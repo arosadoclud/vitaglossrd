@@ -2,10 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Order = require('../models/Order')
 const { protect, adminOnly } = require('../middleware/auth')
-const fetch = (...args) => import('node-fetch').then(({ default: f }) => f(...args)).catch(() => {
-  // Fallback: use built-in fetch (Node 18+)
-  return globalThis.fetch(...args)
-})
+// globalThis.fetch nativo disponible en Node 18+ (aquí Node 24)
 
 // ── Helper: disparar webhook n8n ──────────────────────────────────────────
 async function notifyN8n(order) {

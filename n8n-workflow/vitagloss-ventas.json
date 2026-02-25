@@ -85,13 +85,12 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "=http://localhost:8080/message/sendText/{{ $vars.EVOLUTION_INSTANCE }}",
+        "url": "http://localhost:3001/send",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
-              "name": "apikey",
-              "value": "={{ $vars.EVOLUTION_API_KEY }}"
+              "name": "x-api-key","value": "={{ $vars.WA_SECRET }}"
             }
           ]
         },
@@ -147,13 +146,12 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "=http://localhost:8080/message/sendText/{{ $vars.EVOLUTION_INSTANCE }}",
+        "url": "http://localhost:3001/send",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
-              "name": "apikey",
-              "value": "={{ $vars.EVOLUTION_API_KEY }}"
+              "name": "x-api-key","value": "={{ $vars.WA_SECRET }}"
             }
           ]
         },
@@ -238,13 +236,12 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "=http://localhost:8080/message/sendText/{{ $vars.EVOLUTION_INSTANCE }}",
+        "url": "http://localhost:3001/send",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
-              "name": "apikey",
-              "value": "={{ $vars.EVOLUTION_API_KEY }}"
+              "name": "x-api-key","value": "={{ $vars.WA_SECRET }}"
             }
           ]
         },
@@ -330,3 +327,4 @@
   "updatedAt": "2026-02-24T00:00:00.000Z",
   "versionId": "1"
 }
+
