@@ -87,7 +87,7 @@ export default function BlogPost() {
   return (
     <div className="bg-white min-h-screen">
       {/* ── HERO ── */}
-      <div className="bg-gradient-to-br from-[#0a1628] via-[#1B3A6B] to-[#0f2a54] pt-24 pb-12 px-4">
+      <div className="bg-gradient-to-br from-[#0a1628] via-[#1B3A6B] to-[#0f2a54] pt-20 sm:pt-24 pb-10 sm:pb-12 px-4">
         <div className="max-w-3xl mx-auto">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-xs text-white/40 mb-6">

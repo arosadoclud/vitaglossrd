@@ -85,7 +85,7 @@ export default function Combos() {
     <div className="min-h-screen bg-gray-50">
 
       {/* Header */}
-      <div className="bg-gradient-to-br from-primary via-blue-800 to-secondary pt-32 pb-14 text-white text-center relative overflow-hidden">
+      <div className="bg-gradient-to-br from-primary via-blue-800 to-secondary pt-24 sm:pt-32 pb-10 sm:pb-14 text-white text-center relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-10 left-10 w-40 h-40 bg-white rounded-full blur-3xl" />
           <div className="absolute bottom-10 right-10 w-56 h-56 bg-secondary rounded-full blur-3xl" />
@@ -102,7 +102,7 @@ export default function Combos() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl font-black leading-tight mb-4"
+            className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-4"
           >
             Combos & Paquetes
           </motion.h1>

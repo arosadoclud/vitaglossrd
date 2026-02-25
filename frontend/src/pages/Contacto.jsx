@@ -21,8 +21,8 @@ export default function Contacto() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary to-blue-700 text-white pt-32 pb-14 px-4 text-center">
-        <h1 className="text-4xl font-extrabold mb-2">Contáctanos</h1>
+      <div className="bg-gradient-to-r from-primary to-blue-700 text-white pt-24 sm:pt-32 pb-10 sm:pb-14 px-4 text-center">
+        <h1 className="text-3xl sm:text-4xl font-extrabold mb-2">Contáctanos</h1>
         <p className="text-gray-200 max-w-xl mx-auto">
           Estamos aquí para ayudarte. Escríbenos y te respondemos de inmediato.
         </p>

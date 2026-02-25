@@ -195,7 +195,7 @@ export default function Equipo() {
     <div className="min-h-screen bg-white overflow-x-hidden">
 
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
-      <section className="relative bg-gradient-to-br from-[#0a1628] via-[#1B3A6B] to-[#0f2a54] text-white pt-36 pb-28 px-4 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-[#0a1628] via-[#1B3A6B] to-[#0f2a54] text-white pt-24 sm:pt-36 pb-16 sm:pb-28 px-4 overflow-hidden">
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-secondary/20 rounded-full blur-3xl" />
         <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
@@ -205,7 +205,7 @@ export default function Equipo() {
             Oportunidad de negocio en RD
           </motion.span>
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-            className="text-5xl md:text-6xl font-black mb-5 leading-tight">
+            className="text-4xl sm:text-5xl md:text-6xl font-black mb-5 leading-tight">
             Gana dinero extra<br /><span className="text-secondary">desde tu celular</span>
           </motion.h1>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}

@@ -8,8 +8,8 @@ export default function SobreNosotros() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary to-blue-700 text-white pt-32 pb-14 px-4 text-center">
-        <h1 className="text-4xl font-extrabold mb-2">Sobre Nosotros</h1>
+      <div className="bg-gradient-to-r from-primary to-blue-700 text-white pt-24 sm:pt-32 pb-10 sm:pb-14 px-4 text-center">
+        <h1 className="text-3xl sm:text-4xl font-extrabold mb-2">Sobre Nosotros</h1>
         <p className="text-gray-200 max-w-xl mx-auto">
           Conoce nuestra historia y por qué elegimos Amway para transformar vidas.
         </p>
@@ -17,7 +17,7 @@ export default function SobreNosotros() {
 
       {/* Historia */}
       <div className="max-w-4xl mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center mb-16">
           <div>
             <span className="text-secondary font-semibold text-sm uppercase tracking-wide">Nuestra historia</span>
             <h2 className="text-3xl font-extrabold text-primary mt-2 mb-4">

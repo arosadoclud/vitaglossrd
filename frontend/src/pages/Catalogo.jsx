@@ -33,7 +33,7 @@ export default function Catalogo() {
     <div className="min-h-screen bg-gray-50">
 
       {/* Header */}
-      <div className="relative bg-gradient-to-br from-primary via-blue-800 to-blue-900 text-white pt-32 pb-20 px-4 overflow-hidden">
+      <div className="relative bg-gradient-to-br from-primary via-blue-800 to-blue-900 text-white pt-24 sm:pt-32 pb-12 sm:pb-20 px-4 overflow-hidden">
         <div className="absolute inset-0 opacity-10"
           style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
         <div className="absolute -top-20 -right-20 w-72 h-72 bg-secondary/20 rounded-full blur-3xl" />
@@ -51,7 +51,7 @@ export default function Catalogo() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-5xl md:text-6xl font-black mb-4"
+            className="text-3xl sm:text-5xl md:text-6xl font-black mb-4"
           >
             Nuestro Catálogo
           </motion.h1>
@@ -67,7 +67,7 @@ export default function Catalogo() {
       </div>
 
       {/* Filtros sticky */}
-      <div className="sticky top-[72px] z-30 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+      <div className="sticky top-16 sm:top-[72px] z-30 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 flex gap-3 overflow-x-auto">
           {categorias.map((cat) => (
             <button

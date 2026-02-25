@@ -47,14 +47,14 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-2">
+        <div className="flex justify-between items-center py-3 sm:py-2">
 
           {/* Logo */}
-          <Link to="/" className="flex items-center group -my-8">
+          <Link to="/" className="flex items-center group -my-3 sm:-my-6">
             <img
               src="/logo_final.png"
               alt="VitaGloss RD"
-              className="h-36 w-auto object-contain drop-shadow-md brightness-105 contrast-105 group-hover:scale-105 group-hover:drop-shadow-xl group-hover:brightness-110 transition-all duration-300"
+              className="h-16 sm:h-24 w-auto object-contain drop-shadow-md brightness-105 contrast-105 group-hover:scale-105 group-hover:drop-shadow-xl group-hover:brightness-110 transition-all duration-300"
             />
           </Link>
 

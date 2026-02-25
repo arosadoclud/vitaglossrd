@@ -58,13 +58,13 @@ export default function Blog() {
   return (
     <div className="bg-white min-h-screen">
       {/* ── HERO ── */}
-      <section className="bg-gradient-to-br from-[#0a1628] via-[#1B3A6B] to-[#0f2a54] pt-28 pb-16 px-4">
+      <section className="bg-gradient-to-br from-[#0a1628] via-[#1B3A6B] to-[#0f2a54] pt-20 sm:pt-28 pb-12 sm:pb-16 px-4">
         <div className="max-w-5xl mx-auto text-center">
           <motion.div variants={fadeUp} initial="hidden" animate="visible">
             <span className="inline-block bg-secondary/20 text-secondary text-xs font-bold px-4 py-2 rounded-full uppercase tracking-widest mb-5 border border-secondary/30">
               📚 Blog VitaGloss RD
             </span>
-            <h1 className="text-4xl md:text-5xl font-black text-white mb-4 leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4 leading-tight">
               Salud, nutrición y bienestar<br />
               <span className="text-secondary">para República Dominicana</span>
             </h1>
@@ -88,7 +88,7 @@ export default function Blog() {
       </section>
 
       {/* ── FILTROS ── */}
-      <div className="sticky top-0 z-10 bg-white border-b border-gray-100 shadow-sm">
+      <div className="sticky top-16 sm:top-[72px] z-10 bg-white border-b border-gray-100 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-3 flex gap-2 overflow-x-auto scrollbar-hide">
           {categorias.map(cat => (
             <button

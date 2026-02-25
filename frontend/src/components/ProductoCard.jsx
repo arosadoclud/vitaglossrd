@@ -76,12 +76,12 @@ export default function ProductoCard({ producto }) {
 
         {/* Botones */}
         <div className="flex gap-2">
-          <span className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs font-semibold px-3 py-2.5 rounded-xl transition-colors duration-200 flex items-center justify-center gap-1">
+          <span className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-600 text-[11px] sm:text-xs font-semibold px-2 sm:px-3 py-2.5 rounded-xl transition-colors duration-200 flex items-center justify-center gap-1 whitespace-nowrap">
             Ver más →
           </span>
           <button
             onClick={handleAgregar}
-            className={`flex-1 text-white text-xs font-bold px-3 py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5 shadow-sm ${
+            className={`flex-1 text-white text-[11px] sm:text-xs font-bold px-2 sm:px-3 py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-1 sm:gap-1.5 shadow-sm ${
               agregado ? 'bg-green-600 scale-95' : 'bg-primary hover:bg-blue-800'
             }`}
           >

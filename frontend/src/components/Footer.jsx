@@ -24,11 +24,11 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
 
           {/* Marca */}
-          <div className="md:col-span-1">
+          <div className="col-span-2 md:col-span-1">
             <div className="flex items-center space-x-2 mb-4">
               <div className="bg-secondary rounded-full w-9 h-9 flex items-center justify-center">
                 <span className="text-white font-bold text-sm">VG</span>
@@ -53,6 +53,8 @@ export default function Footer() {
             <ul className="space-y-2 text-sm text-gray-300">
               <li><Link to="/" className="hover:text-secondary transition-colors">Inicio</Link></li>
               <li><Link to="/catalogo" className="hover:text-secondary transition-colors">Catálogo</Link></li>
+              <li><Link to="/combos" className="hover:text-secondary transition-colors">Combos</Link></li>
+              <li><Link to="/blog" className="hover:text-secondary transition-colors">Blog</Link></li>
               <li><Link to="/faq" className="hover:text-secondary transition-colors">Preguntas Frecuentes</Link></li>
               <li><Link to="/sobre-nosotros" className="hover:text-secondary transition-colors">Sobre Nosotros</Link></li>
               <li><Link to="/contacto" className="hover:text-secondary transition-colors">Contacto</Link></li>
