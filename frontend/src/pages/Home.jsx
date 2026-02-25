@@ -282,7 +282,123 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ====== PRODUCTOS ====== */}}
+      {/* ====== SOCIAL PROOF TICKER ====== */}
+      <div className="bg-secondary overflow-hidden py-3">
+        <motion.div
+          animate={{ x: ['0%', '-50%'] }}
+          transition={{ repeat: Infinity, duration: 20, ease: 'linear' }}
+          className="flex gap-10 whitespace-nowrap"
+        >
+          {[...Array(2)].map((_, rep) => (
+            <span key={rep} className="flex gap-10 text-white text-sm font-semibold">
+              <span className="flex items-center gap-2">⭐ +150 clientes satisfechos en RD</span>
+              <span className="opacity-40">•</span>
+              <span className="flex items-center gap-2">🚀 Entrega en 24–48h en todo el país</span>
+              <span className="opacity-40">•</span>
+              <span className="flex items-center gap-2">✅ Distribuidor Amway certificado</span>
+              <span className="opacity-40">•</span>
+              <span className="flex items-center gap-2">💬 Respuesta en menos de 1 hora</span>
+              <span className="opacity-40">•</span>
+              <span className="flex items-center gap-2">🔒 Pago seguro · 100% originales</span>
+              <span className="opacity-40">•</span>
+            </span>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* ====== PROBLEMA → SOLUCIÓN ====== */}
+      <section className="py-16 px-4 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-10"
+          >
+            <span className="inline-block bg-red-100 text-red-500 text-xs font-bold px-4 py-2 rounded-full uppercase tracking-widest mb-4">
+              ¿Te identificas?
+            </span>
+            <h2 className="text-3xl md:text-4xl font-black text-primary leading-tight">
+              ¿Gastas en productos que no te dan resultados?
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Problema */}
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="bg-red-50 border border-red-100 rounded-3xl p-7"
+            >
+              <div className="flex items-center gap-3 mb-5">
+                <span className="w-10 h-10 bg-red-100 rounded-2xl flex items-center justify-center text-xl flex-shrink-0">😤</span>
+                <h3 className="font-black text-red-700 text-lg">El problema habitual</h3>
+              </div>
+              <ul className="space-y-3">
+                {[
+                  'Pasta dental que mancha en vez de blanquear',
+                  'Vitaminas baratas que el cuerpo no absorbe',
+                  'Productos con químicos que irritan o dañan',
+                  'Marcas que prometen mucho y entregan poco',
+                  'Compras en farmacia sin saber qué lleva adentro',
+                ].map((p, i) => (
+                  <li key={i} className="flex items-center gap-2.5 text-red-600 text-sm">
+                    <span className="w-5 h-5 bg-red-200 rounded-full flex items-center justify-center text-xs flex-shrink-0">✗</span>
+                    {p}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+
+            {/* Solución */}
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              custom={1}
+              className="bg-green-50 border border-green-100 rounded-3xl p-7"
+            >
+              <div className="flex items-center gap-3 mb-5">
+                <span className="w-10 h-10 bg-green-100 rounded-2xl flex items-center justify-center text-xl flex-shrink-0">✨</span>
+                <h3 className="font-black text-green-700 text-lg">Con VitaGloss RD</h3>
+              </div>
+              <ul className="space-y-3">
+                {[
+                  'Glister™ blanquea sin peróxido ni abrasivos dañinos',
+                  'Nutrilite™ libera vitaminas durante 8 horas reales',
+                  'Fórmulas limpias: sin parabenos, SLS ni colorantes',
+                  '90+ años de investigación científica comprobada',
+                  'Distribuidor certificado — productos 100% originales',
+                ].map((s, i) => (
+                  <li key={i} className="flex items-center gap-2.5 text-green-700 text-sm">
+                    <span className="w-5 h-5 bg-green-200 rounded-full flex items-center justify-center text-xs flex-shrink-0">✓</span>
+                    {s}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </div>
+
+          {/* CTA puente */}
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mt-8"
+          >
+            <p className="text-gray-500 text-base mb-4">
+              Mira los productos que ya están cambiando la rutina de cientos de dominicanos 👇
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ====== PRODUCTOS ====== */}
       <section className="py-20 px-4 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -853,11 +969,8 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Nota honesta + CTA */}
+          {/* CTA */}
           <div className="text-center">
-            <p className="text-gray-400 text-sm mb-6">
-              📍 Reemplaza estas conversaciones con capturas de pantalla reales de tus clientes de WhatsApp para mayor credibilidad.
-            </p>
             <a
               href="https://wa.me/18492763532?text=Hola!%20Vi%20los%20resultados%20y%20quiero%20probar%20los%20productos%20VitaGloss%20RD"
               target="_blank"
@@ -867,6 +980,50 @@ export default function Home() {
               💬 Quiero resultados como estos
             </a>
           </div>
+        </div>
+      </section>
+
+      {/* ====== REFERIDOS ====== */}
+      <section className="py-16 px-4 bg-gradient-to-br from-[#0a1628] to-[#1B3A6B]">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <span className="inline-block bg-secondary/20 text-secondary text-xs font-bold px-4 py-2 rounded-full uppercase tracking-widest mb-5 border border-secondary/30">
+              🤝 Programa de referidos
+            </span>
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
+              ¿Ya eres cliente? <span className="text-secondary">Gana por cada amigo que compre</span>
+            </h2>
+            <p className="text-white/60 text-lg max-w-xl mx-auto mb-8">
+              Comparte tu enlace personal y recibe beneficios exclusivos cada vez que alguien compre gracias a ti.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+              {[
+                { icono: '🔗', titulo: 'Tu enlace único', desc: 'Lo encuentras en tu perfil del Dashboard' },
+                { icono: '📲', titulo: 'Comparte por WhatsApp', desc: 'Envíaselo a amigos y familia' },
+                { icono: '🎁', titulo: 'Gana beneficios', desc: 'Recompensas por cada nuevo cliente' },
+              ].map((item, i) => (
+                <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-5 text-center">
+                  <div className="text-3xl mb-3">{item.icono}</div>
+                  <h4 className="text-white font-bold text-sm mb-1">{item.titulo}</h4>
+                  <p className="text-white/40 text-xs">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            <Link
+              to="/equipo"
+              className="inline-flex items-center gap-2 bg-secondary hover:bg-teal-400 text-white font-black px-8 py-4 rounded-2xl transition-all hover:scale-105 shadow-lg shadow-secondary/30"
+            >
+              Conocer el programa de referidos →
+            </Link>
+          </motion.div>
         </div>
       </section>
 
