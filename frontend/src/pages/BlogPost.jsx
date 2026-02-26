@@ -147,12 +147,8 @@ export default function BlogPost() {
       {/* ── HERO ── */}
       <div
         className="relative pt-20 sm:pt-24 pb-10 sm:pb-12 px-4"
-        style={post.imagenCover ? { backgroundImage: `url(${post.imagen})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}
       >
-        {post.imagenCover
-          ? <div className="absolute inset-0 bg-black/55" />
-          : <div className="absolute inset-0 bg-gradient-to-br from-[#0a1628] via-[#1B3A6B] to-[#0f2a54]" />
-        }
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0a1628] via-[#1B3A6B] to-[#0f2a54]" />
         <div className="relative max-w-5xl mx-auto">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-xs text-white/40 mb-6">
