@@ -136,11 +136,19 @@ export default function Blog() {
                 >
                   {/* Imagen */}
                   <div className="relative overflow-hidden bg-gradient-to-br from-[#0a1628] to-[#1B3A6B] min-h-[220px] lg:min-h-[360px] flex items-center justify-center">
-                    <img
-                      src={postDestacado.imagen}
-                      alt={postDestacado.titulo}
-                      className="w-48 h-48 lg:w-64 lg:h-64 object-contain drop-shadow-2xl group-hover:scale-105 transition-transform duration-500"
-                    />
+                    {postDestacado.imagenCover ? (
+                      <img
+                        src={postDestacado.imagen}
+                        alt={postDestacado.titulo}
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <img
+                        src={postDestacado.imagen}
+                        alt={postDestacado.titulo}
+                        className="w-48 h-48 lg:w-64 lg:h-64 object-contain drop-shadow-2xl group-hover:scale-105 transition-transform duration-500"
+                      />
+                    )}
                     <div className="absolute top-4 left-4">
                       <span className={`text-xs font-bold px-3 py-1 rounded-full ${catStyle(postDestacado.categoria).bg} ${catStyle(postDestacado.categoria).text}`}>
                         {postDestacado.categoria}
@@ -199,11 +207,19 @@ export default function Blog() {
                       >
                         {/* Imagen */}
                         <div className="relative bg-gradient-to-br from-[#0a1628] to-[#1B3A6B] h-56 flex items-center justify-center overflow-hidden">
-                          <img
-                            src={post.imagen}
-                            alt={post.titulo}
-                            className="h-44 w-44 object-contain drop-shadow-xl group-hover:scale-110 transition-transform duration-500"
-                          />
+                          {post.imagenCover ? (
+                            <img
+                              src={post.imagen}
+                              alt={post.titulo}
+                              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                          ) : (
+                            <img
+                              src={post.imagen}
+                              alt={post.titulo}
+                              className="h-44 w-44 object-contain drop-shadow-xl group-hover:scale-110 transition-transform duration-500"
+                            />
+                          )}
                           <div className="absolute top-3 left-3">
                             <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${cs.bg} ${cs.text}`}>
                               {post.categoria}

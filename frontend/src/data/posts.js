@@ -109,6 +109,7 @@ export const posts = [
     fecha: '2026-02-18',
     tiempoLectura: '7 min',
     imagen: '/esmalte-dientes.jpg',
+    imagenCover: true,
     autor: 'Equipo VitaGloss RD',
     tags: ['blanqueamiento dental', 'esmalte', 'dientes blancos', 'salud bucal'],
     contenido: `

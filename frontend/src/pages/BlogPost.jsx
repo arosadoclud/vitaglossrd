@@ -110,8 +110,15 @@ export default function BlogPost() {
   return (
     <div className="bg-white min-h-screen">
       {/* ── HERO ── */}
-      <div className="bg-gradient-to-br from-[#0a1628] via-[#1B3A6B] to-[#0f2a54] pt-20 sm:pt-24 pb-10 sm:pb-12 px-4">
-        <div className="max-w-5xl mx-auto">
+      <div
+        className="relative pt-20 sm:pt-24 pb-10 sm:pb-12 px-4"
+        style={post.imagenCover ? { backgroundImage: `url(${post.imagen})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}
+      >
+        {post.imagenCover
+          ? <div className="absolute inset-0 bg-black/55" />
+          : <div className="absolute inset-0 bg-gradient-to-br from-[#0a1628] via-[#1B3A6B] to-[#0f2a54]" />
+        }
+        <div className="relative max-w-5xl mx-auto">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-xs text-white/40 mb-6">
             <Link to="/" className="hover:text-white/70 transition-colors">Inicio</Link>
@@ -151,20 +158,22 @@ export default function BlogPost() {
               </div>
             </motion.div>
 
-            {/* Imagen del producto en el hero */}
-            <motion.div
-              variants={fadeUp}
-              initial="hidden"
-              animate="visible"
-              custom={1}
-              className="hidden lg:flex items-end justify-center pb-2"
-            >
-              <img
-                src={post.imagen}
-                alt={post.titulo}
-                className="w-64 h-64 object-contain drop-shadow-2xl"
-              />
-            </motion.div>
+            {/* Imagen del producto en el hero — solo si no es cover */}
+            {!post.imagenCover && (
+              <motion.div
+                variants={fadeUp}
+                initial="hidden"
+                animate="visible"
+                custom={1}
+                className="hidden lg:flex items-end justify-center pb-2"
+              >
+                <img
+                  src={post.imagen}
+                  alt={post.titulo}
+                  className="w-64 h-64 object-contain drop-shadow-2xl"
+                />
+              </motion.div>
+            )}
           </div>
         </div>
       </div>
