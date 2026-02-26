@@ -185,7 +185,8 @@ export default function ProductoDetalle() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.97 }}
                     transition={{ duration: 0.2 }}
-                    className="max-h-[460px] w-full object-contain drop-shadow-md pointer-events-none"
+                    className="max-h-[460px] w-full object-contain pointer-events-none rounded-2xl"
+                    style={{ filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.18))' }}
                   />
                 </AnimatePresence>
 
