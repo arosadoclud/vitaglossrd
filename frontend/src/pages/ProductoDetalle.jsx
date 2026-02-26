@@ -175,20 +175,23 @@ export default function ProductoDetalle() {
               onTouchEnd={handleTouchEnd}
             >
               {/* Zona imagen */}
-              <div className="relative flex items-center justify-center px-10 py-10" style={{ minHeight: '480px' }}>
-                <AnimatePresence mode="wait">
-                  <motion.img
-                    key={imgActiva}
-                    src={imagenes[imgActiva]}
-                    alt={producto.nombre}
-                    initial={{ opacity: 0, scale: 0.97 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.97 }}
-                    transition={{ duration: 0.2 }}
-                    className="max-h-[460px] w-full object-contain pointer-events-none rounded-2xl"
-                    style={{ filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.18))' }}
-                  />
-                </AnimatePresence>
+              <div className="relative flex items-center justify-center px-8 py-8" style={{ minHeight: '480px' }}>
+                {/* Contenedor con fondo y border-radius visibles */}
+                <div className="w-full h-full rounded-3xl overflow-hidden bg-gray-50 flex items-center justify-center" style={{ minHeight: '420px' }}>
+                  <AnimatePresence mode="wait">
+                    <motion.img
+                      key={imgActiva}
+                      src={imagenes[imgActiva]}
+                      alt={producto.nombre}
+                      initial={{ opacity: 0, scale: 0.97 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.97 }}
+                      transition={{ duration: 0.2 }}
+                      className="max-h-[440px] w-full object-contain pointer-events-none p-6"
+                      style={{ filter: 'drop-shadow(0 10px 28px rgba(0,0,0,0.20))' }}
+                    />
+                  </AnimatePresence>
+                </div>
 
                 {/* Flechas — solo si hay más de una imagen */}
                 {imagenes.length > 1 && (
