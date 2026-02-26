@@ -206,7 +206,8 @@ export const posts = [
     categoria: 'Salud bucal',
     fecha: '2026-02-22',
     tiempoLectura: '4 min',
-    imagen: '/124111-690px-01.jpg',
+    imagen: '/salud-bucal.jpg',
+    imagenCover: true,
     autor: 'Equipo VitaGloss RD',
     tags: ['salud bucal', 'hábitos', 'caries', 'higiene dental'],
     contenido: `
