@@ -512,7 +512,8 @@ export const posts = [
     categoria: 'Salud bucal',
     fecha: '2026-02-19',
     tiempoLectura: '4 min',
-    imagen: '/124106SP-690px-01.jpg',
+    imagen: '/rutina-higiene.jpg',
+    imagenCover: true,
     autor: 'Andy Rosado',
     tags: ['rutina dental', 'higiene bucal', 'glister', 'cepillado', 'hilo dental'],
     contenido: `
@@ -557,7 +558,8 @@ export const posts = [
     categoria: 'Salud bucal',
     fecha: '2026-02-20',
     tiempoLectura: '5 min',
-    imagen: '/124108-690px-01.jpg',
+    imagen: '/placa-bacteriana.jpg',
+    imagenCover: true,
     autor: 'Andy Rosado',
     tags: ['placa bacteriana', 'caries', 'salud bucal', 'glister', 'encías'],
     contenido: `
