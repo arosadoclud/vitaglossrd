@@ -198,11 +198,11 @@ export default function Blog() {
                         className="group flex flex-col bg-white border border-gray-100 rounded-3xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full"
                       >
                         {/* Imagen */}
-                        <div className="relative bg-gradient-to-br from-[#0a1628] to-[#1B3A6B] h-44 flex items-center justify-center overflow-hidden">
+                        <div className="relative bg-gradient-to-br from-[#0a1628] to-[#1B3A6B] h-56 flex items-center justify-center overflow-hidden">
                           <img
                             src={post.imagen}
                             alt={post.titulo}
-                            className="h-32 w-32 object-contain drop-shadow-xl group-hover:scale-110 transition-transform duration-500"
+                            className="h-44 w-44 object-contain drop-shadow-xl group-hover:scale-110 transition-transform duration-500"
                           />
                           <div className="absolute top-3 left-3">
                             <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${cs.bg} ${cs.text}`}>

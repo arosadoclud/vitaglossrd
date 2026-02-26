@@ -111,7 +111,7 @@ export default function BlogPost() {
     <div className="bg-white min-h-screen">
       {/* ── HERO ── */}
       <div className="bg-gradient-to-br from-[#0a1628] via-[#1B3A6B] to-[#0f2a54] pt-20 sm:pt-24 pb-10 sm:pb-12 px-4">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-xs text-white/40 mb-6">
             <Link to="/" className="hover:text-white/70 transition-colors">Inicio</Link>
@@ -121,34 +121,51 @@ export default function BlogPost() {
             <span className="text-white/60 truncate max-w-[160px]">{post.titulo}</span>
           </nav>
 
-          <motion.div variants={fadeUp} initial="hidden" animate="visible">
-            <div className="flex items-center gap-3 mb-5 flex-wrap">
-              <span className={`text-xs font-bold px-3 py-1 rounded-full ${cs.bg} ${cs.text}`}>
-                {post.categoria}
-              </span>
-              <span className="text-white/40 text-xs">{formatFecha(post.fecha)}</span>
-              <span className="text-white/40 text-xs">·</span>
-              <span className="text-white/40 text-xs">⏱ {post.tiempoLectura} de lectura</span>
-            </div>
-
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight mb-6">
-              {post.titulo}
-            </h1>
-
-            <p className="text-white/60 text-lg leading-relaxed mb-6">
-              {post.excerpt}
-            </p>
-
-            <div className="flex items-center gap-3 text-sm text-white/50 flex-wrap">
-              <div className="w-9 h-9 bg-secondary rounded-full flex items-center justify-center text-xs font-black text-white flex-shrink-0">
-                AR
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8 items-end">
+            <motion.div variants={fadeUp} initial="hidden" animate="visible">
+              <div className="flex items-center gap-3 mb-5 flex-wrap">
+                <span className={`text-xs font-bold px-3 py-1 rounded-full ${cs.bg} ${cs.text}`}>
+                  {post.categoria}
+                </span>
+                <span className="text-white/40 text-xs">{formatFecha(post.fecha)}</span>
+                <span className="text-white/40 text-xs">·</span>
+                <span className="text-white/40 text-xs">⏱ {post.tiempoLectura} de lectura</span>
               </div>
-              <div>
-                <p className="text-white/80 text-sm font-bold leading-none">Andy Rosado</p>
-                <p className="text-white/40 text-xs mt-0.5">Distribuidor Independiente Certificado Amway · VitaGloss RD</p>
+
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight mb-6">
+                {post.titulo}
+              </h1>
+
+              <p className="text-white/60 text-lg leading-relaxed mb-6">
+                {post.excerpt}
+              </p>
+
+              <div className="flex items-center gap-3 text-sm text-white/50 flex-wrap">
+                <div className="w-9 h-9 bg-secondary rounded-full flex items-center justify-center text-xs font-black text-white flex-shrink-0">
+                  AR
+                </div>
+                <div>
+                  <p className="text-white/80 text-sm font-bold leading-none">Andy Rosado</p>
+                  <p className="text-white/40 text-xs mt-0.5">Distribuidor Independiente Certificado Amway · VitaGloss RD</p>
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+
+            {/* Imagen del producto en el hero */}
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              custom={1}
+              className="hidden lg:flex items-end justify-center pb-2"
+            >
+              <img
+                src={post.imagen}
+                alt={post.titulo}
+                className="w-64 h-64 object-contain drop-shadow-2xl"
+              />
+            </motion.div>
+          </div>
         </div>
       </div>
 
