@@ -81,18 +81,18 @@ export default function LeadPopup() {
             onClick={cerrar}
           />
 
-          {/* Modal */}
+          {/* Modal — contenedor que centra con flexbox */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[70] w-full max-w-sm mx-auto px-4"
+            className="fixed inset-0 z-[70] flex items-center justify-center px-4 py-6 pointer-events-none"
           >
-            {/* Wrapper: limita altura total, botón cerrar siempre visible */}
-            <div className="rounded-3xl shadow-2xl overflow-hidden max-h-[90dvh] flex flex-col relative">
+            {/* Caja del modal: limita altura, scrollea si hace falta */}
+            <div className="relative w-full max-w-sm max-h-full flex flex-col rounded-3xl shadow-2xl overflow-hidden pointer-events-auto">
 
-              {/* Botón cerrar — siempre visible, no scrollea */}
+              {/* Botón cerrar — sobre el contenido, siempre visible */}
               <button
                 onClick={cerrar}
                 aria-label="Cerrar oferta"
@@ -102,7 +102,7 @@ export default function LeadPopup() {
               </button>
 
               {/* Contenido scrolleable */}
-              <div className="bg-gradient-to-br from-[#0a1628] via-[#1B3A6B] to-[#0f2a54] overflow-y-auto flex-1">
+              <div className="bg-gradient-to-br from-[#0a1628] via-[#1B3A6B] to-[#0f2a54] overflow-y-auto">
               <div className="px-6 pt-6 pb-5">
                 {!enviado ? (
                   <>
