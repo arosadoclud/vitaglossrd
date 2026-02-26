@@ -887,7 +887,7 @@ export const posts = [
     categoria: 'Nutrición',
     fecha: '2026-02-24',
     tiempoLectura: '6 min',
-    imagen: '/Nutrilite™ Vitamina D.jpg',
+    imagen: '/Vitamina-D-transparente.png',
     autor: 'Andy Rosado',
     tags: ['vitamina d', 'sol', 'caribe', 'suplementos', 'nutrilite', 'inmunidad'],
     faqs: [
@@ -1055,7 +1055,7 @@ export const posts = [
     categoria: 'Nutrición',
     fecha: '2026-02-25',
     tiempoLectura: '6 min',
-    imagen: '/Proteína vegetal en polvo Nutrilite.jpg',
+    imagen: '/protenia-vegetal-transparente.png',
     autor: 'Andy Rosado',
     tags: ['proteína vegetal', 'suplemento proteico', 'nutrilite', 'músculo', 'nutrición'],
     faqs: [
@@ -1220,7 +1220,7 @@ export const posts = [
     categoria: 'Bienestar',
     fecha: '2026-02-25',
     tiempoLectura: '5 min',
-    imagen: '/Nutrilite Suplemento nutricional Slimmetry Ideal para bajar de peso.jpg',
+    imagen: '/Nutrilite Suplemento nutricional Slimmetry-transparente.png',
     autor: 'Andy Rosado',
     tags: ['slimmetry', 'peso', 'nutrilite', 'metabolismo', 'bienestar'],
     faqs: [
