@@ -168,14 +168,14 @@ export default function ProductoDetalle() {
 
           {/* === GALERÍA IZQUIERDA === */}
           <div className="flex flex-col gap-3">
-            {/* Frame principal — fondo blanco, borde sutil, certificaciones al fondo */}
+            {/* Frame principal */}
             <div
               className="bg-white rounded-3xl border border-gray-200 shadow-sm relative select-none overflow-hidden flex flex-col"
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
             >
               {/* Zona imagen */}
-              <div className="relative flex items-center justify-center px-10 pt-8 pb-4" style={{ minHeight: '380px' }}>
+              <div className="relative flex items-center justify-center px-10 py-10" style={{ minHeight: '480px' }}>
                 <AnimatePresence mode="wait">
                   <motion.img
                     key={imgActiva}
@@ -185,7 +185,7 @@ export default function ProductoDetalle() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.97 }}
                     transition={{ duration: 0.2 }}
-                    className="max-h-[360px] w-full object-contain drop-shadow-md pointer-events-none"
+                    className="max-h-[460px] w-full object-contain drop-shadow-md pointer-events-none"
                   />
                 </AnimatePresence>
 
@@ -214,41 +214,6 @@ export default function ProductoDetalle() {
                 )}
               </div>
 
-              {/* Certificaciones dentro del frame — franja inferior */}
-              {producto.certificaciones && producto.certificaciones.length > 0 && (
-                <div className="border-t border-gray-100 px-6 py-3 flex items-center gap-5">
-                  {producto.certificaciones.map((cert, i) => (
-                    <div key={i} className="flex items-center gap-2">
-                      {cert.nombre === 'Halal' && (
-                        <div className="w-9 h-9 rounded-full border-2 border-gray-800 flex items-center justify-center bg-white flex-shrink-0">
-                          <svg viewBox="0 0 40 40" className="w-8 h-8">
-                            <path d="M20 6 a14 14 0 1 0 9.9 4.1" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round"/>
-                            <text x="20" y="25" textAnchor="middle" fontSize="12" fontWeight="bold" fill="#111" fontFamily="serif">M</text>
-                          </svg>
-                        </div>
-                      )}
-                      {cert.nombre === 'Kosher' && (
-                        <div className="w-9 h-9 flex items-center justify-center flex-shrink-0">
-                          <svg viewBox="0 0 44 44" className="w-9 h-9">
-                            <polygon points="22,2 27,15 41,15 30,23 34,37 22,29 10,37 14,23 3,15 17,15" fill="none" stroke="#111" strokeWidth="2" strokeLinejoin="round"/>
-                            <text x="22" y="27" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#111" fontFamily="sans-serif">K</text>
-                          </svg>
-                        </div>
-                      )}
-                      {cert.nombre === 'NSF' && (
-                        <div className="w-9 h-9 rounded flex items-center justify-center bg-gray-900 flex-shrink-0">
-                          <div className="text-center leading-none px-0.5">
-                            <p className="text-white text-[6px] font-bold tracking-wide">CONTENTS</p>
-                            <p className="text-white text-[6px] font-bold tracking-wide">CERTIFIED</p>
-                            <p className="text-white text-[9px] font-black mt-0.5">NSF</p>
-                          </div>
-                        </div>
-                      )}
-                      <span className="text-gray-500 text-xs leading-tight">{cert.descripcion}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
 
             {/* Miniaturas debajo del frame */}
