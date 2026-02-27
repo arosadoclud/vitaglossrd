@@ -8,7 +8,8 @@ dist-ssr/
 build/
 
 # Environment variables
-# .env incluido intencionalmente para trabajo en local
+.env
+**/.env
 
 # Logs
 logs/
