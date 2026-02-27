@@ -18,6 +18,7 @@ import Footer from './components/Footer'
 import WhatsAppFloat from './components/WhatsAppFloat'
 import LeadPopup from './components/LeadPopup'
 import CartDrawer from './components/CartDrawer'
+import CookieConsent from './components/CookieConsent'
 import Home from './pages/Home'
 import Catalogo from './pages/Catalogo'
 import ProductoDetalle from './pages/ProductoDetalle'
@@ -85,6 +86,7 @@ function Layout() {
       {!isDashboard && <WhatsAppFloat />}
       {!isDashboard && <LeadPopup />}
       {!isDashboard && <CartDrawer />}
+      <CookieConsent />
     </div>
   )
 }
