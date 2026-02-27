@@ -8,28 +8,13 @@ export default function CookieConsent() {
   useEffect(() => {
     const saved = localStorage.getItem(CONSENT_KEY)
     if (!saved) {
-      // Pequeño delay para no interrumpir la carga inicial
       const timer = setTimeout(() => setVisible(true), 1500)
       return () => clearTimeout(timer)
     }
-    if (saved === 'accepted') {
-      loadAdSense()
-    }
   }, [])
-
-  function loadAdSense() {
-    if (document.getElementById('adsense-script')) return
-    const script = document.createElement('script')
-    script.id = 'adsense-script'
-    script.async = true
-    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2971696184390995'
-    script.crossOrigin = 'anonymous'
-    document.head.appendChild(script)
-  }
 
   function handleAccept() {
     localStorage.setItem(CONSENT_KEY, 'accepted')
-    loadAdSense()
     setVisible(false)
   }
 
