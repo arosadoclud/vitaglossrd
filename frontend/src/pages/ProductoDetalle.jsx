@@ -53,6 +53,62 @@ function Accordion({ titulo, icono, children, defaultOpen = false }) {
   )
 }
 
+// ─── Descripción enriquecida ───────────────────────────────────────────────────
+function highlightText(text) {
+  // Resalta marcas (Glister™, Nutrilite™) y palabras clave de ingredientes
+  const regex = /([A-Z][\w\s-]+™|[A-Z][\w\s-]+\u00ae|Gl\u00fcor|fl\u00faor|sin parabenos|sin per\u00f3xido|sin azucar|sin colorantes|sin SLS|formula limpia|certificacion Kosher|certificaci\u00f3n Kosher|fr\u00f3mula limpia)/g
+  const parts = text.split(/(\S+™|\S+\u00ae)/g)
+  return parts.map((part, i) =>
+    /™|\u00ae/.test(part)
+      ? <strong key={i} className="text-gray-900 font-semibold">{part}</strong>
+      : part
+  )
+}
+
+function RichDescription({ text, esSuplemento = false, advertencia = null }) {
+  if (!text) return null
+  const parrafos = text.split('\n\n').filter(Boolean)
+  // Primera oración del primer párrafo = lead
+  const primero = parrafos[0] || ''
+  const corte = primero.indexOf('. ')
+  const lead = corte > 0 ? primero.slice(0, corte + 1) : primero
+  const resto0 = corte > 0 ? primero.slice(corte + 2) : ''
+
+  return (
+    <div>
+      {/* Lead: primera oración con mayor peso visual */}
+      <p className="text-[16px] font-medium text-gray-800 leading-[1.8] mb-4">
+        {highlightText(lead)}
+      </p>
+      {/* Resto del primer párrafo */}
+      {resto0 && (
+        <p className="text-[14.5px] text-gray-500 leading-[1.9] mb-4">
+          {highlightText(resto0)}
+        </p>
+      )}
+      {/* Párrafos adicionales */}
+      {parrafos.slice(1).map((p, i) => (
+        <p key={i} className="text-[14.5px] text-gray-500 leading-[1.9] mb-4">
+          {highlightText(p)}
+        </p>
+      ))}
+      {/* Aviso solo para suplementos */}
+      {esSuplemento && (
+        <div className="mt-5 flex gap-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3.5">
+          <svg className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <p className="text-xs text-amber-800 leading-relaxed">
+            <strong className="font-semibold">Aviso médico:</strong> {advertencia || 'Los niños menores de 12 años, las mujeres embarazadas o que amamantan, o cualquier persona con alguna enfermedad deben consultar a su médico antes de usar este producto.'}{' '}
+            <span className="text-amber-600">† Esta declaración no fue evaluada por la FDA. Este producto no pretende diagnosticar, tratar, curar ni prevenir ninguna enfermedad.</span>
+          </p>
+        </div>
+      )}
+    </div>
+  )
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 // ─── Tabs desktop ──────────────────────────────────────────────────────────
 function TabsInfoSection({ producto }) {
   const [tab, setTab] = useState(0)
@@ -105,15 +161,12 @@ function TabsInfoSection({ producto }) {
 
           {/* Descripción */}
           {tab === 1 && (
-            <div className="max-w-3xl space-y-4 text-gray-600 text-[15px] leading-relaxed">
-              {producto.descripcionLarga.split('\n\n').map((parrafo, i) => (
-                <p key={i}>{parrafo}</p>
-              ))}
-              {producto.categoria === 'Suplementos' && (
-                <p className="text-xs text-gray-400 bg-gray-50 rounded-xl p-4 leading-relaxed border border-gray-100 mt-4">
-                  <strong>Aviso:</strong> {producto.advertencia || 'Los niños menores de 12 años, las mujeres embarazadas o que amamantan, o cualquier persona con alguna enfermedad deben consultar a su médico antes de usar este producto.'} † Esta declaración no fue evaluada por la FDA. Este producto no pretende diagnosticar, tratar, curar ni prevenir ninguna enfermedad.
-                </p>
-              )}
+            <div className="max-w-2xl">
+              <RichDescription
+                text={producto.descripcionLarga}
+                esSuplemento={producto.categoria === 'Suplementos'}
+                advertencia={producto.advertencia}
+              />
             </div>
           )}
 
@@ -471,7 +524,7 @@ export default function ProductoDetalle() {
             </div>
 
             {/* Descripción corta */}
-            <p className="text-gray-500 text-sm leading-relaxed mb-6">
+            <p className="text-[14px] text-gray-500 leading-[1.75] mb-6 border-l-2 border-gray-200 pl-4">
               {producto.descripcion}
             </p>
 
@@ -680,16 +733,11 @@ export default function ProductoDetalle() {
                   </svg>
                 }
               >
-                <div className="space-y-3 mb-4">
-                  {producto.descripcionLarga.split('\n\n').map((parrafo, i) => (
-                    <p key={i} className="leading-relaxed">{parrafo}</p>
-                  ))}
-                </div>
-                {producto.categoria === 'Suplementos' && (
-                  <p className="text-xs text-gray-400 bg-gray-50 rounded-xl p-3 leading-relaxed border border-gray-100">
-                    <strong>Aviso:</strong> {producto.advertencia || 'Los niños menores de 12 años, las mujeres embarazadas o que amamantan, o cualquier persona con alguna enfermedad deben consultar a su médico antes de usar este producto.'} † Esta declaración no fue evaluada por la FDA. Este producto no pretende diagnosticar, tratar, curar ni prevenir ninguna enfermedad.
-                  </p>
-                )}
+                <RichDescription
+                  text={producto.descripcionLarga}
+                  esSuplemento={producto.categoria === 'Suplementos'}
+                  advertencia={producto.advertencia}
+                />
               </Accordion>
 
               <Accordion
