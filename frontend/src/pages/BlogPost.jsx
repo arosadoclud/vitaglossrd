@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { useSEO } from '../hooks/useSEO'
 import { getPostBySlug, getPostsRelacionados } from '../data/posts'
 import { buildTOC } from '../utils/toc'
+import { productos } from '../data/productos'
 
 const SITE_URL = 'https://vitaglossrd.com'
 
@@ -37,6 +38,9 @@ export default function BlogPost() {
   const navigate = useNavigate()
   const post = getPostBySlug(slug)
   const relacionados = post ? getPostsRelacionados(slug) : []
+  const productoDestacado = post?.productoRelacionadoId
+    ? productos.find(p => p.id === post.productoRelacionadoId)
+    : null
 
   const isYMYL = post && ['Nutrición', 'Suplementos', 'Vitaminas', 'Salud bucal', 'Bienestar'].includes(post.categoria)
 
@@ -350,6 +354,66 @@ export default function BlogPost() {
           ))}
         </div>
       </div>
+
+      {/* ── PRODUCTO DESTACADO DEL ARTÍCULO ── */}
+      {productoDestacado && (
+        <section className="py-10 px-4 bg-gradient-to-br from-[#f0fdf9] to-[#e8f8f5] border-t border-teal-100">
+          <div className="max-w-3xl mx-auto">
+            <p className="text-xs font-bold tracking-widest text-teal-600 uppercase mb-4">Producto mencionado en este artículo</p>
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+              className="bg-white rounded-2xl border border-teal-100 shadow-sm overflow-hidden"
+            >
+              <div className="flex items-center gap-5 p-5">
+                <div className="w-20 h-20 flex-shrink-0 bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden border border-gray-100">
+                  <img
+                    src={productoDestacado.imagen}
+                    alt={productoDestacado.nombre}
+                    className="w-16 h-16 object-contain"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[11px] text-gray-400 uppercase tracking-wider font-semibold mb-0.5">{productoDestacado.categoria}</p>
+                  <h4 className="font-black text-primary text-base leading-snug mb-1 truncate">{productoDestacado.nombre}</h4>
+                  <div className="flex items-baseline gap-2 mb-1">
+                    <span className="text-xl font-black text-gray-900">RD${productoDestacado.precio.toLocaleString('es-DO')}</span>
+                    {productoDestacado.precioOriginal && productoDestacado.precioOriginal > productoDestacado.precio && (
+                      <span className="text-sm text-gray-400 line-through">RD${productoDestacado.precioOriginal.toLocaleString('es-DO')}</span>
+                    )}
+                  </div>
+                  {productoDestacado.ventasSemana && (
+                    <p className="text-[11px] text-green-600 font-semibold">✓ {productoDestacado.ventasSemana} personas compraron esta semana</p>
+                  )}
+                </div>
+                <div className="flex flex-col gap-2 flex-shrink-0">
+                  <a
+                    href={`https://wa.me/18492763532?text=${encodeURIComponent(`Hola VitaGloss RD! 👋 Leí el artículo y quiero pedir: ${productoDestacado.nombre} (RD$${productoDestacado.precio.toLocaleString('es-DO')}). ¿Cómo lo proceso?`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-[#25D366] hover:bg-[#20b858] text-white font-bold px-4 py-2.5 rounded-xl text-sm flex items-center gap-1.5 transition-all hover:scale-105 whitespace-nowrap"
+                  >
+                    <svg className="w-4 h-4 fill-white flex-shrink-0" viewBox="0 0 24 24">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.106.55 4.083 1.512 5.802L0 24l6.363-1.487A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.808 9.808 0 01-5.001-1.368l-.36-.214-3.777.883.896-3.69-.234-.38A9.79 9.79 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182c5.429 0 9.818 4.388 9.818 9.818 0 5.429-4.389 9.818-9.818 9.818z"/>
+                    </svg>
+                    Pedirlo
+                  </a>
+                  <Link
+                    to={`/producto/${productoDestacado.id}`}
+                    className="text-center text-primary text-xs font-semibold hover:underline"
+                  >
+                    Ver detalle →
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      )}
 
       {/* ── CTA BAND ── */}
       <section className="bg-gradient-to-r from-[#2EC4B6] to-teal-500 py-12 px-4">
