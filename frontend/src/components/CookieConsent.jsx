@@ -22,7 +22,7 @@ export default function CookieConsent() {
     const script = document.createElement('script')
     script.id = 'adsense-script'
     script.async = true
-    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9316456690005068'
+    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2971696184390995'
     script.crossOrigin = 'anonymous'
     document.head.appendChild(script)
   }
