@@ -27,6 +27,7 @@ import SobreNosotros from './pages/SobreNosotros'
 import Contacto from './pages/Contacto'
 import FAQ from './pages/FAQ'
 import Combos from './pages/Combos'
+import ComboDetalle from './pages/ComboDetalle'
 import Dashboard from './pages/Dashboard'
 import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
@@ -68,6 +69,7 @@ function Layout() {
           <Route path="/contacto" element={<Contacto />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/combos" element={<Combos />} />
+          <Route path="/combos/:id" element={<ComboDetalle />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/privacidad" element={<Privacidad />} />
