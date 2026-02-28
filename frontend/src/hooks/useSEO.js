@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 const SITE_URL = 'https://vitaglossrd.com'
-const SITE_OG_IMAGE = `${SITE_URL}/og-default.jpg`
+const SITE_OG_IMAGE = `${SITE_URL}/salud-bucal.jpg`
 
 // Helper: upsert a <meta> by attribute selector
 function setMeta(attrName, attrValue, content) {
