@@ -355,7 +355,6 @@ export default function Combos() {
   )
 }
 
-    subtitulo: 'El sistema completo de higiene bucal',
     descripcion: 'Los 3 productos Glister™ juntos para una rutina bucal perfecta de mañana a noche. Pasta + Enjuague + Spray: limpieza profunda, protección total y frescura instantánea en cualquier momento.',
     badge: '🔥 Más Popular',
     badgeColor: 'bg-secondary',
