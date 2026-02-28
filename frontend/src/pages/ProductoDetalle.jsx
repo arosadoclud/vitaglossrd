@@ -553,8 +553,7 @@ export default function ProductoDetalle() {
                 )}
               </div>
               <p className="text-gray-400 text-sm">
-                ó 3 cuotas de <strong className="text-gray-700">RD${Math.round(producto.precio / 3).toLocaleString('es-DO')}</strong>
-                <span className="ml-3 text-xs text-blue-500">Envío en Santo Domingo</span>
+                <span className="text-xs text-blue-500">🚚 Envío disponible en todo el país</span>
               </p>
             </div>
 
