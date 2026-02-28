@@ -106,13 +106,42 @@ export default function BlogPost() {
     })),
   } : null
 
-  const jsonLdList = [articleSchema, breadcrumbSchema, faqSchema].filter(Boolean)
+  // Schema Product para el producto destacado del post (rich result de producto en Google)
+  const productSchema = productoDestacado ? {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: productoDestacado.nombre,
+    description: productoDestacado.descripcion || productoDestacado.nombre,
+    image: `${SITE_URL}${productoDestacado.imagen}`,
+    brand: { '@type': 'Brand', name: 'Nutrilite / Amway' },
+    url: `${SITE_URL}/producto/${productoDestacado.id}`,
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'DOP',
+      price: String(productoDestacado.precio),
+      availability: 'https://schema.org/InStock',
+      seller: { '@type': 'Organization', name: 'VitaGloss RD', url: SITE_URL },
+      url: `https://wa.me/18492763532?text=${encodeURIComponent(`Hola! Quiero pedir: ${productoDestacado.nombre} (RD$${productoDestacado.precio})`)}`,
+    },
+    ...(productoDestacado.precioOriginal && productoDestacado.precioOriginal > productoDestacado.precio
+      ? { } : {}),
+  } : null
+
+  const jsonLdList = [articleSchema, breadcrumbSchema, faqSchema, productSchema].filter(Boolean)
 
   useSEO({
     title:       post ? post.titulo : 'Artículo no encontrado',
     description: post ? post.excerpt : '',
     canonical:   canonicalUrl,
     ogImage:     ogImageUrl,
+    ogImageAlt:  post ? `${post.titulo} — VitaGloss RD` : undefined,
+    articleMeta: post ? {
+      published: post.fecha,
+      modified:  post.fechaActualizacion || post.fecha,
+      author:    `https://vitaglossrd.com/sobre-nosotros`,
+      section:   post.categoria,
+      tags:      post.tags,
+    } : undefined,
     jsonLdList,
   })
 
