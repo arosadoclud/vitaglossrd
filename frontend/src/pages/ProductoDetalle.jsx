@@ -111,8 +111,16 @@ function RichDescription({ text, esSuplemento = false, advertencia = null }) {
 
 // ─── Tabs desktop ──────────────────────────────────────────────────────────
 function TabsInfoSection({ producto }) {
+  const TABS = [
+    'Detalles',
+    ...(producto.kitProductos?.length ? ['Contenido del Kit'] : []),
+    ...(producto.ingredientesTexto ? ['Ingredientes'] : []),
+    'Descripción',
+    'Beneficios',
+    'Instrucciones',
+    'Preguntas',
+  ]
   const [tab, setTab] = useState(0)
-  const TABS = ['Detalles', 'Descripción', 'Beneficios', 'Instrucciones', 'Preguntas']
   return (
     <div>
       {/* Barra de tabs */}
@@ -141,7 +149,7 @@ function TabsInfoSection({ producto }) {
           transition={{ duration: 0.18 }}
         >
           {/* Detalles */}
-          {tab === 0 && (
+          {TABS[tab] === 'Detalles' && (
             <div className="rounded-2xl border border-gray-100 overflow-hidden max-w-2xl">
               {[...producto.detalles, { label: 'Marca', valor: 'Amway' }, { label: 'Disponibilidad', valor: producto.stock, highlight: true }].map((d, i, arr) => (
                 <div
@@ -159,8 +167,32 @@ function TabsInfoSection({ producto }) {
             </div>
           )}
 
+          {/* Contenido del Kit */}
+          {TABS[tab] === 'Contenido del Kit' && (
+            <div className="max-w-2xl">
+              <p className="text-sm text-gray-500 mb-4">Este kit incluye los siguientes productos:</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {producto.kitProductos.map((item, i) => (
+                  <div key={i} className="flex items-center gap-3 bg-gray-50 border border-gray-100 rounded-xl px-4 py-3">
+                    <span className="text-2xl flex-shrink-0">{item.icono}</span>
+                    <span className="text-sm font-medium text-gray-800">{item.nombre}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Ingredientes */}
+          {TABS[tab] === 'Ingredientes' && (
+            <div className="max-w-2xl">
+              <div className="bg-gray-50 border border-gray-100 rounded-xl px-5 py-4">
+                <p className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">{producto.ingredientesTexto}</p>
+              </div>
+            </div>
+          )}
+
           {/* Descripción */}
-          {tab === 1 && (
+          {TABS[tab] === 'Descripción' && (
             <div className="max-w-2xl">
               <RichDescription
                 text={producto.descripcionLarga}
@@ -171,7 +203,7 @@ function TabsInfoSection({ producto }) {
           )}
 
           {/* Beneficios */}
-          {tab === 2 && (
+          {TABS[tab] === 'Beneficios' && (
             <ul className="max-w-2xl space-y-0 rounded-2xl border border-gray-100 overflow-hidden">
               {producto.beneficios.map((b, i, arr) => (
                 <li key={i} className={`flex items-center gap-4 px-5 py-3.5 ${i < arr.length - 1 ? 'border-b border-gray-100' : ''} ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
@@ -187,7 +219,7 @@ function TabsInfoSection({ producto }) {
           )}
 
           {/* Instrucciones */}
-          {tab === 3 && (
+          {TABS[tab] === 'Instrucciones' && (
             <div className="space-y-4 max-w-2xl">
               {producto.instrucciones ? (
                 producto.instrucciones.map((paso, i) => (
@@ -215,7 +247,7 @@ function TabsInfoSection({ producto }) {
           )}
 
           {/* FAQs */}
-          {tab === 4 && (
+          {TABS[tab] === 'Preguntas' && (
             <div className="space-y-5 max-w-3xl">
               {producto.faqs && producto.faqs.map((faq, i) => (
                 <div key={i} className="border-l-4 border-secondary pl-5">
@@ -721,9 +753,52 @@ export default function ProductoDetalle() {
                             <span className="text-white text-[8px] font-black leading-tight text-center">NSF<br/>CERT</span>
                           </div>
                         )}
+                        {cert.nombre === 'FriendOfSea' && (
+                          <div className="w-10 h-10 rounded-full border-2 border-blue-500 flex items-center justify-center flex-shrink-0 bg-blue-50">
+                            <span className="text-blue-600 text-[9px] font-black leading-tight text-center">FoS</span>
+                          </div>
+                        )}
                         <span className="text-gray-600 text-sm">{cert.descripcion}</span>
                       </div>
                     ))}
+                  </div>
+                </Accordion>
+              )}
+
+              {/* Contenido del Kit */}
+              {producto.kitProductos && producto.kitProductos.length > 0 && (
+                <Accordion
+                  titulo="Contenido del Kit"
+                  icono={
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10" />
+                    </svg>
+                  }
+                >
+                  <p className="text-sm text-gray-500 mb-3">Este kit incluye los siguientes productos:</p>
+                  <div className="grid grid-cols-1 gap-2">
+                    {producto.kitProductos.map((item, i) => (
+                      <div key={i} className="flex items-center gap-3 bg-gray-50 border border-gray-100 rounded-xl px-4 py-3">
+                        <span className="text-xl flex-shrink-0">{item.icono}</span>
+                        <span className="text-sm font-medium text-gray-800">{item.nombre}</span>
+                      </div>
+                    ))}
+                  </div>
+                </Accordion>
+              )}
+
+              {/* Ingredientes */}
+              {producto.ingredientesTexto && (
+                <Accordion
+                  titulo="Ingredientes"
+                  icono={
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                    </svg>
+                  }
+                >
+                  <div className="bg-gray-50 rounded-xl px-4 py-3">
+                    <p className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">{producto.ingredientesTexto}</p>
                   </div>
                 </Accordion>
               )}

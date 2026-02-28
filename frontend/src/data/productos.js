@@ -923,16 +923,39 @@ export const productos = [
       "Calidad Nutrilite™"
     ],
     instrucciones: [
-      "Toma 1 tableta al día con un vaso de agua.",
-      "Preferiblemente con las comidas.",
-      "No exceder la dosis diaria recomendada.",
-      "Mantener fuera del alcance de los niños."
+      "Dosis recomendada (adultos y adolescentes de 12 años en adelante): Toma una tableta por día, con o sin una comida."
     ],
-    faqs: [],
+    faqs: [
+      {
+        pregunta: "¿Acaso no recibo suficiente vitamina D del sol?",
+        respuesta: "La mayoría de las personas no reciben vitamina D suficiente, especialmente en latitudes del norte, desde noviembre hasta febrero. El Instituto Nacional de Salud recomienda 5-30 minutos de sol entre 10 a. m. y 3 p. m. al menos dos veces por semana. Factores como nubes, contaminación, uso de protector solar y tiempo en interiores bloquean los rayos UV necesarios para la síntesis de vitamina D. Los adultos mayores, personas con piel pigmentada oscura y quienes tienen poca exposición solar están en mayor riesgo de insuficiencia."
+      },
+      {
+        pregunta: "¿Acaso no recibo suficiente vitamina D de los alimentos?",
+        respuesta: "Es difícil obtener suficiente vitamina D solo de la dieta. Muy pocos alimentos la contienen de forma natural. El salmón, uno de los más ricos, proporciona casi 100 IU por onza — insuficiente para alcanzar las 1,000 IU diarias recomendadas. Pequeñas cantidades también se encuentran en hígado de res, queso y yema de huevo."
+      },
+      {
+        pregunta: "¿La Vitamina D Nutrilite™ cuenta con certificación NSF?",
+        respuesta: "Sí. La certificación NSF garantiza que lo que aparece en la etiqueta es lo que hay en el producto. NSF International realiza pruebas extensas, análisis de materiales e inspecciones sin previo aviso. Es la garantía de que los productos cumplen normas estrictas para proteger la salud pública."
+      },
+      {
+        pregunta: "¿La Vitamina D Nutrilite™ cuenta con certificación Kosher?",
+        respuesta: "Sí."
+      },
+      {
+        pregunta: "¿La Vitamina D Nutrilite™ cuenta con certificación Halal?",
+        respuesta: "Sí."
+      }
+    ],
+    certificaciones: [
+      { nombre: "Kosher", descripcion: "Certificación Kosher" },
+      { nombre: "NSF", descripcion: "Certificación de contenido NSF" }
+    ],
     detalles: [
       { label: "Nutriente principal", valor: "Vitamina D3" },
       { label: "Uso", valor: "1 tableta al día" },
       { label: "Beneficio principal", valor: "Huesos e inmunidad" },
+      { label: "Certificaciones", valor: "Kosher · NSF · Halal" },
       { label: "Artículo", valor: "118761CN" }
     ],
     imagenes: ["/nutrilite-vitamina-d.jpg"],
@@ -968,17 +991,38 @@ export const productos = [
       "Calidad Nutrilite™"
     ],
     instrucciones: [
-      "Toma 1-2 cápsulas al día con un vaso de agua.",
-      "Preferiblemente con las comidas para reducir reflujo.",
-      "No exceder la dosis diaria recomendada.",
-      "Consulta a tu médico si tomas anticoagulantes."
+      "Toma 1 cápsula al día. Se recomienda tomar con una comida que incluye grasas saludables."
     ],
-    faqs: [],
+    ingredientesTexto: "Por cápsula: Calorías 10 · Grasas totales 1g (1%) · Vitamina E 10mg (67%) · Total omega 3: 572mg — EPA 286mg · DHA 214mg · Otros omega 3: 72mg · Aceite de chía blanca orgánica 20mg (ALA 11mg).\n\nOtros ingredientes: aceite de pescado purificado (anchoa, caballa y sardina), gelatina, glicerina, ésteres poliglicéricos de ácidos grasos, agua, aceite de lima, triglicéridos de cadena media, lecitina de girasol, tocoferoles mixtos, aceite de oliva, tocoferol.",
+    faqs: [
+      {
+        pregunta: "¿Por qué consumir omega 3?",
+        respuesta: "Los ácidos grasos omega 3 son nutrientes esenciales que el cuerpo no puede producir y se deben obtener de la alimentación o suplementos. El EPA, DHA y ALA son importantes para la salud del corazón, el cerebro, los ojos, las articulaciones, la piel y las células."
+      },
+      {
+        pregunta: "¿Qué tiene de especial Omega Nutrilite™?",
+        respuesta: "Omega Nutrilite™ ofrece aceite de pescado altamente concentrado con una absorción 3 veces mayor comparado con aceite de pescado estándar. Aporta omega ALA de aceite de chía blanca orgánica de granjas asociadas Nutrilite™, y está elaborado con mezcla de aceite de pescado sostenible certificado por Friend of the Sea®."
+      },
+      {
+        pregunta: "¿Existe alguna interacción con medicamentos?",
+        respuesta: "No se recomienda para personas que toman anticoagulantes (warfarina, aspirina) o antiinflamatorios, ni para personas con trastornos hemorrágicos. Los omega 3 pueden prolongar la duración de hemorragias. Consulta a tu médico si tomas alguno de estos medicamentos."
+      },
+      {
+        pregunta: "¿Cuánto omega se recomienda consumir al día?",
+        respuesta: "La OMS recomienda entre 1% y 2% de la ingesta diaria de energía en omega 3. La Asociación Estadounidense del Corazón sugiere pescado graso al menos dos veces por semana. Para adultos se recomiendan entre 190 y 500mg de omega 3 al día."
+      }
+    ],
+    certificaciones: [
+      { nombre: "NSF", descripcion: "Certificación de contenido NSF" },
+      { nombre: "FriendOfSea", descripcion: "Friend of the Sea – Pesca sostenible" },
+      { nombre: "Halal", descripcion: "Halal" }
+    ],
     detalles: [
-      { label: "Ácidos grasos", valor: "EPA y DHA (Omega-3)" },
-      { label: "Origen", valor: "Aceite de pescado purificado" },
-      { label: "Uso", valor: "1-2 cápsulas al día" },
-      { label: "Beneficio principal", valor: "Corazón y cerebro" },
+      { label: "Contenido", valor: "30 cápsulas" },
+      { label: "Omega 3", valor: "EPA 286mg + DHA 214mg + ALA" },
+      { label: "Origen", valor: "Aceite de pescado sostenible + chía blanca" },
+      { label: "Uso", valor: "1 cápsula al día con comida" },
+      { label: "Certificaciones", valor: "NSF · Friend of the Sea · Halal" },
       { label: "Artículo", valor: "126132" }
     ],
     imagenes: ["/omega-nutrilite.jpg"],
@@ -1014,17 +1058,32 @@ export const productos = [
       "Calidad Nutrilite™"
     ],
     instrucciones: [
-      "Toma 1 tableta al día con un vaso de agua.",
-      "Preferiblemente con las comidas.",
-      "Los resultados óptimos se observan después de uso continuo por al menos 4-6 semanas.",
-      "Mantener fuera del alcance de los niños."
+      "Toma un comprimido al día, preferiblemente con una comida."
     ],
-    faqs: [],
+    ingredientesTexto: "Por tableta: Vitamina C 60mg (67%) · Biotina 1,000mcg (3333%) · Colágeno hidrolizado 500mg · Extracto de semillas de uva 30mg · Glicina 30mg · L-cisteína HCl 30mg · Cola de caballo 30mg · Mezcla de acerola 67mg.\n\nOtros ingredientes: fosfato dicálcico, celulosa microcristalina, carboximetilcelulosa sódica, maltodextrina, estearato de magnesio, ácido esteárico, hidroxipropil metilcelulosa, dióxido de silicio, glicerina, cera de carnauba.",
+    faqs: [
+      {
+        pregunta: "¿El producto puede mejorar mi salud general?",
+        respuesta: "Sí. Salud del Cabello, Piel y Uñas Nutrilite™ complementa tu suministro diario con nutrientes clave como biotina, colágeno y vitamina C, que contribuyen a la salud nutricional general además de su enfoque en cabello, piel y uñas."
+      },
+      {
+        pregunta: "¿Puedo tomarlo junto a mi suplemento de antioxidantes y vitamina B?",
+        respuesta: "Sí. Los nutrientes de este producto complementan los antioxidantes y la vitamina B. Sigue las instrucciones de uso y consume las cantidades recomendadas en la etiqueta."
+      },
+      {
+        pregunta: "¿Qué es la certificación NSF?",
+        respuesta: "La certificación NSF International garantiza que lo que aparece en la etiqueta es lo que hay en el producto. Se realizan pruebas extensas, análisis de materiales e inspecciones sin previo aviso a las instalaciones, que aseguran que los productos cumplen normas estrictas que protegen la salud pública."
+      }
+    ],
+    certificaciones: [
+      { nombre: "NSF", descripcion: "Certificación de contenido NSF" }
+    ],
     detalles: [
-      { label: "Ingredientes clave", valor: "Biotina + Zinc + Vitamina C" },
-      { label: "Uso", valor: "1 tableta al día" },
+      { label: "Contenido", valor: "60 comprimidos" },
+      { label: "Ingredientes clave", valor: "Biotina 1,000mcg + Colágeno 500mg + Vitamina C" },
+      { label: "Uso", valor: "1 comprimido al día" },
       { label: "Resultados", valor: "A partir de 4-6 semanas" },
-      { label: "Beneficio principal", valor: "Belleza desde adentro" },
+      { label: "Beneficio principal", valor: "Cabello, piel y uñas" },
       { label: "Artículo", valor: "A7553" }
     ],
     imagenes: ["/nutrilite-pelo-piel-unas.jpg"],
@@ -1060,17 +1119,38 @@ export const productos = [
       "Calidad Nutrilite™"
     ],
     instrucciones: [
-      "Mezcla 1 porción (según indicación del envase) en agua, leche o tu batido favorito.",
-      "Agita bien hasta obtener una mezcla homogénea.",
-      "Consume 1-2 veces al día, idealmente antes o después del ejercicio.",
+      "Agrega 2 cucharadas rasas (12.5 g) a 240 ml de leche, jugo u otro líquido.",
+      "Revuelve rápidamente por 45 segundos o sacude en un recipiente con tapa.",
+      "Consume 1 o varias veces al día según necesidad.",
+      "También puede espolvorearse en arroz, cereales, verduras, ensaladas, sopas o masas para panificados.",
       "Mantener fuera del alcance de los niños."
     ],
-    faqs: [],
+    ingredientesTexto: "Por porción (12.5g): Proteína 10g · Grasas totales 6g (8%) · Carbohidratos 17g (6%) · Fibra 6g (21%) · Azúcar total 7g · Sodio 360mg (16%) · Vitamina D 8mcg (40%) · Calcio 350mg (25%) · Hierro 5mg (30%) · Vitamina C 40mg (45%) · Potasio 690mg (15%).\n\nIngredientes: Proteína de guisante orgánica, aceite de girasol orgánico, aceite de coco orgánico, caña de azúcar orgánica, proteína de arroz orgánica, sabores naturales orgánicos, mezcla de vitaminas y minerales, mezcla de frutas orgánicas (manzana, arándano, mora azul), mezcla verde orgánica (col rizada, brócoli, espinaca), extracto de hoja de stevia orgánica, polvo de acerola orgánica. CONTIENE: coco.",
+    faqs: [
+      {
+        pregunta: "¿La Proteína Vegetal Nutrilite™ tiene certificación Kosher?",
+        respuesta: "Sí."
+      },
+      {
+        pregunta: "¿La Proteína Vegetal Nutrilite™ tiene certificación Halal?",
+        respuesta: "Sí."
+      },
+      {
+        pregunta: "¿Qué es la certificación NSF?",
+        respuesta: "Elegir un producto con certificación NSF International garantiza que lo que aparece en la etiqueta es lo que hay en el producto. Se realizan pruebas extensas de productos, análisis de materiales e inspecciones sin previo aviso a las instalaciones, antes de otorgarle la certificación. La certificación NSF asegura que los productos cumplen normas estrictas para proteger la salud pública."
+      }
+    ],
+    certificaciones: [
+      { nombre: "Halal", descripcion: "Halal" },
+      { nombre: "Kosher", descripcion: "Certificación Kosher" },
+      { nombre: "NSF", descripcion: "Certificación de contenido NSF" }
+    ],
     detalles: [
-      { label: "Fuente de proteína", valor: "Soya y trigo" },
+      { label: "Contenido", valor: "450 g (15.97 oz.)" },
+      { label: "Proteína por porción", valor: "10g por 12.5g de polvo" },
+      { label: "Fuente", valor: "Guisante, arroz y coco orgánico" },
       { label: "Uso", valor: "1-2 porciones al día" },
-      { label: "Sin", valor: "Sabor artificial" },
-      { label: "Beneficio principal", valor: "Músculo y recuperación" },
+      { label: "Sin", valor: "Lácteos · lactosa · colesterol" },
       { label: "Artículo", valor: "NUTRI-PROT" }
     ],
     imagenes: ["/nutrilite-proteina-vegetal.jpg"],
@@ -1087,8 +1167,8 @@ export const productos = [
     nombreCorto: "Solución de Envejecimiento Saludable – KIT Nutrilite",
     categoria: "Vitaminas",
     articulo: "NUTRI-AGING-KIT",
-    precio: 2890,
-    precioOriginal: 3400,
+    precio: 8550,
+    precioOriginal: 10200,
     pv: 10.41,
     bv: 1486.0,
     disponible: true,
@@ -1111,10 +1191,17 @@ export const productos = [
       "Consulta a tu médico si tienes condiciones médicas preexistentes."
     ],
     faqs: [],
+    kitProductos: [
+      { nombre: "Nutrilite™ Glucosamina – Suministro para 30 días", icono: "🦴" },
+      { nombre: "Nutrilite™ Cal Mag D", icono: "🦷" },
+      { nombre: "Espectro Multicaroteno Nutrilite™", icono: "👁️" },
+      { nombre: "Nutrilite™ Ajo Concentrado", icono: "🧄" }
+    ],
     detalles: [
-      { label: "Tipo", valor: "Kit de suplementos" },
+      { label: "Tipo", valor: "Kit de 4 suplementos" },
       { label: "Recomendado para", valor: "Adultos mayores de 40 años" },
       { label: "Objetivo", valor: "Envejecimiento saludable" },
+      { label: "Áreas que apoya", valor: "Articulaciones · Huesos · Ojos · Corazón" },
       { label: "Artículo", valor: "NUTRI-AGING-KIT" }
     ],
     imagenes: ["/kit-envejecimiento-saludable.png"],
@@ -1127,7 +1214,7 @@ export const productos = [
   },
   {
     id: 22,
-    nombre: "Solución Nutrición Diaria",
+    nombre: "KIT Solución Nutrición Diaria",
     nombreCorto: "Solución de Nutrición Diaria – Kit Nutrilite",
     categoria: "Vitaminas",
     articulo: "324813",
@@ -1154,9 +1241,15 @@ export const productos = [
       "Mantener fuera del alcance de los niños."
     ],
     faqs: [],
+    kitProductos: [
+      { nombre: "Proteína Vegetal en Polvo Nutrilite™", icono: "💪" },
+      { nombre: "Omega Nutrilite™", icono: "🐟" },
+      { nombre: "Double X™ de Nutrilite™ – Suministro 31 días", icono: "💡" }
+    ],
     detalles: [
-      { label: "Tipo", valor: "Kit de nutrición diaria" },
+      { label: "Tipo", valor: "Kit de 3 suplementos" },
       { label: "Objetivo", valor: "Nutrición diaria completa" },
+      { label: "Áreas que apoya", valor: "Músculos · Corazón · Cerebro · Piel" },
       { label: "Origen", valor: "Base vegetal · Nutrilite™" },
       { label: "Artículo", valor: "324813" }
     ],
@@ -1192,17 +1285,24 @@ export const productos = [
       "Sin estimulantes ni cafeína"
     ],
     instrucciones: [
-      "Toma 1 cápsula blanda 3 veces al día con las comidas.",
-      "Combinar con dieta balanceada y ejercicio regular para mejores resultados.",
-      "No superar la dosis diaria recomendada.",
-      "Consulta a tu médico si estás embarazada, en lactancia o bajo tratamiento médico."
+      "Toma dos cápsulas blandas tres veces al día, preferentemente con las comidas."
     ],
-    faqs: [],
+    ingredientesTexto: "Por 2 cápsulas blandas: Calorías 15 · Grasas totales 1.5g (2%) · Ácido Linoleico Conjugado —CLA de aceite de cártamo— 1,000mg.\nPor 6 cápsulas (dosis diaria): Calorías 45 · Grasas totales 4.5g (7%) · CLA 3,000mg.\n\nOtros ingredientes: gelatina, glicerina.",
+    faqs: [
+      {
+        pregunta: "¿CLA 500 Nutrilite™ cuenta con certificación Halal?",
+        respuesta: "Sí."
+      }
+    ],
+    certificaciones: [
+      { nombre: "Halal", descripcion: "Halal" }
+    ],
     detalles: [
-      { label: "Ingrediente activo", valor: "CLA (Ácido Linoleico Conjugado)" },
-      { label: "Origen", valor: "Aceite de cártamo vegetal" },
-      { label: "Uso", valor: "1 cápsula × 3 veces al día" },
-      { label: "Suministro", valor: "45 días" },
+      { label: "Contenido", valor: "180 cápsulas blandas" },
+      { label: "Ingrediente activo", valor: "CLA 1,000mg por 2 cápsulas" },
+      { label: "Origen", valor: "Aceite de cártamo 100% vegetal" },
+      { label: "Uso", valor: "2 cápsulas × 3 veces al día con comidas" },
+      { label: "Suministro", valor: "30 días" },
       { label: "Artículo", valor: "100280" }
     ],
     imagenes: ["/CLA500Nutrilite.png"],
@@ -1237,16 +1337,24 @@ export const productos = [
       "Forma picolinato: máxima biodisponibilidad"
     ],
     instrucciones: [
-      "Toma 1 tableta al día con una comida.",
-      "No exceder la dosis diaria recomendada.",
-      "Consulta a tu médico si tomas medicamentos hipoglucemiantes o para la diabetes.",
-      "Mantener fuera del alcance de niños."
+      "Toma una cápsula con un vaso grande de agua tres veces al día, entre 30 y 45 minutos antes de las comidas."
     ],
-    faqs: [],
+    ingredientesTexto: "Por cápsula: Cromo (picolinato de cromo) 100mcg (83%) · Garcinia (fruta) 300mg · Gymnema (hojas) 33.3mg · Concentrado de Perejil Nutrilite™ 33.3mg · Vanadio (bis-glicinato-oxo-vanadio) 6.7mcg.\n\nOtros ingredientes: celulosa microcristalina, gelatina, agua, maltodextrina, estearato de magnesio, acacia, dióxido de silicio. Sin saborizantes, colorantes ni conservantes artificiales.",
+    faqs: [
+      {
+        pregunta: "¿Picolinato de Cromo Nutrilite™ cuenta con certificación Halal?",
+        respuesta: "Sí."
+      }
+    ],
+    certificaciones: [
+      { nombre: "Halal", descripcion: "Halal" }
+    ],
     detalles: [
-      { label: "Ingrediente activo", valor: "Picolinato de Cromo 200 mcg" },
-      { label: "Uso", valor: "1 tableta al día con comida" },
-      { label: "Objetivo", valor: "Control glucosa y antojos" },
+      { label: "Contenido", valor: "120 comprimidos" },
+      { label: "Ingrediente activo", valor: "Cromo 100mcg + Garcinia + Gymnema" },
+      { label: "Uso", valor: "1 cápsula × 3 veces al día (30-45 min antes de comer)" },
+      { label: "Objetivo", valor: "Metabolismo de glucosa y control de antojos" },
+      { label: "Sin", valor: "Saborizantes · colorantes · conservantes artificiales" },
       { label: "Artículo", valor: "A8600" }
     ],
     imagenes: ["/Picolinato-cromo.jpg"],
@@ -1282,17 +1390,37 @@ export const productos = [
       "Sin beta-caroteno sintético"
     ],
     instrucciones: [
-      "Toma 1 cápsula blanda al día con una comida.",
-      "No exceder la dosis diaria recomendada.",
-      "No recomendado para fumadores en dosis altas de beta-caroteno aislado — esta fórmula es segura por ser espectro completo.",
-      "Mantener en lugar fresco y seco."
+      "Toma una cápsula blanda al día."
     ],
-    faqs: [],
+    ingredientesTexto: "Por cápsula: Calorías 5 · Vitamina A (betacaroteno) 1,750mcg (194%) · Zinc (gluconato de zinc) 2mg (18%) · Luteína y zeaxantina (extracto de caléndula Tagetes erecta) 18mg · Licopeno (extracto de tomate) 2.5mg.\n\nNutrientes vegetales de caléndula, tomates y algas cultivadas en granjas asociadas Nutrilite™. Sin gluten, sin soja, sin lácteos, sin saborizantes ni colorantes artificiales.",
+    faqs: [
+      {
+        pregunta: "¿Qué son los carotenoides y cuál es su función?",
+        respuesta: "Los carotenoides dan a las plantas sus pigmentos amarillos, rojos y anaranjados. En el cuerpo actúan como antioxidantes, protegiendo las células del daño oxidativo causado por los radicales libres."
+      },
+      {
+        pregunta: "¿Cuáles son los beneficios de tomar este producto?",
+        respuesta: "Espectro Multicaroteno Nutrilite™ complementa la dieta con carotenoides naturales que apoyan la salud visual. Ayuda a los ojos a filtrar la luz azul, apoya el enfoque visual, proporciona vitamina A esencial para la retina y ofrece protección antioxidante contra el estrés oxidativo."
+      },
+      {
+        pregunta: "¿Cómo y cuándo debo tomarlo?",
+        respuesta: "Toma una cápsula blanda al día. Puede tomarse con una comida o con el estómago vacío, según la preferencia del usuario."
+      },
+      {
+        pregunta: "¿Por qué las cápsulas blandas son de color naranja?",
+        respuesta: "Las cápsulas blandas están fabricadas con un proceso que agrega un color natural a base de betacaroteno, lo que les da el intenso color naranja que coincide con los carotenoides que contienen."
+      }
+    ],
+    certificaciones: [
+      { nombre: "Halal", descripcion: "Halal" },
+      { nombre: "NSF", descripcion: "Certificación de contenido NSF" }
+    ],
     detalles: [
-      { label: "Ingredientes activos", valor: "Alfa, Beta, Gamma Caroteno + Licopeno + Luteína + Zeaxantina" },
-      { label: "Origen", valor: "Plantas cultivadas en granjas Nutrilite™" },
-      { label: "Uso", valor: "1 cápsula al día con comida" },
-      { label: "Certificaciones", valor: "Kosher" },
+      { label: "Contenido", valor: "60 cápsulas blandas" },
+      { label: "Ingredientes activos", valor: "Luteína 15mg + Zeaxantina 3mg + Licopeno + Betacaroteno" },
+      { label: "Origen", valor: "Caléndula, tomates y algas — granjas Nutrilite™" },
+      { label: "Uso", valor: "1 cápsula blanda al día" },
+      { label: "Certificaciones", valor: "Halal · NSF" },
       { label: "Artículo", valor: "124708" }
     ],
     imagenes: ["/espectro-multicaroteno.jpg"],
@@ -1327,16 +1455,33 @@ export const productos = [
       "Precio accesible para uso diario continuo"
     ],
     instrucciones: [
-      "Toma 1 tableta al día con una comida.",
-      "Preferiblemente por la mañana.",
-      "No exceder la dosis diaria recomendada.",
-      "Mantener fuera del alcance de los niños."
+      "Toma una tableta diaria, preferiblemente con comida."
     ],
-    faqs: [],
+    ingredientesTexto: "Por tableta: Vitamina A 800mcg (89%) · Vitamina C 90mg (100%) · Vitamina D 10mcg (50%) · Vitamina E 10mg (67%) · Tiamina 1.4mg (117%) · Riboflavina 1.4mg (108%) · Niacina 18mg (113%) · Vitamina B6 1.4mg (82%) · Ácido fólico 240mcg (60%) · Vitamina B12 2.4mcg (100%) · Biotina 30mcg (100%) · Ácido pantotéónico 5mg (100%) · Calcio 160mg (12%) · Hierro 10mg (56%) · Yodo 150mcg (100%) · Magnesio 63mg (15%) · Zinc 10mg (91%) · Selenio 65mcg (64%) · Cobre 0.5mg (56%) · Manganeso 2.3mg (100%) · Cromo 35mcg (100%) · Molibdeno 23mcg (51%) · Concentrado de acerola 75.27mg · Concentrado de zanahoria 4.86mg.\n\nSin colorantes, saborizantes ni conservantes artificiales. Sin gluten.",
+    faqs: [
+      {
+        pregunta: "¿Daily Nutrilite™ cuenta con certificación NSF?",
+        respuesta: "Sí. NSF International evalúa a fondo cada aspecto del desarrollo del producto — pruebas extensas, análisis de materiales e inspecciones sorpresa — antes de otorgar la certificación. Es la garantía de que los productos cumplen normas estrictas para proteger la salud pública."
+      },
+      {
+        pregunta: "¿Daily Nutrilite™ cuenta con certificación Kosher?",
+        respuesta: "Sí."
+      },
+      {
+        pregunta: "¿Daily Nutrilite™ cuenta con certificación Halal?",
+        respuesta: "Sí."
+      }
+    ],
+    certificaciones: [
+      { nombre: "Kosher", descripcion: "Certificación Kosher" },
+      { nombre: "Halal", descripcion: "Halal" }
+    ],
     detalles: [
-      { label: "Uso", valor: "1 tableta al día" },
-      { label: "Tipo", valor: "Multivitamínico diario esencial" },
-      { label: "Origen", valor: "Base vegetal · Nutrilite™" },
+      { label: "Contenido", valor: "45 tabletas" },
+      { label: "Nutrientes", valor: "22 vitaminas y minerales + concentrados vegetales" },
+      { label: "Uso", valor: "1 tableta al día con comida" },
+      { label: "Sin", valor: "Gluten · colorantes · conservantes artificiales" },
+      { label: "Certificaciones", valor: "Kosher · Halal · NSF" },
       { label: "Artículo", valor: "120011DR" }
     ],
     imagenes: ["/diario-nutrilite.png"],
