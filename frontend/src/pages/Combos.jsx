@@ -31,7 +31,7 @@ const combos = [
     badge: '🛡️ Protección Total',
     badgeColor: 'bg-emerald-600',
     productos: [
-      { nombre: 'Vitamina C Nutrilite™', cantidad: '60 comprimidos', img: '/109741CO-690px-01.jpg', precio: 1099 },
+      { nombre: 'Vitamina C Nutrilite™', cantidad: '60 comprimidos', img: '/109741CO-690px-01.png', precio: 1099 },
       { nombre: 'Vitamina D Nutrilite™', cantidad: '180 comprimidos', img: '/Nutrilite™ Vitamina D.jpg', precio: 1245 },
       { nombre: 'Defensa Zinc Nutrilite™', cantidad: '60 pastillas', img: '/Nutrilite Defensa inmunológica Zinc+albahaca sagrada.jpg', precio: 699 },
     ],
@@ -90,7 +90,7 @@ const combos = [
     productos: [
       { nombre: 'Pelo Piel y Uñas Nutrilite™', cantidad: '60 comprimidos', img: '/Pelo, Piel y Uñas Nutrilite.jpg', precio: 1519 },
       { nombre: 'Vitamina E Masticable', cantidad: '90 tabletas', img: '/Nutrilite Vitamina E masticable.jpg', precio: 2825 },
-      { nombre: 'Vitamina C Nutrilite™', cantidad: '60 comprimidos', img: '/109741CO-690px-01.jpg', precio: 1099 },
+      { nombre: 'Vitamina C Nutrilite™', cantidad: '60 comprimidos', img: '/109741CO-690px-01.png', precio: 1099 },
     ],
     precioNormal: 5443,
     precioCombo: 4890,
@@ -127,7 +127,7 @@ const combos = [
     badgeColor: 'bg-green-600',
     productos: [
       { nombre: 'Pasta Dental Glister™', cantidad: '1 unidad (200g)', img: '/124106SP-690px-01.jpg', precio: 899 },
-      { nombre: 'Vitamina C Nutrilite™', cantidad: '60 comprimidos', img: '/109741CO-690px-01.jpg', precio: 1099 },
+      { nombre: 'Vitamina C Nutrilite™', cantidad: '60 comprimidos', img: '/109741CO-690px-01.png', precio: 1099 },
       { nombre: 'Multivitamínico Niños', cantidad: '120 tabletas', img: '/Multivitamínico diario para niños Nutrilite.jpg', precio: 1094 },
     ],
     precioNormal: 3092,
