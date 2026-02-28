@@ -758,7 +758,7 @@ export default function ProductoDetalle() {
                             <span className="text-blue-600 text-[9px] font-black leading-tight text-center">FoS</span>
                           </div>
                         )}
-                        <span className="text-gray-600 text-sm">{cert.descripcion}</span>
+                        <span className="text-gray-800 text-sm font-bold">{cert.descripcion}</span>
                       </div>
                     ))}
                   </div>
