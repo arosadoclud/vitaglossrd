@@ -52,7 +52,7 @@ router.post('/', async (req, res) => {
       nombre:   nombre  || 'Cliente web',
       whatsapp: whatsapp || '',
       refCode:  refCode  || '',
-      source:   source   || 'web_cart',
+      source:   source   || 'web_carrito',
     })
 
     // Disparar n8n en background (no bloquea la respuesta)
@@ -64,7 +64,29 @@ router.post('/', async (req, res) => {
     res.status(500).json({ error: 'Error al guardar el pedido' })
   }
 })
+// ── POST /api/orders/admin — crear pedido manual desde el panel (admin) ───────────
+router.post('/admin', protect, adminOnly, async (req, res) => {
+  try {
+    const { items, total, nombre, whatsapp, direccionEntrega, notas, pagado } = req.body
+    if (!items || !items.length) return res.status(400).json({ error: 'El pedido está vacío' })
 
+    const order = await Order.create({
+      items,
+      total,
+      nombre:           nombre           || 'Cliente manual',
+      whatsapp:         whatsapp         || '',
+      direccionEntrega: direccionEntrega  || '',
+      notas:            notas            || '',
+      pagado:           pagado           || 'pendiente',
+      source:           'manual',
+      estado:           'nuevo',
+    })
+    res.status(201).json({ ok: true, order })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Error al guardar el pedido' })
+  }
+})
 // ── GET /api/orders — listar pedidos (admin) ──────────────────────────────
 router.get('/', protect, adminOnly, async (req, res) => {
   try {
@@ -98,10 +120,12 @@ router.get('/:id', protect, adminOnly, async (req, res) => {
 // ── PATCH /api/orders/:id — actualizar estado / notas (admin) ────────────
 router.patch('/:id', protect, adminOnly, async (req, res) => {
   try {
-    const { estado, notas } = req.body
+    const { estado, notas, pagado, direccionEntrega } = req.body
     const update = {}
-    if (estado) update.estado = estado
-    if (notas  !== undefined) update.notas = notas
+    if (estado !== undefined)           update.estado = estado
+    if (notas  !== undefined)           update.notas  = notas
+    if (pagado !== undefined)           update.pagado = pagado
+    if (direccionEntrega !== undefined) update.direccionEntrega = direccionEntrega
 
     const order = await Order.findByIdAndUpdate(req.params.id, update, { new: true, runValidators: true })
     if (!order) return res.status(404).json({ error: 'Pedido no encontrado' })

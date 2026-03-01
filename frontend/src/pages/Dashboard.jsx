@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import { api } from '../services/api'
 import { useSEO } from '../hooks/useSEO'
 import AcademiaTab from '../components/academia/AcademiaTab'
+import { productos } from '../data/productos'
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 const ESTADO_LEAD = ['nuevo', 'contactado', 'interesado', 'cerrado', 'perdido']
@@ -24,6 +25,36 @@ const BADGE_VENTA = {
   enviado:    'bg-purple-100 text-purple-700',
   entregado:  'bg-green-100 text-green-700',
   cancelado:  'bg-red-100 text-red-700',
+}
+
+// ─── Order states ────────────────────────────────────────────────────────────
+const ORDER_ESTADOS = [
+  { value: 'nuevo',      label: '🆕 Nuevo',      badge: 'bg-sky-100 text-sky-700' },
+  { value: 'confirmado', label: '💬 Confirmado',  badge: 'bg-blue-100 text-blue-700' },
+  { value: 'preparando', label: '📦 Preparando',  badge: 'bg-amber-100 text-amber-700' },
+  { value: 'enviado',    label: '🚚 Enviado',     badge: 'bg-purple-100 text-purple-700' },
+  { value: 'en_camino',  label: '🛣️ En camino',   badge: 'bg-orange-100 text-orange-700' },
+  { value: 'entregado',  label: '✅ Entregado',   badge: 'bg-green-100 text-green-700' },
+  { value: 'cancelado',  label: '❌ Cancelado',   badge: 'bg-red-100 text-red-700' },
+]
+const ORDER_PAGO = [
+  { value: 'pendiente', label: '⏳ Pendiente', badge: 'bg-yellow-100 text-yellow-700' },
+  { value: 'parcial',   label: '〽️ Parcial',   badge: 'bg-orange-100 text-orange-700' },
+  { value: 'pagado',    label: '✅ Pagado',     badge: 'bg-green-100 text-green-700' },
+]
+
+function waMessageForEstado(order) {
+  const n = order.nombre || 'cliente'
+  const t = `RD$${order.total.toLocaleString()}`
+  switch (order.estado) {
+    case 'nuevo':      return `Hola *${n}* 👋 Acabo de recibir tu pedido de ${t}. ¿Lo confirmamos?`
+    case 'confirmado': return `Hola *${n}* ✅ Tu pedido de ${t} está confirmado. Lo estamos preparando ahora mismo 📦`
+    case 'preparando': return `Hola *${n}* 📦 Tu pedido ya está siendo preparado. Te aviso cuando esté listo para envío.`
+    case 'enviado':    return `Hola *${n}* 🚚 Tu pedido de ${t} ha sido enviado. ¡Espéralo pronto!`
+    case 'en_camino':  return `Hola *${n}* 🛣️ Tu pedido está *en camino* y llegará en breve. ¡Prepárate para recibirlo!`
+    case 'entregado':  return `Hola *${n}* ✅ ¡Tu pedido fue entregado! Espero que estés satisfecho/a. ¿Todo bien con el producto?`
+    default:           return `Hola *${n}*, hablamos sobre tu pedido de ${t}`
+  }
 }
 
 const TABS = ['📊 Resumen', '👥 Leads', '💰 Ventas', '💬 Plantillas', '🟢 Equipo VitaGlossRD', '📦 Pedidos Web', '⚙️ Perfil']
@@ -114,6 +145,11 @@ export default function Dashboard() {
   const [orders, setOrders] = useState([])
   const [loadingOrders, setLoadingOrders] = useState(false)
   const [orderEstadoFilter, setOrderEstadoFilter] = useState('')
+  const [orderModal, setOrderModal] = useState(false)
+  const [orderSaving, setOrderSaving] = useState(false)
+  const [orderSearch, setOrderSearch] = useState('')
+  const EMPTY_ORDER = { nombre: '', whatsapp: '', direccionEntrega: '', notas: '', pagado: 'pendiente', items: [{ nombre: '', precio: '', cantidad: 1 }] }
+  const [orderForm, setOrderForm] = useState(EMPTY_ORDER)
 
   // templates copy feedback
   const [copied, setCopied] = useState(null)
@@ -146,6 +182,28 @@ export default function Dashboard() {
     } catch {}
     finally { setLoadingOrders(false) }
   }, [])
+
+  // ── order helpers ──────────────────────────────────────────────────────────
+  const orderTotal = (items) => items.reduce((s, i) => s + (Number(i.precio) || 0) * (Number(i.cantidad) || 1), 0)
+
+  const addOrderItem = () => setOrderForm(f => ({ ...f, items: [...f.items, { nombre: '', precio: '', cantidad: 1 }] }))
+  const removeOrderItem = (idx) => setOrderForm(f => ({ ...f, items: f.items.filter((_, i) => i !== idx) }))
+  const setOrderItem = (idx, field, val) => setOrderForm(f => ({ ...f, items: f.items.map((it, i) => i === idx ? { ...it, [field]: val } : it) }))
+
+  const submitOrderAdmin = async (e) => {
+    e.preventDefault()
+    const items = orderForm.items.filter(i => i.nombre && i.precio)
+    if (!items.length) return
+    setOrderSaving(true)
+    try {
+      const total = orderTotal(items)
+      await api.createOrderAdmin({ ...orderForm, items: items.map(i => ({ nombre: i.nombre, cantidad: Number(i.cantidad) || 1, precio: Number(i.precio) || 0, articulo: i.articulo || '' })), total })
+      setOrderModal(false)
+      setOrderForm(EMPTY_ORDER)
+      loadOrders(orderEstadoFilter)
+    } catch (err) { alert(err.message) }
+    finally { setOrderSaving(false) }
+  }
 
   useEffect(() => {
     loadStats()
@@ -680,29 +738,50 @@ export default function Dashboard() {
           </Section>
         )}
 
-        {/* ── TAB 5: PEDIDOS WEB ────────────────────────────────────────────────── */}
+        {/* ── TAB 5: PEDIDOS ────────────────────────────────────────────────── */}
         {tab === 5 && (
           <Section>
-            <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
-              <div>
-                <h2 className="text-2xl font-black text-primary mb-1">Pedidos Web</h2>
-                <p className="text-gray-500 text-sm">Pedidos recibidos desde el carrito en la web.</p>
-              </div>
-              <div className="flex items-center gap-2">
+            {/* Mini stats del día */}
+            {(() => {
+              const hoy = new Date().toDateString()
+              const pedidosHoy = orders.filter(o => new Date(o.createdAt).toDateString() === hoy)
+              const pendientes = orders.filter(o => !['entregado','cancelado'].includes(o.estado))
+              const ingresosHoy = pedidosHoy.reduce((s, o) => s + o.total, 0)
+              return (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+                  {[
+                    { label: 'Total pedidos', val: orders.length, color: 'bg-primary/10 text-primary' },
+                    { label: 'Hoy', val: pedidosHoy.length, color: 'bg-blue-50 text-blue-700' },
+                    { label: 'Activos', val: pendientes.length, color: 'bg-amber-50 text-amber-700' },
+                    { label: 'Ingresos hoy', val: `RD$${ingresosHoy.toLocaleString()}`, color: 'bg-green-50 text-green-700' },
+                  ].map(s => (
+                    <div key={s.label} className={`${s.color} rounded-2xl p-4 text-center`}>
+                      <p className="text-2xl font-black">{s.val}</p>
+                      <p className="text-xs font-semibold opacity-70 mt-0.5">{s.label}</p>
+                    </div>
+                  ))}
+                </div>
+              )
+            })()}
+
+            {/* Header + controles */}
+            <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+              <h2 className="text-2xl font-black text-primary">Pedidos</h2>
+              <div className="flex items-center gap-2 flex-wrap">
                 <select
                   value={orderEstadoFilter}
                   onChange={e => { setOrderEstadoFilter(e.target.value); loadOrders(e.target.value) }}
                   className="border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-primary"
                 >
-                  <option value="">Todos</option>
-                  <option value="nuevo">Nuevos</option>
-                  <option value="contactado">Contactados</option>
-                  <option value="confirmado">Confirmados</option>
-                  <option value="entregado">Entregados</option>
-                  <option value="cancelado">Cancelados</option>
+                  <option value="">Todos los estados</option>
+                  {ORDER_ESTADOS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                 </select>
-                <button onClick={() => loadOrders(orderEstadoFilter)} className="border border-gray-200 rounded-xl px-3 py-2 text-sm hover:bg-gray-50 transition-colors">
-                  🔄
+                <button onClick={() => loadOrders(orderEstadoFilter)} className="border border-gray-200 rounded-xl px-3 py-2 text-sm hover:bg-gray-50 transition-colors">🔄</button>
+                <button
+                  onClick={() => setOrderModal(true)}
+                  className="bg-primary text-white rounded-xl px-4 py-2 text-sm font-bold hover:bg-blue-900 transition-colors flex items-center gap-2"
+                >
+                  ＋ Nuevo pedido
                 </button>
               </div>
             </div>
@@ -713,72 +792,253 @@ export default function Dashboard() {
               <div className="text-center py-20">
                 <p className="text-5xl mb-3">📦</p>
                 <p className="text-gray-400 font-medium">No hay pedidos aún</p>
-                <p className="text-gray-300 text-sm mt-1">Cuando un cliente confirme un pedido desde la web aparecerá aquí</p>
+                <p className="text-gray-300 text-sm mt-1">Crea un pedido manualmente o espera uno del carrito web</p>
+                <button onClick={() => setOrderModal(true)} className="mt-4 bg-primary text-white rounded-xl px-5 py-2.5 text-sm font-bold hover:bg-blue-900 transition-colors">＋ Crear primer pedido</button>
               </div>
             ) : (
               <div className="flex flex-col gap-4">
-                {orders.map(order => (
-                  <div key={order._id} className="bg-white rounded-3xl border border-gray-100 p-5 hover:shadow-md transition-shadow">
-                    <div className="flex items-start justify-between gap-3 mb-3">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <p className="font-black text-gray-800">{order.nombre}</p>
-                          {order.refCode && <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-semibold">ref: {order.refCode}</span>}
+                {orders.map(order => {
+                  const estadoInfo = ORDER_ESTADOS.find(s => s.value === order.estado) || ORDER_ESTADOS[0]
+                  const pagoInfo = ORDER_PAGO.find(p => p.value === (order.pagado || 'pendiente')) || ORDER_PAGO[0]
+                  return (
+                    <div key={order._id} className="bg-white rounded-3xl border border-gray-100 p-5 hover:shadow-md transition-shadow">
+                      {/* Header de la card */}
+                      <div className="flex items-start justify-between gap-3 mb-4">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap mb-1">
+                            <p className="font-black text-gray-800 truncate">{order.nombre}</p>
+                            <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${order.source === 'manual' ? 'bg-gray-100 text-gray-500' : 'bg-indigo-100 text-indigo-600'}`}>
+                              {order.source === 'manual' ? '✏️ Manual' : '🛒 Web'}
+                            </span>
+                            {order.refCode && <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-semibold">ref: {order.refCode}</span>}
+                          </div>
+                          {order.whatsapp && (
+                            <a href={`https://wa.me/${order.whatsapp.replace(/\D/g,'')}`} target="_blank" rel="noopener noreferrer"
+                              className="text-green-600 text-sm font-semibold hover:underline inline-flex items-center gap-1">
+                              📲 {order.whatsapp}
+                            </a>
+                          )}
+                          {order.direccionEntrega && <p className="text-gray-400 text-xs mt-0.5 truncate">📍 {order.direccionEntrega}</p>}
+                          <p className="text-gray-300 text-xs mt-1">{new Date(order.createdAt).toLocaleString('es-DO', { dateStyle: 'medium', timeStyle: 'short' })}</p>
                         </div>
+                        <div className="text-right flex-shrink-0">
+                          <p className="text-2xl font-black text-primary mb-2">RD${order.total.toLocaleString()}</p>
+                          {/* Estado */}
+                          <select
+                            value={order.estado}
+                            onChange={async e => { await api.updateOrder(order._id, { estado: e.target.value }); loadOrders(orderEstadoFilter) }}
+                            className={`text-xs font-bold px-2 py-1 rounded-full border-0 outline-none cursor-pointer mb-1 block ml-auto ${estadoInfo.badge}`}
+                          >
+                            {ORDER_ESTADOS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                          </select>
+                          {/* Pago */}
+                          <select
+                            value={order.pagado || 'pendiente'}
+                            onChange={async e => { await api.updateOrder(order._id, { pagado: e.target.value }); loadOrders(orderEstadoFilter) }}
+                            className={`text-xs font-bold px-2 py-1 rounded-full border-0 outline-none cursor-pointer block ml-auto ${pagoInfo.badge}`}
+                          >
+                            {ORDER_PAGO.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
+                          </select>
+                        </div>
+                      </div>
+
+                      {/* Productos */}
+                      <div className="bg-gray-50 rounded-2xl p-3 space-y-1 mb-3">
+                        {order.items.map((item, i) => (
+                          <div key={i} className="flex justify-between text-sm">
+                            <span className="text-gray-600 truncate pr-2">{item.nombre} <span className="text-gray-400">×{item.cantidad}</span></span>
+                            <span className="font-semibold text-gray-700 flex-shrink-0">RD${(item.precio * item.cantidad).toLocaleString()}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Notas */}
+                      {order.notas && <p className="text-gray-400 text-xs italic mb-3 px-1">💬 {order.notas}</p>}
+
+                      {/* Acciones */}
+                      <div className="flex gap-2">
                         {order.whatsapp && (
-                          <a href={`https://wa.me/${order.whatsapp.replace(/\D/g,'')}`} target="_blank" rel="noopener noreferrer"
-                            className="text-green-600 text-sm font-semibold hover:underline flex items-center gap-1">
-                            📲 {order.whatsapp}
+                          <a
+                            href={`https://wa.me/${order.whatsapp.replace(/\D/g,'')}?text=${encodeURIComponent(waMessageForEstado(order))}`}
+                            target="_blank" rel="noopener noreferrer"
+                            className="flex-1 bg-[#25D366] hover:bg-[#1ebe5d] text-white text-sm font-bold py-2.5 rounded-2xl flex items-center justify-center gap-2 transition-colors"
+                          >
+                            <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zm-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                            Mensaje WA
                           </a>
                         )}
-                        <p className="text-gray-400 text-xs mt-1">{new Date(order.createdAt).toLocaleString('es-DO', { dateStyle: 'medium', timeStyle: 'short' })}</p>
-                      </div>
-                      <div className="text-right flex-shrink-0">
-                        <p className="text-xl font-black text-primary">RD${order.total.toLocaleString()}</p>
-                        <select
-                          value={order.estado}
-                          onChange={async e => {
-                            await api.updateOrder(order._id, { estado: e.target.value })
-                            loadOrders(orderEstadoFilter)
-                          }}
-                          className={`mt-1 text-xs font-bold px-2 py-1 rounded-full border-0 outline-none cursor-pointer ${
-                            order.estado === 'nuevo'      ? 'bg-sky-100 text-sky-700' :
-                            order.estado === 'contactado' ? 'bg-yellow-100 text-yellow-700' :
-                            order.estado === 'confirmado' ? 'bg-blue-100 text-blue-700' :
-                            order.estado === 'entregado'  ? 'bg-green-100 text-green-700' :
-                                                            'bg-red-100 text-red-700'
-                          }`}
-                        >
-                          <option value="nuevo">Nuevo</option>
-                          <option value="contactado">Contactado</option>
-                          <option value="confirmado">Confirmado</option>
-                          <option value="entregado">Entregado</option>
-                          <option value="cancelado">Cancelado</option>
-                        </select>
+                        <button
+                          onClick={async () => { if (confirm('¿Eliminar este pedido?')) { await api.deleteOrder(order._id); loadOrders(orderEstadoFilter) } }}
+                          className="bg-red-50 hover:bg-red-100 text-red-500 text-sm font-bold px-4 rounded-2xl transition-colors"
+                        >🗑</button>
                       </div>
                     </div>
-                    <div className="bg-gray-50 rounded-2xl p-3 space-y-1">
-                      {order.items.map((item, i) => (
-                        <div key={i} className="flex justify-between text-sm">
-                          <span className="text-gray-600">{item.nombre} <span className="text-gray-400">x{item.cantidad}</span></span>
-                          <span className="font-semibold text-gray-700">RD${(item.precio * item.cantidad).toLocaleString()}</span>
-                        </div>
-                      ))}
-                    </div>
-                    {order.whatsapp && (
-                      <a
-                        href={`https://wa.me/${order.whatsapp.replace(/\D/g,'')}?text=${encodeURIComponent(`Hola *${order.nombre}* 👋 Tu pedido de RD$${order.total.toLocaleString()} está confirmado ✅ ¿Cuándo podemos coordinarlo?`)}`}
-                        target="_blank" rel="noopener noreferrer"
-                        className="mt-3 w-full bg-[#25D366] hover:bg-[#1ebe5d] text-white text-sm font-bold py-2.5 rounded-2xl flex items-center justify-center gap-2 transition-colors"
-                      >
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zm-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                        Confirmar por WhatsApp
-                      </a>
-                    )}
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             )}
+
+            {/* ── MODAL NUEVO PEDIDO ─────────────────────────────────────────── */}
+            <AnimatePresence>
+              {orderModal && (
+                <motion.div
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-start justify-center p-4 overflow-y-auto"
+                  onClick={e => e.target === e.currentTarget && setOrderModal(false)}
+                >
+                  <motion.div
+                    initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }}
+                    className="bg-white rounded-3xl w-full max-w-lg my-8 overflow-hidden shadow-2xl"
+                  >
+                    <div className="bg-gradient-to-r from-primary to-blue-700 p-6 text-white flex items-center justify-between">
+                      <div>
+                        <h3 className="text-xl font-black">Nuevo Pedido</h3>
+                        <p className="text-white/60 text-sm">Crea un pedido manualmente desde WhatsApp</p>
+                      </div>
+                      <button onClick={() => setOrderModal(false)} className="text-white/60 hover:text-white text-2xl leading-none">×</button>
+                    </div>
+
+                    <form onSubmit={submitOrderAdmin} className="p-6 space-y-5">
+                      {/* Cliente */}
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Nombre cliente *</label>
+                          <input
+                            required
+                            value={orderForm.nombre}
+                            onChange={e => setOrderForm(f => ({ ...f, nombre: e.target.value }))}
+                            placeholder="Ej: María Rodríguez"
+                            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-primary"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">WhatsApp</label>
+                          <input
+                            value={orderForm.whatsapp}
+                            onChange={e => setOrderForm(f => ({ ...f, whatsapp: e.target.value }))}
+                            placeholder="18091234567"
+                            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-primary"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Dirección de entrega</label>
+                        <input
+                          value={orderForm.direccionEntrega}
+                          onChange={e => setOrderForm(f => ({ ...f, direccionEntrega: e.target.value }))}
+                          placeholder="Sector, calle, número, ciudad"
+                          className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-primary"
+                        />
+                      </div>
+
+                      {/* Productos */}
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Productos *</label>
+                          <button type="button" onClick={addOrderItem} className="text-primary text-xs font-bold hover:underline">＋ Agregar</button>
+                        </div>
+                        {/* Buscador rápido */}
+                        <div className="relative mb-2">
+                          <input
+                            value={orderSearch}
+                            onChange={e => setOrderSearch(e.target.value)}
+                            placeholder="🔍 Buscar producto del catálogo..."
+                            className="w-full border border-dashed border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-primary"
+                          />
+                          {orderSearch.length > 1 && (
+                            <div className="absolute z-10 top-full left-0 right-0 bg-white border border-gray-100 rounded-xl shadow-lg mt-1 max-h-40 overflow-y-auto">
+                              {productos.filter(p => p.nombre.toLowerCase().includes(orderSearch.toLowerCase())).slice(0, 6).map(p => (
+                                <button type="button" key={p.id}
+                                  onClick={() => {
+                                    const emptyIdx = orderForm.items.findIndex(i => !i.nombre)
+                                    if (emptyIdx >= 0) {
+                                      setOrderItem(emptyIdx, 'nombre', p.nombre)
+                                      setOrderItem(emptyIdx, 'precio', p.precio)
+                                      setOrderItem(emptyIdx, 'articulo', p.articulo)
+                                    } else {
+                                      setOrderForm(f => ({ ...f, items: [...f.items, { nombre: p.nombre, precio: p.precio, cantidad: 1, articulo: p.articulo }] }))
+                                    }
+                                    setOrderSearch('')
+                                  }}
+                                  className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 flex items-center justify-between border-b border-gray-50 last:border-0"
+                                >
+                                  <span className="truncate pr-2">{p.nombre}</span>
+                                  <span className="text-primary font-bold flex-shrink-0">RD${p.precio.toLocaleString()}</span>
+                                </button>
+                              ))}
+                              {productos.filter(p => p.nombre.toLowerCase().includes(orderSearch.toLowerCase())).length === 0 && (
+                                <p className="text-center text-gray-400 text-xs py-3">Sin resultados</p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                        <div className="space-y-2">
+                          {orderForm.items.map((item, idx) => (
+                            <div key={idx} className="grid grid-cols-12 gap-2 items-center">
+                              <input
+                                value={item.nombre}
+                                onChange={e => setOrderItem(idx, 'nombre', e.target.value)}
+                                placeholder="Producto"
+                                className="col-span-5 border border-gray-200 rounded-xl px-2.5 py-2 text-sm focus:outline-none focus:border-primary"
+                              />
+                              <input
+                                type="number" min="0"
+                                value={item.precio}
+                                onChange={e => setOrderItem(idx, 'precio', e.target.value)}
+                                placeholder="Precio"
+                                className="col-span-3 border border-gray-200 rounded-xl px-2.5 py-2 text-sm focus:outline-none focus:border-primary"
+                              />
+                              <input
+                                type="number" min="1"
+                                value={item.cantidad}
+                                onChange={e => setOrderItem(idx, 'cantidad', e.target.value)}
+                                className="col-span-2 border border-gray-200 rounded-xl px-2.5 py-2 text-sm focus:outline-none focus:border-primary"
+                              />
+                              <button type="button" onClick={() => removeOrderItem(idx)} className="col-span-2 text-red-400 hover:text-red-600 text-lg font-bold text-center">×</button>
+                            </div>
+                          ))}
+                        </div>
+                        {/* Total calculado */}
+                        <div className="mt-3 bg-primary/5 rounded-xl px-4 py-2.5 flex justify-between items-center">
+                          <span className="text-sm font-bold text-gray-500">Total</span>
+                          <span className="text-lg font-black text-primary">RD${orderTotal(orderForm.items).toLocaleString()}</span>
+                        </div>
+                      </div>
+
+                      {/* Pago + notas */}
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Estado del pago</label>
+                          <select
+                            value={orderForm.pagado}
+                            onChange={e => setOrderForm(f => ({ ...f, pagado: e.target.value }))}
+                            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-primary"
+                          >
+                            {ORDER_PAGO.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Notas internas</label>
+                          <input
+                            value={orderForm.notas}
+                            onChange={e => setOrderForm(f => ({ ...f, notas: e.target.value }))}
+                            placeholder="Ej: cliente regular"
+                            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-primary"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex gap-3 pt-2">
+                        <button type="button" onClick={() => setOrderModal(false)} className="flex-1 border border-gray-200 rounded-2xl py-3 text-sm font-bold hover:bg-gray-50 transition-colors">Cancelar</button>
+                        <button type="submit" disabled={orderSaving} className="flex-1 bg-primary text-white rounded-2xl py-3 text-sm font-bold hover:bg-blue-900 transition-colors disabled:opacity-60">
+                          {orderSaving ? 'Guardando...' : '✓ Crear pedido'}
+                        </button>
+                      </div>
+                    </form>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </Section>
         )}
 
