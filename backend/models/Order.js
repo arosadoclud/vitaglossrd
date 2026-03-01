@@ -33,6 +33,9 @@ const orderSchema = new mongoose.Schema({
 
   notas: { type: String, default: '' },
 
+  // Número de factura secuencial
+  invoiceNumber: { type: Number, index: true },
+
   // Atribución
   refCode: { type: String, default: '' },
   source:  { type: String, default: 'web_carrito' }, // 'web_carrito' | 'manual' | 'formulario'

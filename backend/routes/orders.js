@@ -46,13 +46,15 @@ router.post('/', async (req, res) => {
     const { items, total, nombre, whatsapp, refCode, source } = req.body
     if (!items || !items.length) return res.status(400).json({ error: 'El pedido está vacío' })
 
+    const count = await Order.countDocuments()
     const order = await Order.create({
       items,
       total,
-      nombre:   nombre  || 'Cliente web',
-      whatsapp: whatsapp || '',
-      refCode:  refCode  || '',
-      source:   source   || 'web_carrito',
+      nombre:        nombre  || 'Cliente web',
+      whatsapp:      whatsapp || '',
+      refCode:       refCode  || '',
+      source:        source   || 'web_carrito',
+      invoiceNumber: count + 1,
     })
 
     // Disparar n8n en background (no bloquea la respuesta)
@@ -70,6 +72,7 @@ router.post('/admin', protect, adminOnly, async (req, res) => {
     const { items, total, nombre, whatsapp, direccionEntrega, notas, pagado } = req.body
     if (!items || !items.length) return res.status(400).json({ error: 'El pedido está vacío' })
 
+    const count = await Order.countDocuments()
     const order = await Order.create({
       items,
       total,
@@ -80,6 +83,7 @@ router.post('/admin', protect, adminOnly, async (req, res) => {
       pagado:           pagado           || 'pendiente',
       source:           'manual',
       estado:           'nuevo',
+      invoiceNumber:    count + 1,
     })
     res.status(201).json({ ok: true, order })
   } catch (err) {

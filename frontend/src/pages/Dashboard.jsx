@@ -207,6 +207,7 @@ export default function Dashboard() {
       // open invoice automatically
       setFacturaOrder({
         _id: saved?.order?._id || saved?._id || ('MANUAL-' + Date.now()),
+        invoiceNumber: saved?.order?.invoiceNumber || null,
         nombre: orderForm.nombre,
         whatsapp: orderForm.whatsapp,
         direccionEntrega: orderForm.direccionEntrega,
@@ -1067,7 +1068,9 @@ export default function Dashboard() {
             {/* ── MODAL FACTURA ─────────────────────────────────────────────── */}
             <AnimatePresence>
               {facturaModal && facturaOrder && (() => {
-                const numFactura = String(facturaOrder._id).slice(-6).toUpperCase()
+                const numFactura = facturaOrder.invoiceNumber
+                  ? `VG-${String(facturaOrder.invoiceNumber).padStart(4, '0')}`
+                  : String(facturaOrder._id).slice(-6).toUpperCase()
                 const fechaFactura = new Date(facturaOrder.createdAt).toLocaleDateString('es-DO', { year: 'numeric', month: 'long', day: '2-digit' })
                 const subtotalItems = facturaOrder.items.map(i => ({ ...i, subtotal: Number(i.precio) * Number(i.cantidad) }))
                 return (
@@ -1130,14 +1133,16 @@ export default function Dashboard() {
                       {/* ─────────── DOCUMENTO DE FACTURA ─────────── */}
                       <div id="factura-print" className="bg-white shadow-2xl overflow-hidden" style={{ borderRadius: '16px', fontFamily: "'Inter', sans-serif" }}>
 
-                        {/* HEADER — banda oscura de marca */}
-                        <div style={{ background: 'linear-gradient(135deg, #0a1628 0%, #1B3A6B 100%)', padding: '28px 36px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                          {/* Logo */}
-                          <img src="/logo_final.png" alt="VitaGloss RD" style={{ height: '52px', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
-                          {/* Título derecho */}
-                          <div style={{ textAlign: 'right' }}>
-                            <p style={{ color: '#2EC4B6', fontSize: '11px', fontWeight: '700', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '4px' }}>Recibo de Compra</p>
-                            <p style={{ color: '#ffffff', fontSize: '26px', fontWeight: '900', letterSpacing: '-0.5px', lineHeight: 1 }}>N.° {numFactura}</p>
+                        {/* HEADER — bicolor: blanco para logo | oscuro para número */}
+                        <div style={{ display: 'flex', alignItems: 'stretch', minHeight: '90px' }}>
+                          {/* Panel blanco — logo en colores naturales */}
+                          <div style={{ background: '#ffffff', padding: '20px 28px', display: 'flex', alignItems: 'center', borderRight: '1px solid #e5e7eb', flexShrink: 0 }}>
+                            <img src="/logo_final.png" alt="VitaGloss RD" style={{ height: '56px', width: 'auto', objectFit: 'contain', display: 'block' }} />
+                          </div>
+                          {/* Panel oscuro — datos de la factura */}
+                          <div style={{ flex: 1, background: 'linear-gradient(135deg, #0a1628 0%, #1B3A6B 100%)', padding: '20px 28px', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center' }}>
+                            <p style={{ color: '#2EC4B6', fontSize: '10px', fontWeight: '700', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '4px' }}>Recibo de Compra</p>
+                            <p style={{ color: '#ffffff', fontSize: '28px', fontWeight: '900', letterSpacing: '-0.5px', lineHeight: 1 }}>{numFactura}</p>
                             <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '12px', marginTop: '6px' }}>{fechaFactura}</p>
                           </div>
                         </div>
