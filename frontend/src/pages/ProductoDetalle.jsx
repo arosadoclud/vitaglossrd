@@ -320,7 +320,9 @@ export default function ProductoDetalle() {
       '@type': 'Product',
       name: producto.nombre,
       description: producto.descripcion,
-      image: producto.imagenes ?? [producto.imagen],
+      image: (producto.imagenes ?? [producto.imagen]).map(img =>
+        img.startsWith('http') ? img : `https://www.vitaglossrd.com${img}`
+      ),
       brand: { '@type': 'Brand', name: 'Amway' },
       sku: producto.articulo,
       offers: {
