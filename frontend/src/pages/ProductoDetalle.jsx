@@ -315,6 +315,12 @@ export default function ProductoDetalle() {
   useSEO({
     title: producto?.nombre ?? 'Producto',
     description: producto?.descripcion ?? 'Producto Amway original en VitaGloss RD. Envío a todo el país.',
+    canonical: producto ? `https://www.vitaglossrd.com/producto/${producto.id}` : undefined,
+    ogImage: producto ? (
+      (producto.imagenes?.[0] ?? producto.imagen ?? '').startsWith('http')
+        ? (producto.imagenes?.[0] ?? producto.imagen)
+        : `https://www.vitaglossrd.com${producto.imagenes?.[0] ?? producto.imagen}`
+    ) : undefined,
     jsonLd: producto ? {
       '@context': 'https://schema.org/',
       '@type': 'Product',
@@ -327,13 +333,49 @@ export default function ProductoDetalle() {
       sku: producto.articulo,
       offers: {
         '@type': 'Offer',
-        url: `https://vitaglossrd.com/producto/${producto.id}`,
+        url: `https://www.vitaglossrd.com/producto/${producto.id}`,
         priceCurrency: 'DOP',
         price: producto.precio,
+        priceValidUntil: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
         availability: producto.disponible
           ? 'https://schema.org/InStock'
           : 'https://schema.org/OutOfStock',
         seller: { '@type': 'Organization', name: 'VitaGloss RD' },
+        hasMerchantReturnPolicy: {
+          '@type': 'MerchantReturnPolicy',
+          applicableCountry: 'DO',
+          returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+          merchantReturnDays: 30,
+          returnMethod: 'https://schema.org/ReturnByMail',
+          returnFees: 'https://schema.org/FreeReturn',
+        },
+        shippingDetails: {
+          '@type': 'OfferShippingDetails',
+          shippingRate: {
+            '@type': 'MonetaryAmount',
+            value: '0',
+            currency: 'DOP',
+          },
+          shippingDestination: {
+            '@type': 'DefinedRegion',
+            addressCountry: 'DO',
+          },
+          deliveryTime: {
+            '@type': 'ShippingDeliveryTime',
+            handlingTime: {
+              '@type': 'QuantitativeValue',
+              minValue: 0,
+              maxValue: 1,
+              unitCode: 'DAY',
+            },
+            transitTime: {
+              '@type': 'QuantitativeValue',
+              minValue: 2,
+              maxValue: 5,
+              unitCode: 'DAY',
+            },
+          },
+        },
       },
     } : null,
   })
