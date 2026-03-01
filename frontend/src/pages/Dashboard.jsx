@@ -1066,148 +1066,179 @@ export default function Dashboard() {
 
             {/* ── MODAL FACTURA ─────────────────────────────────────────────── */}
             <AnimatePresence>
-              {facturaModal && facturaOrder && (
-                <motion.div
-                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                  className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-start justify-center p-4 overflow-y-auto print:p-0 print:bg-white print:inset-auto print:relative print:flex-none"
-                  onClick={e => e.target === e.currentTarget && setFacturaModal(false)}
-                >
+              {facturaModal && facturaOrder && (() => {
+                const numFactura = String(facturaOrder._id).slice(-6).toUpperCase()
+                const fechaFactura = new Date(facturaOrder.createdAt).toLocaleDateString('es-DO', { year: 'numeric', month: 'long', day: '2-digit' })
+                const subtotalItems = facturaOrder.items.map(i => ({ ...i, subtotal: Number(i.precio) * Number(i.cantidad) }))
+                return (
                   <motion.div
-                    initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }}
-                    className="bg-white rounded-3xl w-full max-w-lg my-8 overflow-hidden shadow-2xl print:shadow-none print:rounded-none print:my-0 print:max-w-full"
-                    id="factura-print"
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                    className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-start justify-center p-4 overflow-y-auto"
+                    onClick={e => e.target === e.currentTarget && setFacturaModal(false)}
                   >
-                    {/* ─ Botones de acción (ocultos al imprimir) ─ */}
-                    <div className="flex gap-2 p-4 border-b border-gray-100 print:hidden">
-                      <button
-                        onClick={() => window.print()}
-                        className="flex-1 bg-primary hover:bg-blue-900 text-white font-bold py-2.5 rounded-2xl text-sm transition-colors flex items-center justify-center gap-2"
-                      >
-                        🖨️ Imprimir / Guardar PDF
-                      </button>
-                      <button
-                        onClick={() => {
-                          const txt = [
-                            `🧾 *FACTURA VITAGLOSS RD*`,
-                            `📅 ${new Date(facturaOrder.createdAt).toLocaleString('es-DO', { dateStyle: 'long', timeStyle: 'short' })}`,
-                            ``,
-                            `👤 *Cliente:* ${facturaOrder.nombre}`,
-                            facturaOrder.whatsapp ? `📲 *WA:* ${facturaOrder.whatsapp}` : '',
-                            facturaOrder.direccionEntrega ? `📍 *Dirección:* ${facturaOrder.direccionEntrega}` : '',
-                            ``,
-                            `🛒 *Productos:*`,
-                            ...facturaOrder.items.map(i => `  • ${i.nombre} ×${i.cantidad} = RD$${(i.precio * i.cantidad).toLocaleString()}`),
-                            ``,
-                            `💰 *TOTAL: RD$${facturaOrder.total.toLocaleString()}*`,
-                            facturaOrder.pagado === 'pagado' ? `✅ PAGADO` : facturaOrder.pagado === 'parcial' ? `⚠️ PAGO PARCIAL` : `⏳ PAGO PENDIENTE`,
-                            facturaOrder.notas ? `\n💬 ${facturaOrder.notas}` : '',
-                            ``,
-                            `Gracias por tu compra 🌿 VitaGloss RD`,
-                          ].filter(Boolean).join('\n')
-                          navigator.clipboard?.writeText(txt)
-                          alert('✅ Texto copiado. Pégalo en WhatsApp.')
-                        }}
-                        className="flex-1 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold py-2.5 rounded-2xl text-sm transition-colors flex items-center justify-center gap-2"
-                      >
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zm-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                        Copiar para WA
-                      </button>
-                      <button onClick={() => setFacturaModal(false)} className="bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold px-4 rounded-2xl text-sm transition-colors">✕</button>
-                    </div>
+                    <motion.div
+                      initial={{ scale: 0.96, y: 24 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.96, y: 24 }}
+                      className="w-full max-w-2xl my-8"
+                    >
+                      {/* ─ Barra de acciones (no se imprime) ─ */}
+                      <div className="flex gap-2 mb-3 print:hidden">
+                        <button
+                          onClick={() => window.print()}
+                          className="flex-1 bg-[#1B3A6B] hover:bg-[#0a1628] text-white font-bold py-3 rounded-2xl text-sm transition-colors flex items-center justify-center gap-2 shadow-lg"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.75 19.5m10.36-5.671a42.41 42.41 0 00-10.56 0m10.56 0L17.25 19.5M9 10.5h.01M15 10.5h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                          🖨️ Imprimir / Guardar PDF
+                        </button>
+                        <button
+                          onClick={() => {
+                            const lineas = subtotalItems.map(i => `  • ${i.nombre}  ×${i.cantidad}  →  RD$${i.subtotal.toLocaleString()}`)
+                            const txt = [
+                              `╔══════════════════════════════╗`,
+                              `║   🧾  RECIBO DE COMPRA       ║`,
+                              `║      VitaGloss RD            ║`,
+                              `╚══════════════════════════════╝`,
+                              ``,
+                              `N.° ${numFactura}   📅 ${fechaFactura}`,
+                              ``,
+                              `👤 *Cliente:* ${facturaOrder.nombre}`,
+                              facturaOrder.whatsapp ? `📲 ${facturaOrder.whatsapp}` : '',
+                              facturaOrder.direccionEntrega ? `📍 ${facturaOrder.direccionEntrega}` : '',
+                              ``,
+                              `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+                              `🛒 *Productos:*`,
+                              ...lineas,
+                              `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+                              `💰 *TOTAL: RD$${facturaOrder.total.toLocaleString()}*`,
+                              facturaOrder.pagado === 'pagado' ? `✅ Pagado` : facturaOrder.pagado === 'parcial' ? `⚠️ Pago parcial` : `⏳ Pendiente de pago`,
+                              facturaOrder.notas ? `\n📝 ${facturaOrder.notas}` : '',
+                              ``,
+                              `¡Gracias por tu compra! 🌿`,
+                              `Productos Amway 100% originales`,
+                              `WhatsApp: 849-276-3532`,
+                            ].filter(l => l !== undefined && l !== null).join('\n')
+                            navigator.clipboard?.writeText(txt)
+                            alert('✅ Recibo copiado. Pégalo en WhatsApp.')
+                          }}
+                          className="flex-1 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold py-3 rounded-2xl text-sm transition-colors flex items-center justify-center gap-2 shadow-lg"
+                        >
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zm-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                          Enviar por WA
+                        </button>
+                        <button onClick={() => setFacturaModal(false)} className="bg-white/90 hover:bg-white text-gray-600 font-bold px-5 rounded-2xl text-lg transition-colors shadow-lg">✕</button>
+                      </div>
 
-                    {/* ─ Cuerpo de la factura ─ */}
-                    <div className="p-8 print:p-6">
-                      {/* Header */}
-                      <div className="flex items-start justify-between mb-8">
-                        <div>
-                          <div className="flex items-center gap-3 mb-1">
-                            <span className="text-3xl">🌿</span>
+                      {/* ─────────── DOCUMENTO DE FACTURA ─────────── */}
+                      <div id="factura-print" className="bg-white shadow-2xl overflow-hidden" style={{ borderRadius: '16px', fontFamily: "'Inter', sans-serif" }}>
+
+                        {/* HEADER — banda oscura de marca */}
+                        <div style={{ background: 'linear-gradient(135deg, #0a1628 0%, #1B3A6B 100%)', padding: '28px 36px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          {/* Logo */}
+                          <img src="/logo_final.png" alt="VitaGloss RD" style={{ height: '52px', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+                          {/* Título derecho */}
+                          <div style={{ textAlign: 'right' }}>
+                            <p style={{ color: '#2EC4B6', fontSize: '11px', fontWeight: '700', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '4px' }}>Recibo de Compra</p>
+                            <p style={{ color: '#ffffff', fontSize: '26px', fontWeight: '900', letterSpacing: '-0.5px', lineHeight: 1 }}>N.° {numFactura}</p>
+                            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '12px', marginTop: '6px' }}>{fechaFactura}</p>
+                          </div>
+                        </div>
+
+                        {/* Banda teal decorativa */}
+                        <div style={{ height: '5px', background: 'linear-gradient(90deg, #2EC4B6, #1B3A6B)' }} />
+
+                        {/* CUERPO */}
+                        <div style={{ padding: '32px 36px' }}>
+
+                          {/* Datos emisor + cliente en 2 columnas */}
+                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '32px' }}>
+                            {/* Emisor */}
                             <div>
-                              <p className="text-2xl font-black text-primary leading-none">VitaGloss RD</p>
-                              <p className="text-xs text-gray-400 font-medium">Distribuidora Amway independiente</p>
+                              <p style={{ fontSize: '10px', fontWeight: '700', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Emisor</p>
+                              <p style={{ fontWeight: '900', fontSize: '15px', color: '#1B3A6B', marginBottom: '2px' }}>VitaGloss RD</p>
+                              <p style={{ fontSize: '12px', color: '#6b7280', lineHeight: '1.6' }}>Distribuidora Amway independiente<br />WhatsApp: 849-276-3532<br />República Dominicana</p>
+                            </div>
+                            {/* Cliente */}
+                            <div style={{ textAlign: 'right' }}>
+                              <p style={{ fontSize: '10px', fontWeight: '700', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Facturado a</p>
+                              <p style={{ fontWeight: '900', fontSize: '15px', color: '#111827', marginBottom: '2px' }}>{facturaOrder.nombre}</p>
+                              {facturaOrder.whatsapp && <p style={{ fontSize: '12px', color: '#6b7280' }}>📲 {facturaOrder.whatsapp}</p>}
+                              {facturaOrder.direccionEntrega && <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '2px' }}>📍 {facturaOrder.direccionEntrega}</p>}
                             </div>
                           </div>
-                          <p className="text-xs text-gray-400 mt-1">📲 849-276-3532</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Factura</p>
-                          <p className="text-lg font-black text-gray-700 tabular-nums">
-                            #{String(facturaOrder._id).slice(-6).toUpperCase()}
-                          </p>
-                          <p className="text-xs text-gray-400 mt-1">
-                            {new Date(facturaOrder.createdAt).toLocaleDateString('es-DO', { year: 'numeric', month: 'long', day: '2-digit' })}
-                          </p>
-                        </div>
-                      </div>
 
-                      {/* Divider */}
-                      <div className="h-px bg-gray-100 mb-6" />
+                          {/* Separador */}
+                          <div style={{ height: '1px', background: '#f3f4f6', marginBottom: '24px' }} />
 
-                      {/* Cliente */}
-                      <div className="mb-6">
-                        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Cliente</p>
-                        <p className="font-black text-gray-800 text-lg leading-tight">{facturaOrder.nombre}</p>
-                        {facturaOrder.whatsapp && <p className="text-sm text-gray-500 mt-0.5">📲 {facturaOrder.whatsapp}</p>}
-                        {facturaOrder.direccionEntrega && <p className="text-sm text-gray-500 mt-0.5">📍 {facturaOrder.direccionEntrega}</p>}
-                      </div>
-
-                      {/* Tabla de productos */}
-                      <div className="mb-6">
-                        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Detalle del pedido</p>
-                        <div className="rounded-2xl overflow-hidden border border-gray-100">
-                          {/* Cabecera */}
-                          <div className="grid grid-cols-12 bg-gray-50 px-4 py-2.5 text-xs font-bold text-gray-400 uppercase tracking-wider">
-                            <span className="col-span-6">Producto</span>
-                            <span className="col-span-2 text-center">Cant.</span>
-                            <span className="col-span-2 text-right">Precio</span>
-                            <span className="col-span-2 text-right">Subtotal</span>
-                          </div>
-                          {/* Filas */}
-                          {facturaOrder.items.map((item, i) => (
-                            <div key={i} className={`grid grid-cols-12 px-4 py-3 text-sm ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
-                              <span className="col-span-6 font-semibold text-gray-700 pr-2">{item.nombre}</span>
-                              <span className="col-span-2 text-center text-gray-500">{item.cantidad}</span>
-                              <span className="col-span-2 text-right text-gray-500">RD${Number(item.precio).toLocaleString()}</span>
-                              <span className="col-span-2 text-right font-bold text-gray-800">RD${(item.precio * item.cantidad).toLocaleString()}</span>
+                          {/* TABLA DE PRODUCTOS */}
+                          <div style={{ marginBottom: '24px' }}>
+                            {/* Cabecera tabla */}
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 60px 100px 100px', background: '#f8fafc', borderRadius: '10px', padding: '10px 16px', marginBottom: '4px' }}>
+                              <span style={{ fontSize: '11px', fontWeight: '700', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '1px' }}>Descripción</span>
+                              <span style={{ fontSize: '11px', fontWeight: '700', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'center' }}>Cant.</span>
+                              <span style={{ fontSize: '11px', fontWeight: '700', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'right' }}>Precio</span>
+                              <span style={{ fontSize: '11px', fontWeight: '700', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'right' }}>Total</span>
                             </div>
-                          ))}
+                            {/* Filas */}
+                            {subtotalItems.map((item, i) => (
+                              <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 60px 100px 100px', padding: '12px 16px', borderBottom: '1px solid #f3f4f6', background: i % 2 === 1 ? '#fafafa' : '#fff' }}>
+                                <span style={{ fontSize: '13px', fontWeight: '600', color: '#111827' }}>{item.nombre}</span>
+                                <span style={{ fontSize: '13px', color: '#6b7280', textAlign: 'center' }}>{item.cantidad}</span>
+                                <span style={{ fontSize: '13px', color: '#6b7280', textAlign: 'right' }}>RD${Number(item.precio).toLocaleString()}</span>
+                                <span style={{ fontSize: '13px', fontWeight: '700', color: '#111827', textAlign: 'right' }}>RD${item.subtotal.toLocaleString()}</span>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* TOTAL + estado de pago */}
+                          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
+                            <div style={{ background: 'linear-gradient(135deg, #0a1628 0%, #1B3A6B 100%)', borderRadius: '14px', padding: '16px 28px', minWidth: '220px' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                                <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>Total a pagar</span>
+                                <span style={{ color: '#2EC4B6', fontSize: '22px', fontWeight: '900', tabularNums: true }}>RD${facturaOrder.total.toLocaleString()}</span>
+                              </div>
+                              <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', marginBottom: '10px' }} />
+                              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '11px' }}>Estado de pago</span>
+                                {facturaOrder.pagado === 'pagado'
+                                  ? <span style={{ background: '#dcfce7', color: '#16a34a', fontSize: '11px', fontWeight: '700', padding: '3px 10px', borderRadius: '20px' }}>✅ PAGADO</span>
+                                  : facturaOrder.pagado === 'parcial'
+                                  ? <span style={{ background: '#fef9c3', color: '#a16207', fontSize: '11px', fontWeight: '700', padding: '3px 10px', borderRadius: '20px' }}>⚠️ PARCIAL</span>
+                                  : <span style={{ background: '#fee2e2', color: '#dc2626', fontSize: '11px', fontWeight: '700', padding: '3px 10px', borderRadius: '20px' }}>⏳ PENDIENTE</span>
+                                }
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Notas */}
+                          {facturaOrder.notas && (
+                            <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '10px', padding: '12px 16px', marginBottom: '24px' }}>
+                              <p style={{ fontSize: '10px', fontWeight: '700', color: '#b45309', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>Observaciones</p>
+                              <p style={{ fontSize: '13px', color: '#92400e' }}>{facturaOrder.notas}</p>
+                            </div>
+                          )}
+
+                          {/* Separador */}
+                          <div style={{ height: '1px', background: '#f3f4f6', marginBottom: '20px' }} />
+
+                          {/* PIE */}
+                          <div style={{ textAlign: 'center' }}>
+                            <p style={{ fontSize: '13px', fontWeight: '700', color: '#1B3A6B', marginBottom: '4px' }}>¡Gracias por tu compra!</p>
+                            <p style={{ fontSize: '11px', color: '#9ca3af', lineHeight: '1.7' }}>
+                              Los precios incluyen ITBIS y envío según zona · Productos Amway 100% originales<br />
+                              VitaGloss RD · WhatsApp: 849-276-3532 · República Dominicana
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* FOOTER — banda teal inferior */}
+                        <div style={{ background: '#2EC4B6', padding: '10px 36px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <span style={{ color: '#fff', fontSize: '11px', fontWeight: '700', letterSpacing: '1px' }}>VITAGLOSS RD — DISTRIBUIDORA AMWAY</span>
+                          <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '11px' }}>N.° {numFactura} · {fechaFactura}</span>
                         </div>
                       </div>
-
-                      {/* Total */}
-                      <div className="flex justify-between items-center bg-primary rounded-2xl px-6 py-4 mb-4">
-                        <span className="text-white font-black text-lg">TOTAL</span>
-                        <span className="text-white font-black text-2xl tabular-nums">RD${facturaOrder.total.toLocaleString()}</span>
-                      </div>
-
-                      {/* Estado de pago */}
-                      <div className="flex justify-end mb-4">
-                        {facturaOrder.pagado === 'pagado'
-                          ? <span className="bg-green-100 text-green-700 text-xs font-bold px-4 py-1.5 rounded-full">✅ PAGADO</span>
-                          : facturaOrder.pagado === 'parcial'
-                          ? <span className="bg-yellow-100 text-yellow-700 text-xs font-bold px-4 py-1.5 rounded-full">⚠️ PAGO PARCIAL</span>
-                          : <span className="bg-red-100 text-red-600 text-xs font-bold px-4 py-1.5 rounded-full">⏳ PENDIENTE</span>
-                        }
-                      </div>
-
-                      {/* Notas */}
-                      {facturaOrder.notas && (
-                        <div className="bg-amber-50 border border-amber-100 rounded-2xl px-4 py-3 mb-6">
-                          <p className="text-xs font-bold text-amber-600 uppercase tracking-wider mb-1">Notas</p>
-                          <p className="text-sm text-amber-800">{facturaOrder.notas}</p>
-                        </div>
-                      )}
-
-                      {/* Pie de factura */}
-                      <div className="h-px bg-gray-100 mb-4" />
-                      <p className="text-center text-xs text-gray-400 leading-relaxed">
-                        Gracias por tu compra 🌿 &nbsp;•&nbsp; <strong>VitaGloss RD</strong> &nbsp;•&nbsp; WhatsApp: 849-276-3532
-                        <br />Productos Amway originales con garantía de satisfacción
-                      </p>
-                    </div>
+                    </motion.div>
                   </motion.div>
-                </motion.div>
-              )}
+                )
+              })()}
             </AnimatePresence>
 
           </Section>
