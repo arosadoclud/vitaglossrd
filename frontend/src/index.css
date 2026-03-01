@@ -91,3 +91,20 @@ html {
   font-style: italic;
   margin: 1.5rem 0;
 }
+
+/* ── Estilos de impresión de facturas ── */
+@media print {
+  /* Ocultar todo excepto el contenido de la factura */
+  body > * { display: none !important; }
+  /* El portal de React monta el modal directo en body */
+  body > div:last-of-type { display: block !important; }
+  /* Ocultar botones de acción dentro del modal al imprimir */
+  .print\:hidden { display: none !important; }
+  /* Quitar bordes del modal al imprimir */
+  #factura-print {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+}

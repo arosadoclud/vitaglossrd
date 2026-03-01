@@ -151,6 +151,10 @@ export default function Dashboard() {
   const EMPTY_ORDER = { nombre: '', whatsapp: '', direccionEntrega: '', notas: '', pagado: 'pendiente', items: [{ nombre: '', precio: '', cantidad: 1 }] }
   const [orderForm, setOrderForm] = useState(EMPTY_ORDER)
 
+  // invoice
+  const [facturaModal, setFacturaModal] = useState(false)
+  const [facturaOrder, setFacturaOrder] = useState(null)
+
   // templates copy feedback
   const [copied, setCopied] = useState(null)
 
@@ -196,9 +200,24 @@ export default function Dashboard() {
     if (!items.length) return
     setOrderSaving(true)
     try {
+      const mappedItems = items.map(i => ({ nombre: i.nombre, cantidad: Number(i.cantidad) || 1, precio: Number(i.precio) || 0, articulo: i.articulo || '' }))
       const total = orderTotal(items)
-      await api.createOrderAdmin({ ...orderForm, items: items.map(i => ({ nombre: i.nombre, cantidad: Number(i.cantidad) || 1, precio: Number(i.precio) || 0, articulo: i.articulo || '' })), total })
+      const saved = await api.createOrderAdmin({ ...orderForm, items: mappedItems, total })
       setOrderModal(false)
+      // open invoice automatically
+      setFacturaOrder({
+        _id: saved?.order?._id || saved?._id || ('MANUAL-' + Date.now()),
+        nombre: orderForm.nombre,
+        whatsapp: orderForm.whatsapp,
+        direccionEntrega: orderForm.direccionEntrega,
+        notas: orderForm.notas,
+        pagado: orderForm.pagado,
+        items: mappedItems,
+        total,
+        createdAt: new Date().toISOString(),
+        source: 'manual',
+      })
+      setFacturaModal(true)
       setOrderForm(EMPTY_ORDER)
       loadOrders(orderEstadoFilter)
     } catch (err) { alert(err.message) }
@@ -871,6 +890,11 @@ export default function Dashboard() {
                           onClick={async () => { if (confirm('¿Eliminar este pedido?')) { await api.deleteOrder(order._id); loadOrders(orderEstadoFilter) } }}
                           className="bg-red-50 hover:bg-red-100 text-red-500 text-sm font-bold px-4 rounded-2xl transition-colors"
                         >🗑</button>
+                        <button
+                          onClick={() => { setFacturaOrder(order); setFacturaModal(true) }}
+                          className="bg-amber-50 hover:bg-amber-100 text-amber-600 text-sm font-bold px-4 rounded-2xl transition-colors"
+                          title="Ver / imprimir factura"
+                        >🧾</button>
                       </div>
                     </div>
                   )
@@ -1039,6 +1063,153 @@ export default function Dashboard() {
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {/* ── MODAL FACTURA ─────────────────────────────────────────────── */}
+            <AnimatePresence>
+              {facturaModal && facturaOrder && (
+                <motion.div
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-start justify-center p-4 overflow-y-auto print:p-0 print:bg-white print:inset-auto print:relative print:flex-none"
+                  onClick={e => e.target === e.currentTarget && setFacturaModal(false)}
+                >
+                  <motion.div
+                    initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }}
+                    className="bg-white rounded-3xl w-full max-w-lg my-8 overflow-hidden shadow-2xl print:shadow-none print:rounded-none print:my-0 print:max-w-full"
+                    id="factura-print"
+                  >
+                    {/* ─ Botones de acción (ocultos al imprimir) ─ */}
+                    <div className="flex gap-2 p-4 border-b border-gray-100 print:hidden">
+                      <button
+                        onClick={() => window.print()}
+                        className="flex-1 bg-primary hover:bg-blue-900 text-white font-bold py-2.5 rounded-2xl text-sm transition-colors flex items-center justify-center gap-2"
+                      >
+                        🖨️ Imprimir / Guardar PDF
+                      </button>
+                      <button
+                        onClick={() => {
+                          const txt = [
+                            `🧾 *FACTURA VITAGLOSS RD*`,
+                            `📅 ${new Date(facturaOrder.createdAt).toLocaleString('es-DO', { dateStyle: 'long', timeStyle: 'short' })}`,
+                            ``,
+                            `👤 *Cliente:* ${facturaOrder.nombre}`,
+                            facturaOrder.whatsapp ? `📲 *WA:* ${facturaOrder.whatsapp}` : '',
+                            facturaOrder.direccionEntrega ? `📍 *Dirección:* ${facturaOrder.direccionEntrega}` : '',
+                            ``,
+                            `🛒 *Productos:*`,
+                            ...facturaOrder.items.map(i => `  • ${i.nombre} ×${i.cantidad} = RD$${(i.precio * i.cantidad).toLocaleString()}`),
+                            ``,
+                            `💰 *TOTAL: RD$${facturaOrder.total.toLocaleString()}*`,
+                            facturaOrder.pagado === 'pagado' ? `✅ PAGADO` : facturaOrder.pagado === 'parcial' ? `⚠️ PAGO PARCIAL` : `⏳ PAGO PENDIENTE`,
+                            facturaOrder.notas ? `\n💬 ${facturaOrder.notas}` : '',
+                            ``,
+                            `Gracias por tu compra 🌿 VitaGloss RD`,
+                          ].filter(Boolean).join('\n')
+                          navigator.clipboard?.writeText(txt)
+                          alert('✅ Texto copiado. Pégalo en WhatsApp.')
+                        }}
+                        className="flex-1 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold py-2.5 rounded-2xl text-sm transition-colors flex items-center justify-center gap-2"
+                      >
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zm-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        Copiar para WA
+                      </button>
+                      <button onClick={() => setFacturaModal(false)} className="bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold px-4 rounded-2xl text-sm transition-colors">✕</button>
+                    </div>
+
+                    {/* ─ Cuerpo de la factura ─ */}
+                    <div className="p-8 print:p-6">
+                      {/* Header */}
+                      <div className="flex items-start justify-between mb-8">
+                        <div>
+                          <div className="flex items-center gap-3 mb-1">
+                            <span className="text-3xl">🌿</span>
+                            <div>
+                              <p className="text-2xl font-black text-primary leading-none">VitaGloss RD</p>
+                              <p className="text-xs text-gray-400 font-medium">Distribuidora Amway independiente</p>
+                            </div>
+                          </div>
+                          <p className="text-xs text-gray-400 mt-1">📲 849-276-3532</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Factura</p>
+                          <p className="text-lg font-black text-gray-700 tabular-nums">
+                            #{String(facturaOrder._id).slice(-6).toUpperCase()}
+                          </p>
+                          <p className="text-xs text-gray-400 mt-1">
+                            {new Date(facturaOrder.createdAt).toLocaleDateString('es-DO', { year: 'numeric', month: 'long', day: '2-digit' })}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Divider */}
+                      <div className="h-px bg-gray-100 mb-6" />
+
+                      {/* Cliente */}
+                      <div className="mb-6">
+                        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Cliente</p>
+                        <p className="font-black text-gray-800 text-lg leading-tight">{facturaOrder.nombre}</p>
+                        {facturaOrder.whatsapp && <p className="text-sm text-gray-500 mt-0.5">📲 {facturaOrder.whatsapp}</p>}
+                        {facturaOrder.direccionEntrega && <p className="text-sm text-gray-500 mt-0.5">📍 {facturaOrder.direccionEntrega}</p>}
+                      </div>
+
+                      {/* Tabla de productos */}
+                      <div className="mb-6">
+                        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Detalle del pedido</p>
+                        <div className="rounded-2xl overflow-hidden border border-gray-100">
+                          {/* Cabecera */}
+                          <div className="grid grid-cols-12 bg-gray-50 px-4 py-2.5 text-xs font-bold text-gray-400 uppercase tracking-wider">
+                            <span className="col-span-6">Producto</span>
+                            <span className="col-span-2 text-center">Cant.</span>
+                            <span className="col-span-2 text-right">Precio</span>
+                            <span className="col-span-2 text-right">Subtotal</span>
+                          </div>
+                          {/* Filas */}
+                          {facturaOrder.items.map((item, i) => (
+                            <div key={i} className={`grid grid-cols-12 px-4 py-3 text-sm ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
+                              <span className="col-span-6 font-semibold text-gray-700 pr-2">{item.nombre}</span>
+                              <span className="col-span-2 text-center text-gray-500">{item.cantidad}</span>
+                              <span className="col-span-2 text-right text-gray-500">RD${Number(item.precio).toLocaleString()}</span>
+                              <span className="col-span-2 text-right font-bold text-gray-800">RD${(item.precio * item.cantidad).toLocaleString()}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Total */}
+                      <div className="flex justify-between items-center bg-primary rounded-2xl px-6 py-4 mb-4">
+                        <span className="text-white font-black text-lg">TOTAL</span>
+                        <span className="text-white font-black text-2xl tabular-nums">RD${facturaOrder.total.toLocaleString()}</span>
+                      </div>
+
+                      {/* Estado de pago */}
+                      <div className="flex justify-end mb-4">
+                        {facturaOrder.pagado === 'pagado'
+                          ? <span className="bg-green-100 text-green-700 text-xs font-bold px-4 py-1.5 rounded-full">✅ PAGADO</span>
+                          : facturaOrder.pagado === 'parcial'
+                          ? <span className="bg-yellow-100 text-yellow-700 text-xs font-bold px-4 py-1.5 rounded-full">⚠️ PAGO PARCIAL</span>
+                          : <span className="bg-red-100 text-red-600 text-xs font-bold px-4 py-1.5 rounded-full">⏳ PENDIENTE</span>
+                        }
+                      </div>
+
+                      {/* Notas */}
+                      {facturaOrder.notas && (
+                        <div className="bg-amber-50 border border-amber-100 rounded-2xl px-4 py-3 mb-6">
+                          <p className="text-xs font-bold text-amber-600 uppercase tracking-wider mb-1">Notas</p>
+                          <p className="text-sm text-amber-800">{facturaOrder.notas}</p>
+                        </div>
+                      )}
+
+                      {/* Pie de factura */}
+                      <div className="h-px bg-gray-100 mb-4" />
+                      <p className="text-center text-xs text-gray-400 leading-relaxed">
+                        Gracias por tu compra 🌿 &nbsp;•&nbsp; <strong>VitaGloss RD</strong> &nbsp;•&nbsp; WhatsApp: 849-276-3532
+                        <br />Productos Amway originales con garantía de satisfacción
+                      </p>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
           </Section>
         )}
 
