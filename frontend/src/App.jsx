@@ -33,9 +33,10 @@ import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
 import Privacidad from './pages/Privacidad'
 import Terminos from './pages/Terminos'
+import Unete from './pages/Unete'
 
 // Páginas que NO deben mostrar el Navbar/Footer público
-const DASHBOARD_ROUTES = ['/dashboard']
+const DASHBOARD_ROUTES = ['/dashboard', '/unete']
 
 // Detecta ?ref= en URL y guarda en sessionStorage para atribuir leads
 function RefTracker() {
@@ -74,6 +75,7 @@ function Layout() {
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/privacidad" element={<Privacidad />} />
           <Route path="/terminos" element={<Terminos />} />
+          <Route path="/unete" element={<Unete />} />
           <Route
             path="/dashboard"
             element={
