@@ -660,8 +660,8 @@ export const productos = [
       { label: "Beneficio principal", valor: "Sistema inmunológico" },
       { label: "Artículo", valor: "NUTRI-ZINC" }
     ],
-    imagenes: ["/Nutrilite Defensa inmunológica Zinc+albahaca sagrada.jpg"],
-    imagen: "/Nutrilite Defensa inmunológica Zinc+albahaca sagrada.jpg",
+    imagenes: ["/nutrilite-zinc-defensa-inmunologica.jpg"],
+    imagen: "/nutrilite-zinc-defensa-inmunologica.jpg",
     rating: 4.7,
     reviewCount: 24,
     usosPorEnvase: 60,
