@@ -7,14 +7,13 @@ export default defineConfig({
   plugins: [
     react(),
     ViteImageOptimizer({
-      // PNG → comprimir agresivamente (logo_final.png 2.2MB → ~200KB)
-      png: { quality: 80, compressionLevel: 9 },
-      // JPG / JPEG → comprimir productos
-      jpg:  { quality: 82, progressive: true },
-      jpeg: { quality: 82, progressive: true },
-      // WebP → para los que ya vengan en WebP
+      // PNG: comprimir manteniendo SIEMPRE la transparencia (alpha)
+      png: { quality: 80, compressionLevel: 8 },
+      // JPG / JPEG: comprimir y aplanar con fondo blanco (nunca negro)
+      jpg:  { quality: 82, progressive: true, background: { r: 255, g: 255, b: 255, alpha: 1 } },
+      jpeg: { quality: 82, progressive: true, background: { r: 255, g: 255, b: 255, alpha: 1 } },
+      // WebP
       webp: { quality: 82 },
-      // Loggear cuánto se ahorró en cada build
       logStats: true,
     }),
   ],

@@ -22,7 +22,11 @@ export default function ProductoCard({ producto }) {
       style={{ textDecoration: 'none', color: 'inherit' }}
     >
       {/* Imagen */}
-      <div className="relative bg-white flex items-center justify-center p-6" style={{ minHeight: '220px' }}>
+      <div className="relative flex items-center justify-center p-6 rounded-t-2xl overflow-hidden"
+        style={{
+          minHeight: '220px',
+          background: 'linear-gradient(135deg, #060d1b 0%, #0d1f3c 60%, #1B3A6B 100%)',
+        }}>
         <span className={`absolute top-3 left-3 z-10 ${producto.badgeColor} text-white text-xs font-bold px-3 py-1 rounded-full shadow`}>
           {producto.badge}
         </span>

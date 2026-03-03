@@ -199,7 +199,10 @@ export default function Home() {
                     src={slide.imagen}
                     alt="Producto"
                     className="w-44 sm:w-60 md:w-72 lg:w-80 h-44 sm:h-60 md:h-72 lg:h-80 object-contain"
-                    style={{ filter: `drop-shadow(0 20px 30px ${slide.acento}70)` }}
+                    style={{
+                      filter: `drop-shadow(0 20px 30px ${slide.acento}70)`,
+                      mixBlendMode: 'screen',
+                    }}
                     fetchPriority={slideActivo === 0 ? 'high' : 'low'}
                     loading={slideActivo === 0 ? 'eager' : 'lazy'}
                   />
