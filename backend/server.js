@@ -17,11 +17,24 @@ const app = express()
 const PORT = process.env.PORT || 4000
 
 // ── CORS ───────────────────────────────────────────────────────────────────
+const ALLOWED_ORIGINS = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  // Producción: soporta múltiples URLs separadas por coma en FRONTEND_URL
+  ...(process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.split(',').map(u => u.trim())
+    : []),
+]
+
 app.use(cors({
-  origin: [
-    process.env.FRONTEND_URL || 'http://localhost:5173',
-    'http://localhost:5174',
-  ],
+  origin: (origin, callback) => {
+    // Permitir llamadas sin origin (Postman, Railway health-checks, mobile)
+    if (!origin) return callback(null, true)
+    // Permitir cualquier subdominio de vercel.app (previews de PR)
+    if (/\.vercel\.app$/.test(origin)) return callback(null, true)
+    if (ALLOWED_ORIGINS.includes(origin)) return callback(null, true)
+    callback(new Error(`CORS: origen no permitido → ${origin}`))
+  },
   credentials: true,
 }))
 
