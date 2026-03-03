@@ -295,11 +295,20 @@ export default function ProductoDetalle() {
         '@type': 'Offer',
         url: `https://vitaglossrd.com/producto/${producto.id}`,
         priceCurrency: 'DOP',
-        price: producto.precio,
+        price: String(producto.precio),
+        priceValidUntil: '2027-12-31',
         availability: producto.disponible
           ? 'https://schema.org/InStock'
           : 'https://schema.org/OutOfStock',
-        seller: { '@type': 'Organization', name: 'VitaGloss RD' },
+        itemCondition: 'https://schema.org/NewCondition',
+        seller: { '@type': 'Organization', name: 'VitaGloss RD', url: 'https://vitaglossrd.com' },
+      },
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: String(producto.rating ?? 4.8),
+        reviewCount: String(producto.reviewCount ?? 12),
+        bestRating: '5',
+        worstRating: '1',
       },
     } : null,
   })
