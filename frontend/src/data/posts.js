@@ -15,6 +15,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['vitamina c', 'suplementos', 'nutrilite', 'salud'],
     productoRelacionadoId: 4,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: 'Descubre por qué la Vitamina C de farmacia en República Dominicana no absorbe igual que Nutrilite™. Comparativa de biodisponibilidad con datos reales.',
     contenido: `
       <p>Si estás tomando Vitamina C de la farmacia y no notas mejoría en tu sistema inmune, en tu energía ni en tu piel, hay una razón técnica muy concreta: <strong>la mayoría de los suplementos baratos usan ácido ascórbico sintético de liberación inmediata</strong>, lo que significa que el cuerpo absorbe lo que puede en la primera hora y el resto lo elimina.</p>
 
@@ -65,6 +67,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['pasta dental', 'glister', 'salud bucal', 'blanqueamiento'],
     productoRelacionadoId: 1,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: 'Comparativa honesta: Glister™ vs pastas del supermercado en RD. Ingredientes, flúor, esmalte y por qué importa lo que usas a diario.',
     contenido: `
       <p>Cuando compras una pasta dental en el supermercado, probablemente miras el precio y el sabor. Pocos leen la lista de ingredientes al reverso. Y si la lees, probablemente no reconoces la mitad. Eso es exactamente el problema.</p>
 
@@ -115,6 +119,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['blanqueamiento dental', 'esmalte', 'dientes blancos', 'salud bucal'],
     productoRelacionadoId: 1,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: 'Cómo blanquear dientes sin dañar el esmalte en República Dominicana. Métodos seguros, ingredientes a evitar y la alternativa de Glister™.',
     contenido: `
       <p>Los dientes blancos se han convertido en un símbolo de salud y confianza. No es vanidad —múltiples estudios muestran que una sonrisa blanca mejora la percepción que otros tienen de ti en entrevistas de trabajo, reuniones sociales y primeras citas. El problema es que la industria del blanqueamiento está llena de métodos que funcionan rápido pero cobran un precio alto a largo plazo.</p>
 
@@ -167,6 +173,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['suplementos', 'vitaminas', 'republica dominicana', 'compra inteligente'],
     productoRelacionadoId: 6,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: 'Los 7 errores más comunes al comprar vitaminas en República Dominicana. Cómo evitar estafas y elegir suplementos con respaldo científico.',
     contenido: `
       <p>El mercado de suplementos en República Dominicana ha explotado en los últimos años. Hay vitaminas en farmacias, colmados, redes sociales y hasta en los mismos semáforos. El problema es que la regulación no ha crecido al mismo ritmo, y muchas personas terminan gastando dinero en productos que no funcionan —o que en el peor caso, pueden hacerles daño.</p>
 
@@ -215,6 +223,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['salud bucal', 'hábitos', 'caries', 'higiene dental'],
     productoRelacionadoId: 1,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: 'Hábitos de salud bucal que los dominicanos deberían adoptar. Guía práctica para prevenir caries y mantener encías sanas con Glister™.',
     contenido: `
       <p>Según datos de la Organización Panamericana de la Salud, República Dominicana tiene una de las tasas de caries dental más altas de América Latina. La razón principal no es genética —es cultural. Nuestros hábitos de higiene bucal, formados desde pequeños, dejan mucho que desear. La buena noticia es que cambiarlos es más simple de lo que crees.</p>
 
@@ -251,6 +261,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['sistema inmune', 'clima caribeño', 'vitaminas', 'nutrilite', 'República Dominicana'],
     productoRelacionadoId: 4,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: 'Por qué el sistema inmune necesita apoyo extra en el Caribe. Vitaminas Nutrilite™ recomendadas para el clima y estilo de vida dominicano.',
     contenido: `
       <p>Vivir en el Caribe tiene muchas ventajas: el sol, la naturaleza, la cultura. Pero el mismo ambiente que hace a República Dominicana tan especial también crea demandas únicas para el cuerpo humano que pocos médicos mencionan en sus consultas.</p>
 
@@ -296,6 +308,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['salud bucal', 'glister', 'rutina dental', 'caries', 'encías'],
     productoRelacionadoId: 1,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: 'Guía definitiva de salud bucal para dominicanos en 2026. Cepillado, enjuague, hilo dental y los mejores productos disponibles en RD.',
     faqs: [
       { pregunta: '¿Con qué frecuencia debo ir al dentista en RD?', respuesta: 'Lo ideal son 2 visitas al año, aunque muchos dominicanos solo van cuando hay dolor. Con una buena rutina diaria puedes reducir significativamente el riesgo de problemas.' },
       { pregunta: '¿El agua de la llave en RD afecta los dientes?', respuesta: 'El agua de la llave en muchas zonas de RD no está fluorada de forma consistente, por lo que la pasta dental con flúor se vuelve aún más importante.' },
@@ -362,6 +376,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['pasta dental', 'salud bucal', 'glister', 'cambio'],
     productoRelacionadoId: 1,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: '¿Cada cuánto cambiar de pasta dental en RD? Señales de que ya no es efectiva y cuándo pasarte a Glister™ Multi-Action.',
     faqs: [
       { pregunta: '¿Puede la pasta dental volverse inefectiva con el tiempo?', respuesta: 'Sí. Las pastas dentales tienen fecha de vencimiento (generalmente 2 años). El flúor puede degradarse y perder efectividad. Revisa siempre la fecha en el tubo.' },
       { pregunta: '¿Por qué mi boca se acostumbra a la pasta dental?', respuesta: 'Es posible desarrollar tolerancia a ciertos agentes antimicrobianos en pastas con triclosan u otros antibacterianos. Rotar entre marcas de distintas fórmulas puede ayudar si sientes que ya no tienes el mismo efecto.' },
@@ -418,6 +434,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['mal aliento', 'halitosis', 'spray bucal', 'enjuague', 'salud bucal'],
     productoRelacionadoId: 2,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: 'Causas del mal aliento crónico y soluciones efectivas en República Dominicana. El spray y enjuague Glister™ contra las bacterias causantes de halitosis.',
     faqs: [
       { pregunta: '¿El mal aliento puede venir del estómago?', respuesta: 'Sí, en algunos casos. El reflujo gastroesofágico, la gastritis o la bacteria H. pylori pueden ser fuentes de halitosis. Si el problema persiste a pesar de una buena higiene oral, consulta un gastroenterólogo.' },
       { pregunta: '¿Los chicles de menta resuelven el mal aliento?', respuesta: 'No. Los chicles y pastillas mentoladas enmascaran el olor temporalmente (15-30 minutos) pero no eliminan las bacterias causantes. Los chicles sin azúcar con xilitol sí ayudan indirectamente al estimular la producción de saliva.' },
@@ -477,6 +495,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['enjuague bucal', 'alcohol', 'salud bucal', 'glister', 'microbioma'],
     productoRelacionadoId: 3,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: '¿Enjuague con alcohol o sin alcohol? La diferencia real y por qué Glister™ es la elección correcta para la salud bucal en República Dominicana.',
     faqs: [
       { pregunta: '¿Los enjuagues con alcohol son carcinogénicos?', respuesta: 'Hay estudios que sugieren un posible vínculo entre el uso frecuente y prolongado de enjuagues con alto contenido de alcohol y el cáncer oral, aunque la evidencia no es concluyente. La precaución recomienda optar por alternativas sin alcohol.' },
       { pregunta: '¿El enjuague sin alcohol es igual de efectivo?', respuesta: 'Sí, y en muchos aspectos es superior. No daña la mucosa, no seca la boca y los estudios muestran que las fórmulas sin alcohol con cloruro de cetilpiridinio (CPC) o aceites esenciales son tan efectivas como las alcohólicas para reducir placa y bacterias.' },
@@ -527,6 +547,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['rutina dental', 'higiene bucal', 'glister', 'cepillado', 'hilo dental'],
     productoRelacionadoId: 1,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: 'Rutina completa de higiene bucal en 5 minutos. Paso a paso con productos Glister™ para proteger dientes y encías en República Dominicana.',
     contenido: `
       <p>La mayoría de las personas sobrestima la complejidad del cuidado bucal. Una rutina efectiva no requiere decenas de productos ni mucho tiempo. Con 5 minutos al día —2.5 en la mañana, 2.5 en la noche— puedes mantenerte libre de caries y con encías sanas indefinidamente.</p>
 
@@ -574,6 +596,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['placa bacteriana', 'caries', 'salud bucal', 'glister', 'encías'],
     productoRelacionadoId: 1,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: 'Cómo eliminar la placa bacteriana en adultos en RD. Guía práctica con Glister™ para proteger encías y prevenir caries desde casa.',
     contenido: `
       <p>La placa dental es una biopelícula (biofilm) —una comunidad organizada de bacterias que se adhiere a las superficies dentales. No es suciedad ordinaria que se enjuaga con agua. Es una estructura bacteriana compleja que require acción mecánica (cepillo, hilo) y química (flúor, agentes antimicrobianos) para eliminarse.</p>
 
@@ -624,6 +648,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['nutrilite', 'suplementos', 'vitaminas', 'principiantes', 'república dominicana'],
     productoRelacionadoId: 6,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: 'Guía de suplementos Nutrilite™ para principiantes en RD. Qué tomar, cuándo empezar y cómo comprar productos Amway originales en República Dominicana.',
     faqs: [
       { pregunta: '¿Los suplementos Nutrilite tienen efectos secundarios?', respuesta: 'Los suplementos Nutrilite están elaborados con ingredientes de origen vegetal y son generalmente bien tolerados. Como cualquier suplemento, es posible que haya sensibilidad individual. Si tienes condiciones médicas o tomas medicamentos, consulta a tu médico antes de comenzar.' },
       { pregunta: '¿A qué edad se pueden tomar suplementos Nutrilite?', respuesta: 'Hay fórmulas para distintas edades: desde el Multivitamínico para Niños hasta el Kit Envejecimiento Saludable para adultos mayores. Cada producto especifica su rango de edad recomendado.' },
@@ -683,6 +709,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['double x', 'nutrilite', 'multivitamínico', 'vitaminas', 'suplementos'],
     productoRelacionadoId: 6,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: '¿Para qué sirve el Double X Nutrilite™ y quién debe tomarlo? El multivitamínico premium de Amway disponible en República Dominicana desde VitaGloss RD.',
     faqs: [
       { pregunta: '¿Es normal que la orina se vuelva amarilla intensa al tomar Double X?', respuesta: 'Sí, completamente normal. El color amarillo intenso es causado por la riboflavina (B2) y otras vitaminas B que el cuerpo excreta en exceso a través de la orina. No es señal de problema.' },
       { pregunta: '¿Se puede tomar Double X con el estómago vacío?', respuesta: 'No se recomienda. Los nutrientes liposolubles (vitaminas A, D, E, K) se absorben mejor con grasa dietética. Tómalo con una comida que contenga algo de grasa.' },
@@ -747,6 +775,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['ácido fólico', 'folato', 'embarazo', 'nutrilite', 'vitaminas'],
     productoRelacionadoId: 9,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: '¿Cuándo y cómo tomar ácido fólico en República Dominicana? Guía completa para embarazadas y adultos sobre el Ácido Fólico Nutrilite™.',
     faqs: [
       { pregunta: '¿Cuánto ácido fólico necesita una mujer embarazada?', respuesta: 'La OMS y las guías dominicanas recomiendan 400-800 mcg diarios desde al menos 1 mes antes de la concepción y durante el primer trimestre. Consulta a tu ginecólogo para la dosis específica en tu caso.' },
       { pregunta: '¿Los hombres necesitan ácido fólico?', respuesta: 'Sí. El folato participa en la síntesis de ADN en todas las células, incluyendo los espermatozoides. Estudios muestran que niveles adecuados de folato en hombres están asociados con mejor calidad del semen.' },
@@ -804,6 +834,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['calcio', 'magnesio', 'vitamina d', 'huesos', 'nutrilite', 'suplementos'],
     productoRelacionadoId: 10,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: 'Calcio, magnesio y vitamina D: el trío para huesos fuertes que casi nadie toma bien en RD. Guía sobre Cal Mag D Nutrilite™ disponible en República Dominicana.',
     faqs: [
       { pregunta: '¿El calcio solo es malo para los huesos?', respuesta: 'En exceso y sin la combinación adecuada con vitamina K2 y magnesio, el calcio puede depositarse en arterias y tejidos blandos en lugar de ir a los huesos. La clave es tomarlo en la dosis correcta y con el soporte nutricional adecuado.' },
       { pregunta: '¿Cuánto magnesio necesito diariamente?', respuesta: 'La ingesta adecuada es de 310-420 mg/día según la edad y el sexo. La mayoría de adultos en RD no llega a estos niveles solo con la dieta. El déficit crónico leve de magnesio es extremadamente común y frecuentemente no diagnosticado.' },
@@ -865,6 +897,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['omega 3', 'dha', 'epa', 'cardiovascular', 'nutrilite', 'suplementos'],
     productoRelacionadoId: 18,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: 'Beneficios del Omega-3 en República Dominicana: corazón, cerebro y articulaciones. Dosis recomendada y por qué Omega Nutrilite™ es el más confiable en RD.',
     faqs: [
       { pregunta: '¿Por qué mi omega 3 huele y repite a pescado?', respuesta: 'El olor y sabor a pescado indica oxidación del aceite —el omega 3 se vuelve rancio. Esto ocurre con cápsulas de baja calidad o mal almacenadas. Un omega 3 de calidad no debería repetir casi nada.' },
       { pregunta: '¿El omega 3 de plantas (ALA) es equivalente al de pescado (DHA/EPA)?', respuesta: 'No. El ALA de semillas de chía o lino se convierte en DHA/EPA en el cuerpo, pero con una eficiencia muy baja (entre 5-15%). Para beneficios cardiovasculares y cognitivos reales, se necesita DHA/EPA directamente, como el que se obtiene del aceite de pescado.' },
@@ -913,6 +947,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['vitamina d', 'sol', 'caribe', 'suplementos', 'nutrilite', 'inmunidad'],
     productoRelacionadoId: 17,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: '¿Necesitas vitamina D viviendo en el Caribe? La respuesta sorprende a muchos dominicanos y por qué la Vitamina D Nutrilite™ sigue siendo necesaria en RD.',
     faqs: [
       { pregunta: '¿Cuánto tiempo al sol necesito para producir vitamina D?', respuesta: 'Para personas con piel morena-clara (como la mayoría de dominicanos), entre 15-30 minutos de exposición de brazos y piernas al sol de mediodía, sin protector solar, es suficiente para producir 600-800 IU de vitamina D. Pero este escenario es difícil de lograr diariamente para personas con trabajo de oficina.' },
       { pregunta: '¿Se puede tener deficiencia de vitamina D en el trópico?', respuesta: 'Absolutamente. Estudios en países tropicales, incluyendo México y Brasil, muestran prevalencias de déficit de vitamina D entre el 40-70% de la población adulta. La piel oscura necesita más exposición solar para la misma síntesis, y el estilo de vida moderno reduce drásticamente la exposición real.' },
@@ -966,6 +1002,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['zinc', 'inmunidad', 'sistema inmune', 'nutrilite', 'suplementos'],
     productoRelacionadoId: 11,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: 'Zinc e inmunidad: evidencia científica y cómo tomarlo bien en República Dominicana. Defensa Inmunológica Zinc Nutrilite™ disponible en RD.',
     faqs: [
       { pregunta: '¿Puedo tomar zinc todos los días?', respuesta: 'Sí, en dosis normales (8-11 mg/día RDA). Dosis altas (>40 mg/día por largos períodos) pueden interferir con la absorción de cobre e inhibir la función inmune. Sigue las instrucciones del producto.' },
       { pregunta: '¿El zinc interactúa con otros medicamentos?', respuesta: 'Sí. El zinc puede reducir la absorción de antibióticos de la familia de las tetraciclinas y quinolonas. Si estás tomando antibióticos, consulta a tu médico o farmacéutico antes de suplementar con zinc.' },
@@ -1026,6 +1064,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['envejecimiento saludable', 'antioxidantes', 'kit envejecimiento', 'nutrilite', 'bienestar'],
     productoRelacionadoId: 21,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: 'Envejecimiento saludable después de los 40 en República Dominicana. Suplementos Nutrilite™ para mantener energía, piel y bienestar en el Caribe.',
     faqs: [
       { pregunta: '¿Es demasiado tarde empezar a cuidarme a los 50?', respuesta: 'Absolutamente no. Estudios muestran que los cambios en dieta, ejercicio y suplementación pueden revertir parcialmente marcadores biológicos de envejecimiento incluso en la sexta y séptima década. "El mejor momento fue hace 20 años; el segundo mejor momento es hoy."' },
       { pregunta: '¿Los suplementos pueden retrasar el envejecimiento?', respuesta: 'No detener ni revertir el envejecimiento per se, pero sí reducir el daño oxidativo acumulado, mantener la masa muscular y la densidad ósea, y reducir el riesgo de enfermedades crónicas asociadas al envejecimiento.' },
@@ -1084,6 +1124,8 @@ export const posts = [
     autor: 'Andy Rosado',
     tags: ['proteína vegetal', 'suplemento proteico', 'nutrilite', 'músculo', 'nutrición'],
     productoRelacionadoId: 20,
+    fechaActualizacion: '2026-03-03',
+    metaDescripcion: '¿Proteína vegetal o animal en República Dominicana? Comparativa honesta y por qué la Proteína Vegetal Nutrilite™ es la opción más limpia.',
     faqs: [
       { pregunta: '¿La proteína vegetal construye músculo igual que la whey?', respuesta: 'En usuarios recreativos (no atletas de élite) que consumen dosis equivalentes, los estudios más recientes muestran ganancias musculares comparables. La clave está en la cantidad total de proteína y en el entrenamiento de resistencia, más que en la fuente.' },
       { pregunta: '¿La Proteína Vegetal Nutrilite tiene todos los aminoácidos esenciales?', respuesta: 'Sí. La fórmula Nutrilite combina proteína de soya, trigo y amaranto para lograr un perfil completo de aminoácidos esenciales, incluyendo leucina, isoleucina y valina (BCAAs), que son los más importantes para la síntesis muscular.' },

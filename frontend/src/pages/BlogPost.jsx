@@ -56,12 +56,18 @@ export default function BlogPost() {
 
   const articleSchema = post ? {
     '@context': 'https://schema.org',
-    '@type': 'Article',
+    '@type': 'BlogPosting',
     headline: post.titulo,
-    description: post.excerpt,
+    description: post.metaDescripcion || post.excerpt,
     datePublished: post.fecha,
     dateModified: post.fechaActualizacion || post.fecha,
     url: canonicalUrl,
+    wordCount: post.contenido
+      ? post.contenido.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length
+      : undefined,
+    articleSection: post.categoria,
+    inLanguage: 'es-DO',
+    keywords: post.tags?.join(', '),
     image: {
       '@type': 'ImageObject',
       url: ogImageUrl,
@@ -74,16 +80,29 @@ export default function BlogPost() {
       url: `${SITE_URL}/sobre-nosotros`,
       jobTitle: 'Distribuidor Independiente Certificado Amway',
       worksFor: { '@type': 'Organization', name: 'VitaGloss RD', url: SITE_URL },
+      sameAs: ['https://wa.me/18492763532'],
     },
     publisher: {
       '@type': 'Organization',
       name: 'VitaGloss RD',
       url: SITE_URL,
       logo: { '@type': 'ImageObject', url: `${SITE_URL}/logoVitaglossRd.png` },
+      address: {
+        '@type': 'PostalAddress',
+        addressCountry: 'DO',
+        addressRegion: 'Santo Domingo',
+      },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
-    inLanguage: 'es-DO',
-    keywords: post.tags?.join(', '),
+    locationCreated: {
+      '@type': 'Place',
+      name: 'República Dominicana',
+      address: { '@type': 'PostalAddress', addressCountry: 'DO' },
+    },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '.article-excerpt', 'h2'],
+    },
   } : null
 
   const breadcrumbSchema = post ? {
@@ -109,11 +128,16 @@ export default function BlogPost() {
   const jsonLdList = [articleSchema, breadcrumbSchema, faqSchema].filter(Boolean)
 
   useSEO({
-    title:       post ? post.titulo : 'Artículo no encontrado',
-    description: post ? post.excerpt : '',
-    canonical:   canonicalUrl,
-    ogImage:     ogImageUrl,
+    title:          post ? post.titulo : 'Artículo no encontrado',
+    description:    post ? (post.metaDescripcion || post.excerpt) : '',
+    canonical:      canonicalUrl,
+    ogImage:        ogImageUrl,
     jsonLdList,
+    publishedTime:  post?.fecha,
+    modifiedTime:   post?.fechaActualizacion || post?.fecha,
+    articleAuthor:  'Andy Rosado',
+    articleTags:    post?.tags,
+    articleSection: post?.categoria,
   })
 
   // Scroll al top en cada navegación
