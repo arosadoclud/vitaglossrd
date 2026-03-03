@@ -386,8 +386,8 @@ export default function ProductoDetalle() {
           <div className="flex flex-col gap-4 lg:sticky lg:top-24 lg:self-start">
             {/* Imagen principal */}
             <div
-              className="relative rounded-2xl overflow-hidden select-none border-2 border-gray-700/30"
-              style={{ aspectRatio: '1/1', background: 'linear-gradient(135deg, #060d1b 0%, #0d1f3c 60%, #1B3A6B 100%)' }}
+              className="relative rounded-2xl overflow-hidden select-none border-2 border-gray-200 bg-white"
+              style={{ aspectRatio: '1/1' }}
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
             >
@@ -446,7 +446,7 @@ export default function ProductoDetalle() {
                     className={`w-16 h-16 rounded-xl overflow-hidden border-2 p-1.5 transition-all duration-200 flex-shrink-0 ${
                       imgActiva === i ? 'border-primary' : 'border-gray-600/40 opacity-60 hover:opacity-100'
                     }`}
-                    style={{ background: 'linear-gradient(135deg, #060d1b 0%, #0d1f3c 100%)' }}
+                    style={{ background: '#ffffff' }}
                   >
                     <img src={img} alt={`Vista ${i + 1}`} className="w-full h-full object-contain" />
                   </button>
