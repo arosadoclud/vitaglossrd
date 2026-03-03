@@ -1087,8 +1087,8 @@ export const productos = [
     nombreCorto: "Solución de Envejecimiento Saludable – KIT Nutrilite",
     categoria: "Vitaminas",
     articulo: "NUTRI-AGING-KIT",
-    precio: 2890,
-    precioOriginal: 4446,
+    precio: 8550,
+    precioOriginal: 13154,
     pv: 10.41,
     bv: 1486.0,
     disponible: true,
@@ -1167,5 +1167,228 @@ export const productos = [
     usosPorEnvase: 30,
     badge: "Kit Diario",
     badgeColor: "bg-indigo-500"
+  },
+  {
+    id: 23,
+    nombre: "CLA 500 Nutrilite",
+    nombreCorto: "CLA 500 Nutrilite™ – Ácido Linoleico Conjugado",
+    categoria: "Vitaminas",
+    articulo: "100280",
+    precio: 3402,
+    precioOriginal: 5234,
+    pv: 18.76,
+    bv: 2682.0,
+    disponible: true,
+    stock: "En stock",
+    stockUnidades: 5,
+    ventasSemana: 7,
+    descripcion: "CLA 500 de Nutrilite™ aporta ácido linoleico conjugado de origen vegetal para apoyar la composición corporal, reducir grasa y mantener masa muscular magra.",
+    descripcionLarga: "El CLA 500 de Nutrilite™ contiene ácido linoleico conjugado (CLA) derivado de aceite de cártamo, una fuente vegetal de alta calidad. El CLA es un ácido graso omega-6 que se ha estudiado por su capacidad para apoyar la composición corporal saludable.\n\nEn combinación con ejercicio regular y una dieta equilibrada, el CLA puede contribuir a reducir la acumulación de grasa corporal y a preservar la masa muscular magra. Es especialmente popular entre personas activas que buscan optimizar su rendimiento o composición física.\n\nCalidad Nutrilite™. Suministro para 45 días.",
+    beneficios: [
+      "Apoya la reducción de grasa corporal",
+      "Contribuye a mantener masa muscular magra",
+      "Derivado de aceite de cártamo (vegetal)",
+      "Ideal para complementar rutinas de ejercicio",
+      "Sin estimulantes ni cafeína"
+    ],
+    instrucciones: [
+      "Toma dos cápsulas blandas tres veces al día, preferentemente con las comidas."
+    ],
+    ingredientesTexto: "Por 2 cápsulas blandas: Calorías 15 · Grasas totales 1.5g (2%) · Ácido Linoleico Conjugado —CLA de aceite de cártamo— 1,000mg.\nPor 6 cápsulas (dosis diaria): Calorías 45 · Grasas totales 4.5g (7%) · CLA 3,000mg.\n\nOtros ingredientes: gelatina, glicerina.",
+    faqs: [
+      {
+        pregunta: "¿CLA 500 Nutrilite™ cuenta con certificación Halal?",
+        respuesta: "Sí."
+      }
+    ],
+    certificaciones: [
+      { nombre: "Halal", descripcion: "Halal" }
+    ],
+    detalles: [
+      { label: "Contenido", valor: "180 cápsulas blandas" },
+      { label: "Ingrediente activo", valor: "CLA 1,000mg por 2 cápsulas" },
+      { label: "Origen", valor: "Aceite de cártamo 100% vegetal" },
+      { label: "Uso", valor: "2 cápsulas × 3 veces al día con comidas" },
+      { label: "Suministro", valor: "30 días" },
+      { label: "Artículo", valor: "100280" }
+    ],
+    imagenes: ["/CLA500Nutrilite.png"],
+    imagen: "/CLA500Nutrilite.png",
+    rating: 4.6,
+    reviewCount: 14,
+    usosPorEnvase: 135,
+    badge: "Figura",
+    badgeColor: "bg-orange-500"
+  },
+  {
+    id: 24,
+    nombre: "Picolinato de Cromo Nutrilite",
+    nombreCorto: "Picolinato de Cromo Nutrilite™ – Control de Azúcar y Metabolismo",
+    categoria: "Vitaminas",
+    articulo: "A8600",
+    precio: 1823,
+    precioOriginal: 2805,
+    pv: 10.05,
+    bv: 1436.0,
+    disponible: true,
+    stock: "En stock",
+    stockUnidades: 6,
+    ventasSemana: 5,
+    descripcion: "El Picolinato de Cromo de Nutrilite™ ayuda a regular los niveles de azúcar en sangre, reducir antojos de carbohidratos y apoyar el metabolismo de glucosa en personas activas.",
+    descripcionLarga: "El Picolinato de Cromo Nutrilite™ proporciona cromo en su forma picolinato, la variante con mayor biodisponibilidad. El cromo es un oligoelemento esencial que potencia la acción de la insulina, contribuyendo a mantener niveles normales de glucosa en sangre.\n\nEs especialmente útil para personas que experimentan antojos frecuentes de azúcares o carbohidratos, ya que al mejorar la sensibilidad a la insulina ayuda a reducir estos impulsos. También apoya el metabolismo de carbohidratos, grasas y proteínas.\n\nCalidad Nutrilite™. Cada tableta aporta 200 mcg de cromo.",
+    beneficios: [
+      "Apoya el control de niveles de azúcar en sangre",
+      "Reduce antojos de azúcar y carbohidratos",
+      "Potencia la sensibilidad a la insulina",
+      "Favorece el metabolismo de macronutrientes",
+      "Forma picolinato: máxima biodisponibilidad"
+    ],
+    instrucciones: [
+      "Toma una cápsula con un vaso grande de agua tres veces al día, entre 30 y 45 minutos antes de las comidas."
+    ],
+    ingredientesTexto: "Por cápsula: Cromo (picolinato de cromo) 100mcg (83%) · Garcinia (fruta) 300mg · Gymnema (hojas) 33.3mg · Concentrado de Perejil Nutrilite™ 33.3mg · Vanadio (bis-glicinato-oxo-vanadio) 6.7mcg.\n\nOtros ingredientes: celulosa microcristalina, gelatina, agua, maltodextrina, estearato de magnesio, acacia, dióxido de silicio. Sin saborizantes, colorantes ni conservantes artificiales.",
+    faqs: [
+      {
+        pregunta: "¿Picolinato de Cromo Nutrilite™ cuenta con certificación Halal?",
+        respuesta: "Sí."
+      }
+    ],
+    certificaciones: [
+      { nombre: "Halal", descripcion: "Halal" }
+    ],
+    detalles: [
+      { label: "Contenido", valor: "120 comprimidos" },
+      { label: "Ingrediente activo", valor: "Cromo 100mcg + Garcinia + Gymnema" },
+      { label: "Uso", valor: "1 cápsula × 3 veces al día (30-45 min antes de comer)" },
+      { label: "Objetivo", valor: "Metabolismo de glucosa y control de antojos" },
+      { label: "Sin", valor: "Saborizantes · colorantes · conservantes artificiales" },
+      { label: "Artículo", valor: "A8600" }
+    ],
+    imagenes: ["/Picolinato-cromo.jpg"],
+    imagen: "/Picolinato-cromo.jpg",
+    rating: 4.5,
+    reviewCount: 11,
+    usosPorEnvase: 90,
+    badge: "Glucosa",
+    badgeColor: "bg-cyan-600"
+  },
+  {
+    id: 25,
+    nombre: "Espectro Multicaroteno Nutrilite",
+    nombreCorto: "Espectro Multicaroteno Nutrilite™ – Antioxidante Natural",
+    categoria: "Vitaminas",
+    articulo: "124708",
+    precio: 2460,
+    precioOriginal: 3785,
+    pv: 13.56,
+    bv: 1938.0,
+    disponible: true,
+    stock: "En stock",
+    stockUnidades: 4,
+    ventasSemana: 6,
+    descripcion: "Espectro Multicaroteno de Nutrilite™ es una mezcla de carotenoides naturales — alfa, beta y gamma caroteno, licopeno, luteína y zeaxantina — para protección antioxidante completa.",
+    descripcionLarga: "El Espectro Multicaroteno Nutrilite™ proporciona una combinación única de carotenoides naturales derivados de plantas cultivadas en granjas Nutrilite™. A diferencia de suplementos que solo ofrecen beta-caroteno aislado, esta fórmula incluye el espectro completo que se encuentra en los alimentos.\n\nLos carotenoides son antioxidantes potentes que protegen las células del daño oxidativo, apoyan la salud ocular (luteína y zeaxantina), la salud cardiovascular (licopeno) y contribuyen a la producción de vitamina A (alfa y beta-caroteno).\n\nIdeal para personas expuestas a factores de estrés oxidativo: sol, humo, contaminación, estrés crónico.",
+    beneficios: [
+      "Protección antioxidante amplia con múltiples carotenoides",
+      "Apoya la salud ocular con luteína y zeaxantina",
+      "Beneficios cardiovasculares con licopeno",
+      "Contribuye a la producción natural de vitamina A",
+      "Origen 100% vegetal de granjas Nutrilite™",
+      "Sin beta-caroteno sintético"
+    ],
+    instrucciones: [
+      "Toma una cápsula blanda al día."
+    ],
+    ingredientesTexto: "Por cápsula: Calorías 5 · Vitamina A (betacaroteno) 1,750mcg (194%) · Zinc (gluconato de zinc) 2mg (18%) · Luteína y zeaxantina (extracto de caléndula Tagetes erecta) 18mg · Licopeno (extracto de tomate) 2.5mg.\n\nNutrientes vegetales de caléndula, tomates y algas cultivadas en granjas asociadas Nutrilite™. Sin gluten, sin soja, sin lácteos, sin saborizantes ni colorantes artificiales.",
+    faqs: [
+      {
+        pregunta: "¿Qué son los carotenoides y cuál es su función?",
+        respuesta: "Los carotenoides dan a las plantas sus pigmentos amarillos, rojos y anaranjados. En el cuerpo actúan como antioxidantes, protegiendo las células del daño oxidativo causado por los radicales libres."
+      },
+      {
+        pregunta: "¿Cuáles son los beneficios de tomar este producto?",
+        respuesta: "Espectro Multicaroteno Nutrilite™ complementa la dieta con carotenoides naturales que apoyan la salud visual. Ayuda a los ojos a filtrar la luz azul, apoya el enfoque visual, proporciona vitamina A esencial para la retina y ofrece protección antioxidante."
+      }
+    ],
+    certificaciones: [
+      { nombre: "Halal", descripcion: "Halal" },
+      { nombre: "NSF", descripcion: "Certificación de contenido NSF" }
+    ],
+    detalles: [
+      { label: "Contenido", valor: "60 cápsulas blandas" },
+      { label: "Ingredientes activos", valor: "Luteína 15mg + Zeaxantina 3mg + Licopeno + Betacaroteno" },
+      { label: "Origen", valor: "Caléndula, tomates y algas — granjas Nutrilite™" },
+      { label: "Uso", valor: "1 cápsula blanda al día" },
+      { label: "Certificaciones", valor: "Halal · NSF" },
+      { label: "Artículo", valor: "124708" }
+    ],
+    imagenes: ["/espectro-multicaroteno.jpg"],
+    imagen: "/espectro-multicaroteno.jpg",
+    rating: 4.7,
+    reviewCount: 9,
+    usosPorEnvase: 60,
+    badge: "Antioxidante",
+    badgeColor: "bg-yellow-600"
+  },
+  {
+    id: 26,
+    nombre: "Diario Nutrilite",
+    nombreCorto: "Nutrilite™ Daily – Multivitamínico Diario Esencial",
+    categoria: "Vitaminas",
+    articulo: "120011DR",
+    precio: 717,
+    precioOriginal: 1103,
+    pv: 3.95,
+    bv: 565.0,
+    disponible: true,
+    stock: "En stock",
+    stockUnidades: 10,
+    ventasSemana: 12,
+    descripcion: "Nutrilite™ Daily es el multivitamínico de entrada ideal. Cubre las vitaminas y minerales esenciales del día a día con nutrientes de base vegetal en una sola tableta diaria.",
+    descripcionLarga: "El Nutrilite™ Daily es el complemento vitamínico perfecto para quienes buscan una cobertura nutricional básica sin complicaciones. Con una sola tableta al día obtienes un amplio espectro de vitaminas y minerales esenciales respaldados por concentrados de plantas de calidad Nutrilite™.\n\nIdeal para personas que recién comienzan con la suplementación, adultos con dietas poco variadas o quienes necesitan una opción de valor para cubrir sus necesidades diarias básicas. Es el punto de entrada perfecto al ecosistema Nutrilite™.\n\nFormulación de base vegetal. Sin conservantes artificiales.",
+    beneficios: [
+      "Cobertura completa de vitaminas y minerales esenciales",
+      "Una sola tableta al día — fácil de mantener",
+      "Base vegetal certificada Nutrilite™",
+      "Ideal para comenzar con suplementación",
+      "Precio accesible para uso diario continuo"
+    ],
+    instrucciones: [
+      "Toma una tableta diaria, preferiblemente con comida."
+    ],
+    ingredientesTexto: "Por tableta: Vitamina A 800mcg (89%) · Vitamina C 90mg (100%) · Vitamina D 10mcg (50%) · Vitamina E 10mg (67%) · Tiamina 1.4mg (117%) · Riboflavina 1.4mg (108%) · Niacina 18mg (113%) · Vitamina B6 1.4mg (82%) · Ácido fólico 240mcg (60%) · Vitamina B12 2.4mcg (100%) · Biotina 30mcg (100%) · Ácido pantoténico 5mg (100%) · Calcio 160mg (12%) · Hierro 10mg (56%) · Yodo 150mcg (100%) · Magnesio 63mg (15%) · Zinc 10mg (91%) · Selenio 65mcg (64%) · Cobre 0.5mg (56%) · Manganeso 2.3mg (100%) · Cromo 35mcg (100%) · Molibdeno 23mcg (51%) · Concentrado de acerola 75.27mg · Concentrado de zanahoria 4.86mg.\n\nSin colorantes, saborizantes ni conservantes artificiales. Sin gluten.",
+    faqs: [
+      {
+        pregunta: "¿Daily Nutrilite™ cuenta con certificación NSF?",
+        respuesta: "Sí. NSF International evalúa a fondo cada aspecto del desarrollo del producto antes de otorgar la certificación."
+      },
+      {
+        pregunta: "¿Daily Nutrilite™ cuenta con certificación Kosher?",
+        respuesta: "Sí."
+      },
+      {
+        pregunta: "¿Daily Nutrilite™ cuenta con certificación Halal?",
+        respuesta: "Sí."
+      }
+    ],
+    certificaciones: [
+      { nombre: "Kosher", descripcion: "Certificación Kosher" },
+      { nombre: "Halal", descripcion: "Halal" }
+    ],
+    detalles: [
+      { label: "Contenido", valor: "45 tabletas" },
+      { label: "Nutrientes", valor: "22 vitaminas y minerales + concentrados vegetales" },
+      { label: "Uso", valor: "1 tableta al día con comida" },
+      { label: "Sin", valor: "Gluten · colorantes · conservantes artificiales" },
+      { label: "Certificaciones", valor: "Kosher · Halal · NSF" },
+      { label: "Artículo", valor: "120011DR" }
+    ],
+    imagenes: ["/diario-nutrilite.png"],
+    imagen: "/diario-nutrilite.png",
+    rating: 4.8,
+    reviewCount: 28,
+    usosPorEnvase: 30,
+    badge: "Esencial",
+    badgeColor: "bg-teal-600"
   }
 ]
