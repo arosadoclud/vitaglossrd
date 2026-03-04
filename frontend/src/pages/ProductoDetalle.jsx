@@ -283,20 +283,27 @@ export default function ProductoDetalle() {
     }
   }
 
+  const SITE = 'https://vitaglossrd.com'
   useSEO({
     title: producto?.nombre ?? 'Producto',
     description: producto?.descripcion ?? 'Producto Amway original en VitaGloss RD. Envío a todo el país.',
+    canonical: producto ? `${SITE}/producto/${producto.id}` : undefined,
+    ogImage: producto ? `${SITE}${producto.imagen}` : undefined,
     jsonLd: producto ? {
       '@context': 'https://schema.org/',
       '@type': 'Product',
       name: producto.nombre,
       description: producto.descripcion,
-      image: producto.imagenes ?? [producto.imagen],
+      // Google Shopping requires absolute image URLs
+      image: (producto.imagenes ?? [producto.imagen]).map(img =>
+        img.startsWith('http') ? img : `${SITE}${img}`
+      ),
       brand: { '@type': 'Brand', name: 'Amway' },
       sku: producto.articulo,
+      mpn: producto.articulo,
       offers: {
         '@type': 'Offer',
-        url: `https://vitaglossrd.com/producto/${producto.id}`,
+        url: `${SITE}/producto/${producto.id}`,
         priceCurrency: 'DOP',
         price: String(producto.precio),
         priceValidUntil: '2027-12-31',
@@ -304,7 +311,42 @@ export default function ProductoDetalle() {
           ? 'https://schema.org/InStock'
           : 'https://schema.org/OutOfStock',
         itemCondition: 'https://schema.org/NewCondition',
-        seller: { '@type': 'Organization', name: 'VitaGloss RD', url: 'https://vitaglossrd.com' },
+        seller: { '@type': 'Organization', name: 'VitaGloss RD', url: SITE },
+        shippingDetails: {
+          '@type': 'OfferShippingDetails',
+          shippingRate: {
+            '@type': 'MonetaryAmount',
+            value: '150',
+            currency: 'DOP',
+          },
+          shippingDestination: {
+            '@type': 'DefinedRegion',
+            addressCountry: 'DO',
+          },
+          deliveryTime: {
+            '@type': 'ShippingDeliveryTime',
+            handlingTime: {
+              '@type': 'QuantitativeValue',
+              minValue: 0,
+              maxValue: 1,
+              unitCode: 'DAY',
+            },
+            transitTime: {
+              '@type': 'QuantitativeValue',
+              minValue: 1,
+              maxValue: 3,
+              unitCode: 'DAY',
+            },
+          },
+        },
+        hasMerchantReturnPolicy: {
+          '@type': 'MerchantReturnPolicy',
+          applicableCountry: 'DO',
+          returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+          merchantReturnDays: 30,
+          returnMethod: 'https://schema.org/ReturnByMail',
+          returnFees: 'https://schema.org/FreeReturn',
+        },
       },
       aggregateRating: {
         '@type': 'AggregateRating',
