@@ -179,7 +179,7 @@ export default function BlogPost() {
         <div className="absolute inset-0 bg-gradient-to-br from-[#0a1628] via-[#1B3A6B] to-[#0f2a54]" />
         <div className="relative max-w-5xl mx-auto">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-xs text-white/40 mb-6">
+          <nav aria-label="Ruta de navegación" className="flex items-center gap-2 text-xs text-white/40 mb-6">
             <Link to="/" className="hover:text-white/70 transition-colors">Inicio</Link>
             <span>/</span>
             <Link to="/blog" className="hover:text-white/70 transition-colors">Blog</Link>
@@ -229,6 +229,10 @@ export default function BlogPost() {
                 <img
                   src={post.imagen}
                   alt={post.titulo}
+                  width="256"
+                  height="256"
+                  fetchPriority="high"
+                  decoding="async"
                   className="w-64 h-64 object-contain drop-shadow-2xl"
                 />
               </motion.div>
@@ -258,7 +262,7 @@ export default function BlogPost() {
             )}
             {/* ── Tabla de Contenido (mobile) ── */}
             {headings.length >= 3 && (
-              <nav className="mb-8 bg-blue-50 border border-blue-100 rounded-2xl px-5 py-4">
+              <nav aria-label="Tabla de contenido" className="mb-8 bg-blue-50 border border-blue-100 rounded-2xl px-5 py-4">
                 <p className="text-xs font-bold text-blue-700 uppercase tracking-wide mb-3">📋 En este artículo</p>
                 <ol className="space-y-1.5">
                   {headings.filter(h => h.level === 2).map((h, i) => (
@@ -290,12 +294,14 @@ export default function BlogPost() {
                   href={shareWA}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="Compartir este artículo en WhatsApp"
                   className="flex items-center gap-2 bg-[#25D366] hover:bg-green-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-colors mb-2"
                 >
                   📲 Compartir en WhatsApp
                 </a>
                 <button
                   onClick={copyLink}
+                  aria-label="Copiar enlace del artículo"
                   className="w-full flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs font-semibold px-4 py-2.5 rounded-xl transition-colors"
                 >
                   🔗 Copiar enlace
@@ -306,6 +312,7 @@ export default function BlogPost() {
               {headings.length >= 3 && (
                 <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5">
                   <p className="text-xs font-bold text-blue-700 uppercase tracking-wide mb-3">📋 Contenido</p>
+                  <nav aria-label="Tabla de contenido">
                   <ol className="space-y-2">
                     {headings.filter(h => h.level === 2).map((h, i) => (
                       <li key={h.id}>
@@ -318,6 +325,7 @@ export default function BlogPost() {
                       </li>
                     ))}
                   </ol>
+                  </nav>
                 </div>
               )}
 
@@ -483,12 +491,20 @@ export default function BlogPost() {
                           <img
                             src={rel.imagen}
                             alt={rel.titulo}
+                            width="320"
+                            height="144"
+                            loading="lazy"
+                            decoding="async"
                             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                         ) : (
                           <img
                             src={rel.imagen}
                             alt={rel.titulo}
+                            width="96"
+                            height="96"
+                            loading="lazy"
+                            decoding="async"
                             className="h-24 w-24 object-contain drop-shadow-xl group-hover:scale-110 transition-transform duration-500"
                           />
                         )}

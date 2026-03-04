@@ -139,10 +139,11 @@ export default function Blog() {
             </p>
 
             {/* Búsqueda */}
-            <div className="max-w-md mx-auto relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 text-sm">🔍</span>
+            <div className="max-w-md mx-auto relative" role="search">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 text-sm" aria-hidden="true">🔍</span>
               <input
-                type="text"
+                type="search"
+                aria-label="Buscar artículos del blog"
                 placeholder="Buscar artículos…"
                 value={busqueda}
                 onChange={e => setBusqueda(e.target.value)}
@@ -155,11 +156,12 @@ export default function Blog() {
 
       {/* ── FILTROS ── */}
       <div className="sticky top-16 sm:top-[72px] z-10 bg-white border-b border-gray-100 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex gap-2 overflow-x-auto scrollbar-hide">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex gap-2 overflow-x-auto scrollbar-hide" role="group" aria-label="Filtrar por categoría">
           {categorias.map(cat => (
             <button
               key={cat}
               onClick={() => setCategoriaActiva(cat)}
+              aria-pressed={categoriaActiva === cat}
               className={`flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 ${
                 categoriaActiva === cat
                   ? 'bg-primary text-white shadow-md shadow-primary/20'
@@ -205,12 +207,20 @@ export default function Blog() {
                       <img
                         src={postDestacado.imagen}
                         alt={postDestacado.titulo}
+                        width="600"
+                        height="360"
+                        loading="lazy"
+                        decoding="async"
                         className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     ) : (
                       <img
                         src={postDestacado.imagen}
                         alt={postDestacado.titulo}
+                        width="256"
+                        height="256"
+                        loading="lazy"
+                        decoding="async"
                         className="w-48 h-48 lg:w-64 lg:h-64 object-contain drop-shadow-2xl group-hover:scale-105 transition-transform duration-500"
                       />
                     )}
@@ -261,10 +271,10 @@ export default function Blog() {
                     <motion.div
                       key={post.id}
                       variants={fadeUp}
-                      initial="hidden"
+                      initial={i < 3 ? 'visible' : 'hidden'}
                       whileInView="visible"
                       viewport={{ once: true }}
-                      custom={i}
+                      custom={i < 3 ? 0 : i - 2}
                     >
                       <Link
                         to={`/blog/${post.slug}`}
@@ -276,12 +286,20 @@ export default function Blog() {
                             <img
                               src={post.imagen}
                               alt={post.titulo}
+                              width="400"
+                              height="224"
+                              loading="lazy"
+                              decoding="async"
                               className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             />
                           ) : (
                             <img
                               src={post.imagen}
                               alt={post.titulo}
+                              width="176"
+                              height="176"
+                              loading="lazy"
+                              decoding="async"
                               className="h-44 w-44 object-contain drop-shadow-xl group-hover:scale-110 transition-transform duration-500"
                             />
                           )}
