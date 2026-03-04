@@ -1,65 +1,41 @@
 /**
- * VitaGloss RD — Generador automático de artículos con IA (Anthropic Claude)
+ * VitaGloss RD — Generador automático de artículos con IA
  *
  * Uso:
- *   ANTHROPIC_API_KEY=sk-... PEXELS_API_KEY=... node scripts/generate-post.js
+ *   ANTHROPIC_API_KEY=sk-ant-... OPENAI_API_KEY=sk-... node scripts/generate-post.js
  *
  * Lo que hace:
  *   1. Lee los posts existentes en frontend/src/data/posts.js
- *   2. Llama a Claude para generar un post NUEVO y ÚNICO
- *   3. Busca y descarga una foto relevante desde Pexels
+ *   2. Llama a Claude (Anthropic) para generar el texto del artículo
+ *   3. Llama a DALL-E 3 (OpenAI) para generar una imagen única y personalizada
  *   4. Inserta el nuevo post en posts.js con la imagen descargada
  *   5. Listo — el commit/push lo hace GitHub Actions (o tú manualmente)
  */
 
 const Anthropic = require('@anthropic-ai/sdk')
+const OpenAI = require('openai')
 const fs = require('fs')
 const path = require('path')
 const https = require('https')
 const http = require('http')
 
-// ─── Imagen fallback si Pexels falla ────────────────────────────────────────
+// ─── Imagen fallback si DALL-E falla ───────────────────────────────────────
 const IMAGEN_FALLBACK_POR_PRODUCTO = {
-  1:  '/109741CO-690px-01.png',
-  2:  '/109742CO-690px-01.png',
-  3:  '/109743CO-690px-01.png',
-  4:  '/116571CO-690px-01.png',
-  6:  '/116545CO-690px-01.png',
-  9:  '/116560CO-690px-01.png',
-  10: '/116570CO-690px-01.png',
-  11: '/116558CO-690px-01.png',
-  17: '/116567CO-690px-01.png',
-  18: '/116562CO-690px-01.png',
-  20: '/116580CO-690px-01.png',
-  21: '/116585CO-690px-01.png',
+  1:  '/109741CO-690px-01.webp',
+  2:  '/124111-690px-01.webp',
+  3:  '/124108-690px-01.webp',
+  4:  '/109741CO-690px-01.webp',
+  6:  '/110170CO-690px-01.webp',
+  9:  '/109741CO-690px-01.webp',
+  10: '/109741CO-690px-01.webp',
+  11: '/nutrilite-zinc-defensa-inmunologica.webp',
+  17: '/Vitamina-D-transparente.webp',
+  18: '/omega-nutrilite.webp',
+  20: '/protenia-vegetal-transparente.webp',
+  21: '/kit-envejecimiento-saludable.webp',
 }
 
-// ─── Traducción de tags frecuentes al inglés (mejora resultados en Pexels) ───
-const TRADUCCION_TAGS = {
-  'salud bucal': 'dental health',
-  'pasta dental': 'toothpaste dental care',
-  'vitaminas': 'vitamins supplements',
-  'suplementos': 'health supplements',
-  'caries': 'tooth decay dental',
-  'encías': 'gum health',
-  'blanqueamiento dental': 'teeth whitening',
-  'mal aliento': 'fresh breath dental',
-  'omega 3': 'omega 3 fish oil',
-  'vitamina c': 'vitamin c citrus health',
-  'vitamina d': 'vitamin d sunshine',
-  'zinc': 'zinc immune health',
-  'calcio': 'calcium bones health',
-  'proteína vegetal': 'plant protein healthy food',
-  'colágeno': 'collagen skin health',
-  'sistema inmune': 'immune system health',
-  'probióticos': 'gut health probiotics',
-  'magnesio': 'magnesium supplements',
-  'antioxidantes': 'antioxidants healthy food',
-  'envejecimiento': 'healthy aging wellness',
-  'nutrición': 'healthy nutrition food',
-  'higiene dental': 'dental hygiene routine',
-  'flúor': 'fluoride dental health',
-}
+// ─── (tabla de traducción eliminada — DALL-E entiende español directamente) ──
 
 /**
  * Descarga un archivo desde una URL a una ruta local.
@@ -90,54 +66,49 @@ function descargarArchivo(url, destino) {
 }
 
 /**
- * Busca una foto en Pexels y la descarga.
- * Devuelve la ruta pública (/blog/[slug].jpg) o null si falla.
+ * Genera una imagen con DALL-E 3 basada en el título y tags del artículo.
+ * La descarga a /frontend/public/blog/[slug].png
+ * Devuelve la ruta pública (/blog/[slug].png) o null si falla.
  */
-async function buscarYDescargarImagen(tags, titulo, slug, pexelsKey) {
-  if (!pexelsKey) {
-    console.warn('⚠️  PEXELS_API_KEY no definida — se usará imagen de producto')
+async function generarImagenDallE(titulo, tags, slug, openaiKey) {
+  if (!openaiKey) {
+    console.warn('⚠️  OPENAI_API_KEY no definida — se usará imagen de producto')
     return null
   }
 
-  // Construir query en inglés con los primeros 2 tags
-  const queryRaw = tags.slice(0, 2).join(' ')
-  const queryEn = TRADUCCION_TAGS[queryRaw.toLowerCase()] ||
-    tags.slice(0, 2).map(t => TRADUCCION_TAGS[t.toLowerCase()] || t).join(' ')
+  const openai = new OpenAI({ apiKey: openaiKey })
 
-  const query = encodeURIComponent(queryEn + ' health')
-  const pexelsUrl = `https://api.pexels.com/v1/search?query=${query}&per_page=5&orientation=landscape&size=medium`
+  // Construir prompt detallado para DALL-E 3
+  const temasPrincipales = tags.slice(0, 3).join(', ')
+  const prompt = `Imagen fotorrealista de alta calidad para un artículo de blog sobre salud y nutrición en República Dominicana. Tema: "${titulo}". Conceptos clave: ${temasPrincipales}. Estilo: fotografía editorial profesional, colores vibrantes tropicales, iluminación natural cálida del Caribe. Formato horizontal (landscape). Sin texto, sin logos, sin watermarks.`
 
-  console.log(`🖼️  Buscando imagen en Pexels: "${queryEn} health"`)
+  console.log(`🎨 Generando imagen con DALL-E 3 para: "${titulo}"`)
 
   try {
-    const res = await fetch(pexelsUrl, {
-      headers: { Authorization: pexelsKey },
+    const response = await openai.images.generate({
+      model: 'dall-e-3',
+      prompt,
+      n: 1,
+      size: '1792x1024',   // landscape, alta resolución
+      quality: 'standard', // 'hd' cuesta el doble (~$0.08)
+      response_format: 'url',
     })
 
-    if (!res.ok) throw new Error(`Pexels API: ${res.status}`)
-
-    const data = await res.json()
-    if (!data.photos || data.photos.length === 0) {
-      console.warn('⚠️  Pexels no devolvió fotos para esa búsqueda')
-      return null
-    }
-
-    // Elegir la foto con mejor resolución (preferimos la 2da para variedad)
-    const foto = data.photos[1] || data.photos[0]
-    const imageUrl = foto.src.large2x || foto.src.large || foto.src.medium
+    const imageUrl = response.data[0].url
+    console.log(`✅ Imagen generada por DALL-E 3`)
 
     // Crear carpeta /public/blog/ si no existe
     const blogDir = path.join(__dirname, '../frontend/public/blog')
     if (!fs.existsSync(blogDir)) fs.mkdirSync(blogDir, { recursive: true })
 
-    const destino = path.join(blogDir, `${slug}.jpg`)
+    const destino = path.join(blogDir, `${slug}.png`)
     await descargarArchivo(imageUrl, destino)
 
-    console.log(`✅ Imagen descargada: /blog/${slug}.jpg (foto por ${foto.photographer})`)
-    return `/blog/${slug}.jpg`
+    console.log(`✅ Imagen guardada: /blog/${slug}.png`)
+    return `/blog/${slug}.png`
 
   } catch (err) {
-    console.warn(`⚠️  Error descargando imagen de Pexels: ${err.message} — se usará imagen de producto`)
+    console.warn(`⚠️  Error generando imagen con DALL-E 3: ${err.message} — se usará imagen de producto`)
     return null
   }
 }
@@ -290,17 +261,17 @@ REGLAS PARA EL CONTENIDO HTML:
     console.warn(`⚠️  Slug duplicado — se usó: ${postData.slug}`)
   }
 
-  // 4 ── Buscar y descargar imagen desde Pexels ─────────────────────────────
-  const pexelsKey = process.env.PEXELS_API_KEY
-  const imagenDescargada = await buscarYDescargarImagen(
-    postData.tags,
+  // 4 ── Generar imagen con DALL-E 3 ──────────────────────────────────────────
+  const openaiKey = process.env.OPENAI_API_KEY
+  const imagenDescargada = await generarImagenDallE(
     postData.titulo,
+    postData.tags,
     postData.slug,
-    pexelsKey
+    openaiKey
   )
   const imagen = imagenDescargada ||
     IMAGEN_FALLBACK_POR_PRODUCTO[postData.productoRelacionadoId] ||
-    '/109741CO-690px-01.png'
+    '/109741CO-690px-01.webp'
 
   // 5 ── Construir el bloque del nuevo post ──────────────────────────────────
   const tagsStr = JSON.stringify(postData.tags)
