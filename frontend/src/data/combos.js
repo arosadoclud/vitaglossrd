@@ -154,7 +154,7 @@ export const combos = [
     badgeColor: 'bg-cyan-600',
     productos: [
       { nombre: 'Cal Mag D Nutrilite™', cantidad: '90 comprimidos', img: '/nutrilite-cal-mag-d.jpg', precio: PRECIOS[10].precio },
-      { nombre: 'Glucosamina Nutrilite™', cantidad: '30 días', img: '/nutrilite-glucosamina.jpg', precio: PRECIOS[15].precio },
+      { nombre: 'Glucosamina Nutrilite™', cantidad: '30 días', img: '/nutrilite-glucosamina.webp', precio: PRECIOS[15].precio },
       { nombre: 'Vitamina D Nutrilite™', cantidad: '90 comprimidos', img: '/Vitamina-D-transparente.webp', precio: PRECIOS[17].precio },
     ],
     precioNormal: PRECIOS[10].precio + PRECIOS[15].precio + PRECIOS[17].precio,

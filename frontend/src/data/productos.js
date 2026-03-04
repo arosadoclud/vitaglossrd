@@ -152,8 +152,8 @@ export const productos = [
     imagenes: [
       "/124111-690px-01.webp",
       "/124111-690px-02.webp",
-      "/124111-690px-03.jpg",
-      "/124111-690px-04.jpg"
+      "/124111-690px-03.webp",
+      "/124111-690px-04.webp"
     ],
     imagen: "/124111-690px-01.webp",
     rating: 4.7,
@@ -1191,8 +1191,8 @@ export const productos = [
       { label: "Suministro", valor: "30 días" },
       { label: "Artículo", valor: "100280" }
     ],
-    imagenes: ["/CLA500Nutrilite.png"],
-    imagen: "/CLA500Nutrilite.png",
+    imagenes: ["/CLA500Nutrilite.webp"],
+    imagen: "/CLA500Nutrilite.webp",
     rating: 4.6,
     reviewCount: 14,
     usosPorEnvase: 135,
