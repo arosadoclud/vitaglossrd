@@ -3,7 +3,7 @@ import { useSEO } from '../hooks/useSEO'
 export default function Devoluciones() {
   useSEO({
     title: 'Política de Devoluciones',
-    description: 'Política de devoluciones y cambios de VitaGloss RD. Conoce nuestros plazos, condiciones y proceso para devoluciones de productos Amway.',
+    description: 'Política de devoluciones de VitaGloss RD. Aceptamos devoluciones de productos defectuosos. Conoce nuestro proceso y condiciones.',
     canonical: 'https://www.vitaglossrd.com/devoluciones',
   })
 
@@ -25,7 +25,7 @@ export default function Devoluciones() {
           <section>
             <h2 className="text-xl font-bold text-primary mb-3">2. Plazo de devolución</h2>
             <p>
-              Aceptamos devoluciones dentro de los <strong>30 días calendario</strong> siguientes a la fecha de entrega del producto, tanto para productos defectuosos como para productos en buen estado que no satisfagan al cliente.
+              Aceptamos devoluciones dentro de los <strong>30 días calendario</strong> siguientes a la fecha de entrega, exclusivamente para productos que presenten defectos de fabricación o daños al momento de la recepción.
             </p>
           </section>
 
@@ -33,10 +33,10 @@ export default function Devoluciones() {
             <h2 className="text-xl font-bold text-primary mb-3">3. Condiciones para la devolución</h2>
             <p>Para que la devolución sea aceptada, el producto debe cumplir las siguientes condiciones:</p>
             <ul className="list-disc pl-6 mt-2 space-y-1">
+              <li>Presentar un defecto de fabricación comprobable o daño recibido al momento de la entrega.</li>
               <li>Estar dentro del plazo de 30 días desde la entrega.</li>
               <li>Presentar el comprobante de compra o número de pedido.</li>
-              <li>El producto debe estar sin usar o con uso mínimo en caso de defecto.</li>
-              <li>El empaque original debe estar en buen estado (cuando aplique).</li>
+              <li>El empaque original debe estar disponible (cuando aplique).</li>
             </ul>
           </section>
 
@@ -50,12 +50,11 @@ export default function Devoluciones() {
           <section>
             <h2 className="text-xl font-bold text-primary mb-3">5. Gastos de devolución</h2>
             <p>
-              Los gastos de envío para devoluciones son <strong>gratuitos</strong> en los siguientes casos:
+              Los gastos de envío para devoluciones son <strong>gratuitos</strong> cuando el motivo es:
             </p>
             <ul className="list-disc pl-6 mt-2 space-y-1">
               <li>Producto defectuoso o dañado al recibirlo.</li>
               <li>Producto erróneo enviado por nuestra parte.</li>
-              <li>Devolución por insatisfacción dentro de los primeros 30 días.</li>
             </ul>
           </section>
 
@@ -86,9 +85,10 @@ export default function Devoluciones() {
             <h2 className="text-xl font-bold text-primary mb-3">9. Excepciones</h2>
             <p>No se aceptan devoluciones en los siguientes casos:</p>
             <ul className="list-disc pl-6 mt-2 space-y-1">
-              <li>Productos consumibles parcialmente usados sin defecto comprobado.</li>
+              <li>Productos en buen estado sin defecto comprobado (cambio de opinión o insatisfacción general).</li>
               <li>Productos devueltos fuera del plazo de 30 días.</li>
               <li>Productos dañados por mal uso o almacenamiento inadecuado por parte del cliente.</li>
+              <li>Productos consumibles con más del 30% de uso.</li>
             </ul>
           </section>
 
