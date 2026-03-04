@@ -1465,6 +1465,7 @@ export const posts = [
     fechaActualizacion: '2026-03-04',
     tiempoLectura: '7 min',
     imagen: '/fluor-pastadental.webp',
+    imagenCover: true,
     autor: 'Andy Rosado',
     tags: ["flúor","pasta dental","salud bucal","esmalte dental","higiene oral"],
     productoRelacionadoId: 1,
