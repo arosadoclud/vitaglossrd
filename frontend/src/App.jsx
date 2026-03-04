@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation, useSearchParams } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 
 // Scroll al inicio en cada cambio de ruta
 function ScrollToTop() {
@@ -14,28 +14,40 @@ import { CartProvider } from './context/CartContext'
 import { PreciosProvider } from './context/PreciosContext'
 import { api } from './services/api'
 import ProtectedRoute from './components/ProtectedRoute'
+// Siempre presentes en pantalla → carga eagerly
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import WhatsAppFloat from './components/WhatsAppFloat'
 import LeadPopup from './components/LeadPopup'
 import CartDrawer from './components/CartDrawer'
 import CookieConsent from './components/CookieConsent'
-import Home from './pages/Home'
-import Catalogo from './pages/Catalogo'
-import ProductoDetalle from './pages/ProductoDetalle'
-import Equipo from './pages/Equipo'
-import SobreNosotros from './pages/SobreNosotros'
-import Contacto from './pages/Contacto'
-import FAQ from './pages/FAQ'
-import Combos from './pages/Combos'
-import ComboDetalle from './pages/ComboDetalle'
-import Dashboard from './pages/Dashboard'
-import Blog from './pages/Blog'
-import BlogPost from './pages/BlogPost'
-import Privacidad from './pages/Privacidad'
-import Devoluciones from './pages/Devoluciones'
-import Terminos from './pages/Terminos'
-import Unete from './pages/Unete'
+
+// ── Páginas lazy: se parsean/compilan solo cuando el usuario navega a ellas ──
+const Home           = lazy(() => import('./pages/Home'))
+const Catalogo       = lazy(() => import('./pages/Catalogo'))
+const ProductoDetalle= lazy(() => import('./pages/ProductoDetalle'))
+const Equipo         = lazy(() => import('./pages/Equipo'))
+const SobreNosotros  = lazy(() => import('./pages/SobreNosotros'))
+const Contacto       = lazy(() => import('./pages/Contacto'))
+const FAQ            = lazy(() => import('./pages/FAQ'))
+const Combos         = lazy(() => import('./pages/Combos'))
+const ComboDetalle   = lazy(() => import('./pages/ComboDetalle'))
+const Dashboard      = lazy(() => import('./pages/Dashboard'))
+const Blog           = lazy(() => import('./pages/Blog'))
+const BlogPost       = lazy(() => import('./pages/BlogPost'))
+const Privacidad     = lazy(() => import('./pages/Privacidad'))
+const Devoluciones   = lazy(() => import('./pages/Devoluciones'))
+const Terminos       = lazy(() => import('./pages/Terminos'))
+const Unete          = lazy(() => import('./pages/Unete'))
+
+// Fallback mínimo mientras se carga un chunk
+function PageSpinner() {
+  return (
+    <div className="flex items-center justify-center min-h-[60vh]" aria-busy="true">
+      <div className="w-10 h-10 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+    </div>
+  )
+}
 
 // Páginas que NO deben mostrar el Navbar/Footer público
 const DASHBOARD_ROUTES = ['/dashboard', '/unete']
@@ -63,6 +75,7 @@ function Layout() {
       <RefTracker />
       {!isDashboard && <Navbar />}
       <main className="flex-1">
+        <Suspense fallback={<PageSpinner />}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/catalogo" element={<Catalogo />} />
@@ -88,6 +101,7 @@ function Layout() {
             }
           />
         </Routes>
+        </Suspense>
       </main>
       {!isDashboard && <Footer />}
       {!isDashboard && <WhatsAppFloat />}
