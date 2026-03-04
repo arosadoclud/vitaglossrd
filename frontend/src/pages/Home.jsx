@@ -310,39 +310,27 @@ export default function Home() {
                 </div>
 
                 {/* Badge precio */}
-                <m.div
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
-                  className="absolute top-2 sm:top-4 right-0 sm:right-2 bg-white rounded-2xl px-3 sm:px-4 py-2 sm:py-3 shadow-2xl"
-                >
+                <div className="animate-float-up absolute top-2 sm:top-4 right-0 sm:right-2 bg-white rounded-2xl px-3 sm:px-4 py-2 sm:py-3 shadow-2xl">
                   <p className="text-xs text-gray-600 font-medium">Precio especial</p>
                   <p className="text-primary font-black text-base sm:text-lg">RD${slidePrecio}</p>
-                </m.div>
+                </div>
 
                 {/* Badge stock */}
-                <m.div
-                  animate={{ y: [0, 8, 0] }}
-                  transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut', delay: 0.5 }}
-                  className="absolute bottom-2 sm:bottom-6 left-0 sm:left-2 bg-green-700 text-white rounded-2xl px-3 sm:px-4 py-2 sm:py-2.5 shadow-xl flex items-center gap-2"
-                >
+                <div className="animate-float-down absolute bottom-2 sm:bottom-6 left-0 sm:left-2 bg-green-700 text-white rounded-2xl px-3 sm:px-4 py-2 sm:py-2.5 shadow-xl flex items-center gap-2">
                   <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
                   <span className="text-xs sm:text-sm font-bold">En Stock</span>
-                </m.div>
+                </div>
               </m.div>
             </AnimatePresence>
           </div>
         </div>
 
         {/* Flecha scroll */}
-        <m.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/40"
-        >
+        <div className="animate-scroll-hint absolute bottom-8 left-1/2 -translate-x-1/2 text-white/40">
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
-        </m.div>
+        </div>
       </section>
 
       {/* ====== STATS BAR ====== */}

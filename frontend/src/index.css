@@ -30,6 +30,21 @@ html {
   scrollbar-width: none;
 }
 
+/* ── Animaciones CSS puras (sin JS) para elementos del hero ──
+   Reemplazan motion.div repeat:Infinity → evitan el RAF loop de framer-motion
+   desde el inicio de la página y reducen las tareas largas en el main thread. */
+@keyframes float-up {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+@keyframes float-down {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(8px); }
+}
+.animate-float-up   { animation: float-up   3s ease-in-out infinite; }
+.animate-float-down { animation: float-down 2.5s ease-in-out infinite; }
+.animate-scroll-hint { animation: float-down 1.5s ease-in-out infinite; }
+
 /* ── Estilos del contenido del blog ── */
 .prose-custom {
   color: #374151;
