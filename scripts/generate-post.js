@@ -78,9 +78,16 @@ async function generarImagenDallE(titulo, tags, slug, openaiKey) {
 
   const openai = new OpenAI({ apiKey: openaiKey })
 
-  // Construir prompt detallado para DALL-E 3
+  // Construir prompt estilo póster editorial de salud con diseño profesional
   const temasPrincipales = tags.slice(0, 3).join(', ')
-  const prompt = `Imagen fotorrealista de alta calidad para un artículo de blog sobre salud y nutrición en República Dominicana. Tema: "${titulo}". Conceptos clave: ${temasPrincipales}. Estilo: fotografía editorial profesional, colores vibrantes tropicales, iluminación natural cálida del Caribe. Formato horizontal (landscape). Sin texto, sin logos, sin watermarks.`
+  const prompt = `Create a professional health and wellness blog cover image in the style of a modern health magazine editorial poster. \
+The image must visually represent the exact topic: "${titulo}". \
+Visual elements: realistic photography or illustration directly related to ${temasPrincipales} — show the actual subject matter clearly (e.g. if the topic is dental sensitivity, show a person with tooth pain or dental care; if it's a supplement, show the supplement with relevant foods; if it's a disease, show a human body part or medical imagery). \
+Include the Spanish title text prominently: "${titulo}" — bold, clean modern typography, white or high-contrast text. \
+Add a short Spanish motivational subtitle at the bottom in smaller text. \
+Design style: vibrant health magazine cover, rich saturated colors matching the topic mood, professional lighting, clean composition with clear visual hierarchy. \
+NO generic beach or tropical backgrounds unless the topic is specifically about sun or beach. The background and imagery MUST match the article topic directly. \
+High quality, photorealistic with graphic design overlay elements. Wide landscape format.`
 
   console.log(`🎨 Generando imagen con DALL-E 3 para: "${titulo}"`)
 
@@ -288,6 +295,7 @@ REGLAS PARA EL CONTENIDO HTML:
     fechaActualizacion: '${today}',
     tiempoLectura: '${postData.tiempoLectura}',
     imagen: '${imagen}',
+    imagenCover: true,
     autor: 'Andy Rosado',
     tags: ${tagsStr},
     productoRelacionadoId: ${postData.productoRelacionadoId},
