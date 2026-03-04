@@ -296,6 +296,8 @@ export default function Home() {
                   }}>
                   <img
                     src={slide.imagen}
+                    srcSet={`${slide.imagen.replace('-690px-01.webp','-400w.webp').replace('-690px-01','-400w')} 400w, ${slide.imagen} 690w`}
+                    sizes="(max-width: 1024px) 320px, 400px"
                     alt="Producto"
                     className="w-44 sm:w-60 md:w-72 lg:w-80 h-44 sm:h-60 md:h-72 lg:h-80 object-contain"
                     style={{
