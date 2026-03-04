@@ -1482,7 +1482,7 @@ export const posts = [
     fecha: '2026-03-04',
     fechaActualizacion: '2026-03-04',
     tiempoLectura: '7 min',
-    imagen: '/curcuma con pimienta negra el antiinflamatorio_.webp',
+    imagen: '/curcuma-pimienta-negra-antiinflamatorio.webp',
     imagenCover: true,
     autor: 'Andy Rosado',
     tags: ["cúrcuma","antiinflamatorio natural","pimienta negra","curcumina","salud articular"],
