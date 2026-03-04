@@ -11,7 +11,8 @@
          en las peticiones fetch() CORS al API de Railway -->
     <link rel="preconnect" href="https://vitaglossrd-production.up.railway.app" crossorigin />
     <!-- Google Fonts no bloqueante — mueve fuera de la ruta crítica de render -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" as="style" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" as="style" id="gfonts-preload" />
+    <script src="/init-fonts.js" defer></script>
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" /></noscript>
     <!-- Preload imagen LCP — versión 400w para pantallas móviles/tablet -->
     <link rel="preload" as="image" href="/124106SP-400w.webp"

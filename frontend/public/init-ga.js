@@ -1,8 +1,3 @@
-// Activate Google Fonts stylesheet preloads (avoids inline onload= handler)
-document.querySelectorAll('link[rel="preload"][as="style"]').forEach(function (l) {
-  l.rel = 'stylesheet';
-});
-
 // Google Analytics 4 — dataLayer init + deferred script load
 window.dataLayer = window.dataLayer || [];
 function gtag() { dataLayer.push(arguments); }
