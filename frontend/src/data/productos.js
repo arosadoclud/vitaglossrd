@@ -1474,5 +1474,70 @@ export const productos = [
     usosPorEnvase: 30,
     badge: "Absorción 2×",
     badgeColor: "bg-green-600"
+  },
+  {
+    id: 28,
+    nombre: "Nutrilite™ Cerocarb",
+    nombreCorto: "Nutrilite™ Cerocarb – Inhibidor de carbohidratos",
+    categoria: "Vitaminas",
+    articulo: "NUTRI-CEROCARB",
+    precio: 1600,
+    precioOriginal: 2462,
+    pv: 8.30,
+    bv: 1187.0,
+    disponible: true,
+    stock: "En stock",
+    stockUnidades: 10,
+    ventasSemana: 8,
+    descripcion: "Cerocarb ayuda a inhibir la digestión de azúcares simples y carbohidratos complejos. Puede ayudar a prevenir la absorción de hasta 500 calorías en comidas altas en carbohidratos.",
+    descripcionLarga: "Nutrilite™ Cerocarb está diseñado para inhibir la digestión de azúcares simples y carbohidratos complejos, ayudando a prevenir la absorción de hasta 500 calorías cuando se ingiere con comidas altas en carbohidratos.\n\nBloquea los carbohidratos sin privar a tu cuerpo de vitaminas, minerales y fibra esenciales. Elaborado a partir de soja fermentada y extractos de frijol blanco, ingredientes naturales con respaldo científico.\n\nCertificado Halal. Calidad Nutrilite™.",
+    beneficios: [
+      "Inhibe la digestión de azúcares simples y carbohidratos complejos",
+      "Puede prevenir la absorción de hasta 500 calorías por comida",
+      "No priva al cuerpo de vitaminas, minerales ni fibra",
+      "Elaborado de soja fermentada y extracto de frijol blanco",
+      "Fórmula natural con certificación Halal"
+    ],
+    instrucciones: [
+      "Tomar de una a tres tabletas con comidas ricas en carbohidratos.",
+      "No consumir más de 9 tabletas por día."
+    ],
+    ingredientesTexto: "Por porción: Extracto de Frijol (Phaseolus vulgaris) 500mg † · Extracto de soja (Glycine max L.) 300mg † · Concentrado de Perejil (hojas, tallo) 30mg †\n\nOtros ingredientes: Celulosa microcristalina, ácido esteárico, goma arábiga, dióxido de silicio, carboximetilcelulosa sódica, metilcelulosa, glicerina, cera de carnaúba.\n\n† Valor diario no establecido.",
+    faqs: [
+      {
+        pregunta: "¿Nutrilite™ Cerocarb cuenta con certificación Halal?",
+        respuesta: "Sí."
+      },
+      {
+        pregunta: "¿Quiénes deben consultar a un médico antes de usar este producto?",
+        respuesta: "Las mujeres embarazadas o que amamantan, o toda persona con una enfermedad, incluidas diabetes e hipoglucemia, deben consultar con un médico antes de usar este producto."
+      },
+      {
+        pregunta: "¿Cuántas tabletas puedo tomar al día?",
+        respuesta: "Toma de una a tres tabletas con comidas ricas en carbohidratos. No consumas más de 9 tabletas por día."
+      },
+      {
+        pregunta: "¿Cerocarb elimina nutrientes esenciales junto con los carbohidratos?",
+        respuesta: "No. Cerocarb bloquea los carbohidratos sin privar a tu cuerpo de vitaminas, minerales y fibra esenciales."
+      }
+    ],
+    certificaciones: [
+      { nombre: "Halal", descripcion: "Halal" }
+    ],
+    detalles: [
+      { label: "Contenido", valor: "60 tabletas" },
+      { label: "Extracto principal", valor: "Frijol blanco 500mg + Soja 300mg por porción" },
+      { label: "Uso", valor: "1-3 tabletas con comidas ricas en carbohidratos" },
+      { label: "Máximo diario", valor: "9 tabletas" },
+      { label: "Certificaciones", valor: "Halal" },
+      { label: "Artículo", valor: "NUTRI-CEROCARB" }
+    ],
+    imagenes: ["/Nutrilite™ Cerocarb.png"],
+    imagen: "/Nutrilite™ Cerocarb.png",
+    rating: 4.6,
+    reviewCount: 15,
+    usosPorEnvase: 60,
+    badge: "Bloquea Carbos",
+    badgeColor: "bg-blue-600"
   }
 ]
