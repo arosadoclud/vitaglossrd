@@ -294,23 +294,17 @@ export default function Home() {
                     background: `radial-gradient(circle at 40% 30%, ${slide.acento}18 0%, transparent 70%)`,
                     boxShadow: `0 0 0 2px ${slide.acento}90, 0 0 25px ${slide.acento}50, 0 0 60px ${slide.acento}20`,
                   }}>
-                  <picture>
-                    <source
-                      srcSet={slide.imagen.replace(/\.(jpg|png)$/i, '.webp')}
-                      type="image/webp"
-                    />
-                    <img
-                      src={slide.imagen}
-                      alt="Producto"
-                      className="w-44 sm:w-60 md:w-72 lg:w-80 h-44 sm:h-60 md:h-72 lg:h-80 object-contain"
-                      style={{
-                        filter: `drop-shadow(0 20px 30px ${slide.acento}70)`,
-                        mixBlendMode: 'screen',
-                      }}
-                      fetchPriority={slideActivo === 0 ? 'high' : 'low'}
-                      loading={slideActivo === 0 ? 'eager' : 'lazy'}
-                    />
-                  </picture>
+                  <img
+                    src={slide.imagen}
+                    alt="Producto"
+                    className="w-44 sm:w-60 md:w-72 lg:w-80 h-44 sm:h-60 md:h-72 lg:h-80 object-contain"
+                    style={{
+                      filter: `drop-shadow(0 20px 30px ${slide.acento}70)`,
+                      mixBlendMode: 'screen',
+                    }}
+                    fetchPriority={slideActivo === 0 ? 'high' : 'low'}
+                    loading={slideActivo === 0 ? 'eager' : 'lazy'}
+                  />
                 </div>
 
                 {/* Badge precio */}

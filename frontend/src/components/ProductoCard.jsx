@@ -45,21 +45,15 @@ export default function ProductoCard({ producto }) {
             🔥 Solo {producto.stockUnidades} disponibles
           </span>
         )}
-        <picture>
-          <source
-            srcSet={producto.imagen.replace(/\.(jpg|png)$/i, '.webp')}
-            type="image/webp"
-          />
-          <img
-            src={producto.imagen}
-            alt={producto.nombre}
-            loading="lazy"
-            decoding="async"
-            width="308"
-            height="308"
-            className="h-44 w-full object-contain group-hover:scale-105 transition-transform duration-300"
-          />
-        </picture>
+        <img
+          src={producto.imagen}
+          alt={producto.nombre}
+          loading="lazy"
+          decoding="async"
+          width="308"
+          height="176"
+          className="h-44 w-full object-contain group-hover:scale-105 transition-transform duration-300"
+        />
       </div>
 
       {/* Info */}

@@ -30,18 +30,11 @@ export default function Footer() {
           {/* Marca */}
           <div className="col-span-2 md:col-span-1">
             <div className="mb-2">
-              <picture>
-                <source srcSet="/logo-footer-n.webp" type="image/webp" />
-                <img
-                  src="/logo-footer-n.png"
-                  alt="VitaGloss RD"
-                  width="252"
-                  height="168"
-                  loading="lazy"
-                  decoding="async"
-                  className="h-24 w-auto object-contain drop-shadow-lg"
-                />
-              </picture>
+              <img
+                src="/logo-footer-n.png"
+                alt="VitaGloss RD"
+                className="h-24 w-auto object-contain drop-shadow-lg"
+              />
             </div>
             <p className="font-bold text-xl text-white leading-tight">VitaGloss RD</p>
             <p className="text-secondary text-sm mb-4">Tu salud, tu sonrisa</p>
