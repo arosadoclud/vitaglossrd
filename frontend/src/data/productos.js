@@ -1390,5 +1390,89 @@ export const productos = [
     usosPorEnvase: 30,
     badge: "Esencial",
     badgeColor: "bg-teal-600"
+  },
+  {
+    id: 27,
+    nombre: "Magnesio Nutrilite",
+    nombreCorto: "Nutrilite™ Magnesio – Mejor absorción para mejores días",
+    categoria: "Vitaminas",
+    articulo: "NUTRI-MAG",
+    precio: 2350,
+    precioOriginal: 3615,
+    pv: 12.20,
+    bv: 1743.0,
+    disponible: true,
+    stock: "En stock",
+    stockUnidades: 8,
+    ventasSemana: 10,
+    descripcion: "Magnesio Nutrilite™ apoya más de 300 procesos en el cuerpo: corazón, nervios, músculos, sueño, estrés ocasional y producción de energía. Formulado para absorber 2× mejor que el producto líder.",
+    descripcionLarga: "El magnesio, clave para más de 300 procesos en el cuerpo humano, ayuda a que tus células puedan crear proteína esencial, apoyar tus músculos y nervios, producir energía y mucho más.\n\nMagnesio Nutrilite™ está formulado para absorber dos veces mejor que el producto líder al maximizar las formas protegidas de magnesio: quelato bisglicinato de magnesio y malato de dimagnesio. Además contiene extracto de fruto de olivo para la salud del corazón y apoyo antioxidante.\n\nIdeal para adultos que buscan apoyo diario para su corazón, nervios, músculos, sueño, estrés ocasional, producción de energía y salud del cerebro.",
+    beneficios: [
+      "Apoya más de 300 procesos biológicos esenciales",
+      "2× mejor absorción que el producto líder",
+      "Quelato bisglicinato de magnesio y malato de dimagnesio",
+      "Extracto de fruto de olivo para la salud del corazón",
+      "Apoyo para sueño, estrés ocasional y energía",
+      "Vegano · sin gluten · sin lactosa · sin soja"
+    ],
+    instrucciones: [
+      "Toma dos cápsulas por día, preferiblemente con la cena."
+    ],
+    ingredientesTexto: "Por 2 cápsulas: Magnesio (como quelato bisglicinato de magnesio, hidróxido de magnesio y malato de dimagnesio) 200mg (48% VD) · Extracto de olivo (Olea Europaea L.) (fruta) 54mg (brinda 10mg de hidroxitirosol) †\n\nOtros ingredientes: Hidroxipropil metilcelulosa, fibra de maíz, dextrina, ácido cítrico, fibra de bambú, acacia.\n\nSin colorantes, saborizantes ni conservantes artificiales. Vegano. Sin lactosa, sin lácteos, sin soja, sin gluten, sin OMG.",
+    faqs: [
+      {
+        pregunta: "¿Este producto contiene magnesio quelado y por qué es importante?",
+        respuesta: "Sí, Magnesio Nutrilite™ incluye magnesio quelado en forma de quelato bisglicinato de magnesio y malato de dimagnesio. Estas formas se absorben mejor y son más suaves para el estómago, lo que reduce las molestias gastrointestinales."
+      },
+      {
+        pregunta: "¿Qué significa que Magnesio Nutrilite™ tiene certificación de contenido NSF?",
+        respuesta: "La certificación NSF garantiza que el producto cumpla con estrictos estándares de calidad y seguridad a través de pruebas de terceros e inspecciones de plantas."
+      },
+      {
+        pregunta: "¿Magnesio Nutrilite™ cuenta con certificación Kosher?",
+        respuesta: "Sí."
+      },
+      {
+        pregunta: "¿Magnesio Nutrilite™ cuenta con certificación Halal?",
+        respuesta: "Sí."
+      },
+      {
+        pregunta: "¿Puedo tomar Magnesio Nutrilite™ con otros productos Amway que contengan magnesio?",
+        respuesta: "Sí, pero el límite máximo de ingesta tolerable de suplementos es 400 mg/día. Evita tomar Magnesio Nutrilite™, Double X™ y Cal Mag D al mismo tiempo."
+      },
+      {
+        pregunta: "¿Magnesio Nutrilite reemplaza a Cal Mag D?",
+        respuesta: "No, son productos distintos. Magnesio Nutrilite cubre múltiples beneficios (sueño, estrés, energía, corazón, nervio, músculo y cerebro). Cal Mag D está diseñado específicamente para apoyar la salud de los huesos."
+      },
+      {
+        pregunta: "¿Este producto es recomendable para niños?",
+        respuesta: "No, Magnesio Nutrilite™ está diseñado para adultos mayores de 18 años."
+      },
+      {
+        pregunta: "¿Las mujeres embarazadas o que amamantan pueden consumir este producto?",
+        respuesta: "Consulta a tu médico antes de usarlo si estás embarazada o amamantando."
+      }
+    ],
+    certificaciones: [
+      { nombre: "Halal", descripcion: "Halal" },
+      { nombre: "Kosher", descripcion: "Certificación Kosher" },
+      { nombre: "NSF", descripcion: "Certificación de contenido NSF" }
+    ],
+    detalles: [
+      { label: "Contenido", valor: "60 cápsulas" },
+      { label: "Porción", valor: "2 cápsulas · 30 porciones por envase" },
+      { label: "Magnesio por porción", valor: "200mg (48% VD)" },
+      { label: "Ingrediente especial", valor: "Extracto de fruto de olivo 54mg" },
+      { label: "Uso", valor: "2 cápsulas al día, preferiblemente con la cena" },
+      { label: "Certificaciones", valor: "Halal · Kosher · NSF" },
+      { label: "Artículo", valor: "NUTRI-MAG" }
+    ],
+    imagenes: ["/magnesio-nutrilite.jpg"],
+    imagen: "/magnesio-nutrilite.jpg",
+    rating: 4.8,
+    reviewCount: 12,
+    usosPorEnvase: 30,
+    badge: "Absorción 2×",
+    badgeColor: "bg-green-600"
   }
 ]
