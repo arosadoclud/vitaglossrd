@@ -78,16 +78,15 @@ async function generarImagenDallE(titulo, tags, slug, openaiKey) {
 
   const openai = new OpenAI({ apiKey: openaiKey })
 
-  // Construir prompt estilo póster editorial de salud con diseño profesional
+  // Construir prompt: imagen editorial de salud acorde al tema, sin texto
   const temasPrincipales = tags.slice(0, 3).join(', ')
-  const prompt = `Create a professional health and wellness blog cover image in the style of a modern health magazine editorial poster. \
-The image must visually represent the exact topic: "${titulo}". \
-Visual elements: realistic photography or illustration directly related to ${temasPrincipales} — show the actual subject matter clearly (e.g. if the topic is dental sensitivity, show a person with tooth pain or dental care; if it's a supplement, show the supplement with relevant foods; if it's a disease, show a human body part or medical imagery). \
-Include the Spanish title text prominently: "${titulo}" — bold, clean modern typography, white or high-contrast text. \
-Add a short Spanish motivational subtitle at the bottom in smaller text. \
-Design style: vibrant health magazine cover, rich saturated colors matching the topic mood, professional lighting, clean composition with clear visual hierarchy. \
-NO generic beach or tropical backgrounds unless the topic is specifically about sun or beach. The background and imagery MUST match the article topic directly. \
-High quality, photorealistic with graphic design overlay elements. Wide landscape format.`
+  const prompt = `Professional health and wellness blog cover photo for an article about: "${titulo}". \
+Visual concept: ${temasPrincipales}. \
+Style: high-quality editorial health magazine photography, clean and modern aesthetic, vibrant but professional color palette (teal, deep blue, white accents — matching a premium health brand). \
+The image must directly and clearly represent the article topic — use realistic relevant imagery (medical, nutritional, anatomical, food or lifestyle depending on the topic). \
+NO text, NO titles, NO watermarks, NO logos in the image. \
+Composition: wide landscape format, centered subject with clean background, professional studio lighting or natural light. \
+Feel: trustworthy, premium health brand, Latin American wellness market.`
 
   console.log(`🎨 Generando imagen con DALL-E 3 para: "${titulo}"`)
 
