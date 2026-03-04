@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { productos } from '../data/productos'
-import { COMBO_PRECIOS } from '../../data/precios.js'
-import { usePrecios } from '../../context/PreciosContext'
-import { api } from '../../services/api'
+import { COMBO_PRECIOS } from '../data/precios.js'
+import { usePrecios } from '../context/PreciosContext'
+import { api } from '../services/api'
 
 // Nombres de combos para mostrar
 const COMBO_NOMBRES = {
