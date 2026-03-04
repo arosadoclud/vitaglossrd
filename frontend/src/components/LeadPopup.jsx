@@ -28,11 +28,17 @@ export default function LeadPopup() {
     }
 
     // Mobile: usuario ha scrolleado al 60% y luego sube (scroll-up intención de salida)
+    // Cacheamos scrollHeight una sola vez al montar para evitar forzar un
+    // reflow (recálculo de layout) en cada evento scroll.
+    let cachedMaxScroll = document.body.scrollHeight - window.innerHeight
+    // Actualizamos el caché si la ventana cambia de tamaño (resize raro en mobile)
+    const onResize = () => { cachedMaxScroll = document.body.scrollHeight - window.innerHeight }
+    window.addEventListener('resize', onResize, { passive: true })
+
     let ultimoScroll = 0
     const onScrollMobile = () => {
       const scrollY = window.scrollY
-      const maxScroll = document.body.scrollHeight - window.innerHeight
-      const porcentaje = maxScroll > 0 ? scrollY / maxScroll : 0
+      const porcentaje = cachedMaxScroll > 0 ? scrollY / cachedMaxScroll : 0
       if (porcentaje > 0.6 && scrollY < ultimoScroll - 80) {
         mostrar()
       }
@@ -47,6 +53,7 @@ export default function LeadPopup() {
     return () => {
       document.removeEventListener('mouseleave', onMouseLeave)
       window.removeEventListener('scroll', onScrollMobile)
+      window.removeEventListener('resize', onResize)
       clearTimeout(timerFallback)
     }
   }, [])

@@ -7,8 +7,9 @@
     <!-- Preconnect orígenes críticos -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://vitaglossrd-production.up.railway.app" />
-    <link rel="preconnect" href="https://randomuser.me" crossorigin />
+    <!-- crossorigin es obligatorio para que el browser reutilice esta conexión
+         en las peticiones fetch() CORS al API de Railway -->
+    <link rel="preconnect" href="https://vitaglossrd-production.up.railway.app" crossorigin />
     <!-- Google Fonts no bloqueante — mueve fuera de la ruta crítica de render -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" /></noscript>
