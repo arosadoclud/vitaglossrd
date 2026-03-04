@@ -63,6 +63,27 @@ const fadeUp = {
   })
 }
 
+// Deterministic color from name — no external image requests
+const AVATAR_PALETTE = ['#0d9488','#2563eb','#7c3aed','#ea580c','#db2777','#059669']
+function avatarColor(name) { return AVATAR_PALETTE[name.charCodeAt(0) % AVATAR_PALETTE.length] }
+function getInitials(name) { return name.split(' ').map(w => w[0]).slice(0, 2).join('') }
+function AvatarInitials({ name, size = 44, border = '2px solid rgba(46,196,182,0.3)' }) {
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        width: size, height: size, borderRadius: '50%',
+        background: avatarColor(name),
+        border, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        flexShrink: 0, color: '#fff', fontWeight: 700,
+        fontSize: size >= 44 ? 15 : 13,
+      }}
+    >
+      {getInitials(name)}
+    </div>
+  )
+}
+
 export default function Home() {
   useSEO({
     title: 'Distribuidor Amway en República Dominicana — Pasta Dental Glister™ y Vitaminas Nutrilite™',
@@ -699,11 +720,7 @@ export default function Home() {
                 <p className="text-gray-600 text-sm leading-relaxed mb-5 italic">"{t.texto}"</p>
                 {/* Autor */}
                 <div className="flex items-center gap-3">
-                  <img
-                    src={t.foto}
-                    alt={t.nombre}
-                    className="w-11 h-11 rounded-full object-cover flex-shrink-0 ring-2 ring-secondary/30"
-                  />
+                  <AvatarInitials name={t.nombre} size={44} />
                   <div>
                     <p className="font-bold text-dark text-sm">{t.nombre}</p>
                     <p className="text-gray-400 text-xs">{t.ciudad} · {t.producto}</p>
@@ -1088,11 +1105,7 @@ export default function Home() {
               >
                 {/* Header WhatsApp */}
                 <div className="bg-[#075e54] px-4 py-3 flex items-center gap-3">
-                  <img
-                    src={chat.foto}
-                    alt={chat.nombre}
-                    className="w-10 h-10 rounded-full object-cover border-2 border-white/30"
-                  />
+                  <AvatarInitials name={chat.nombre} size={40} border="2px solid rgba(255,255,255,0.3)" />
                   <div className="flex-1 min-w-0">
                     <p className="text-white font-bold text-sm">{chat.nombre}</p>
                     <p className="text-green-200 text-xs">en línea</p>
