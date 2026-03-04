@@ -1554,7 +1554,7 @@ export const posts = [
     fecha: '2026-03-04',
     fechaActualizacion: '2026-03-04',
     tiempoLectura: '7 min',
-    imagen: '/blog/manchas-cafe-dientes-como-quitarlas-sin-danar-esmalte.png',
+    imagen: '/manchas-cafe-dientes.webp',
     imagenCover: true,
     autor: 'Andy Rosado',
     tags: ["manchas dientes café","blanqueamiento dental","esmalte dental","higiene bucal RD","café dominicano"],
