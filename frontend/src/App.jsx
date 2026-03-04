@@ -11,6 +11,7 @@ function ScrollToTop() {
 }
 import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
+import { PreciosProvider } from './context/PreciosContext'
 import { api } from './services/api'
 import ProtectedRoute from './components/ProtectedRoute'
 import Navbar from './components/Navbar'
@@ -99,9 +100,11 @@ function App() {
   return (
     <AuthProvider>
       <CartProvider>
+      <PreciosProvider>
       <BrowserRouter>
         <Layout />
       </BrowserRouter>
+      </PreciosProvider>
       </CartProvider>
     </AuthProvider>
   )

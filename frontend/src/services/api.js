@@ -64,4 +64,8 @@ export const api = {
   getOrders: (params = '') => request('GET', `/orders${params}`, null, true),
   updateOrder: (id, body) => request('PATCH', `/orders/${id}`, body, true),
   deleteOrder: (id) => request('DELETE', `/orders/${id}`, null, true),
+
+  // Precios
+  getPrecios: () => request('GET', '/precios'),
+  updatePrecios: (body) => request('PUT', '/precios', body, true),
 }

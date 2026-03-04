@@ -1,11 +1,17 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
+import { usePrecios } from '../context/PreciosContext'
 
 export default function ProductoCard({ producto }) {
   const stockBajo = producto.stockUnidades && producto.stockUnidades <= 5
   const { addItem } = useCart()
+  const { getPrecio } = usePrecios()
   const [agregado, setAgregado] = useState(false)
+
+  const livePrice = getPrecio(producto.id)
+  const precio = livePrice?.precio ?? producto.precio
+  const precioOriginal = livePrice?.precioOriginal ?? producto.precioOriginal
 
   const handleAgregar = (e) => {
     e.preventDefault()
@@ -86,12 +92,12 @@ export default function ProductoCard({ producto }) {
 
         {/* Precio */}
         <div className="flex items-center gap-2 mb-3 flex-wrap">
-          <span className="text-xl font-extrabold text-primary">RD${producto.precio.toLocaleString('es-DO', { minimumFractionDigits: producto.precio % 1 !== 0 ? 2 : 0, maximumFractionDigits: 2 })}</span>
-          {producto.precioOriginal && (
+          <span className="text-xl font-extrabold text-primary">RD${precio.toLocaleString('es-DO', { minimumFractionDigits: precio % 1 !== 0 ? 2 : 0, maximumFractionDigits: 2 })}</span>
+          {precioOriginal && (
             <>
-              <span className="text-gray-300 text-xs line-through">RD${producto.precioOriginal.toLocaleString('es-DO')}</span>
+              <span className="text-gray-300 text-xs line-through">RD${precioOriginal.toLocaleString('es-DO')}</span>
               <span className="bg-red-100 text-red-500 text-[10px] font-bold px-1.5 py-0.5 rounded-full">
-                -{Math.round(((producto.precioOriginal - producto.precio) / producto.precioOriginal) * 100)}%
+                -{Math.round(((precioOriginal - precio) / precioOriginal) * 100)}%
               </span>
             </>
           )}

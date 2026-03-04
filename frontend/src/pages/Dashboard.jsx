@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import { api } from '../services/api'
 import { useSEO } from '../hooks/useSEO'
 import AcademiaTab from '../components/academia/AcademiaTab'
+import PreciosTab from '../components/PreciosTab'
 import { productos } from '../data/productos'
 
 // ─── helpers ────────────────────────────────────────────────────────────────
@@ -57,7 +58,7 @@ function waMessageForEstado(order) {
   }
 }
 
-const TABS = ['📊 Resumen', '👥 Leads', '💰 Ventas', '💬 Plantillas', '🟢 Equipo VitaGlossRD', '📦 Pedidos Web', '⚙️ Perfil']
+const TABS_ALL = ['📊 Resumen', '👥 Leads', '💰 Ventas', '💬 Plantillas', '🟢 Equipo VitaGlossRD', '📦 Pedidos Web', '⚙️ Perfil', '💲 Precios']
 
 const WA_TEMPLATES = [
   { producto: 'Glister™ Pasta Dental', msg: '¡Hola! 👋 Te cuento sobre *Glister™*, la pasta dental con flúor activo de Amway. Combate caries, blanquea los dientes y elimina el mal aliento desde la primera semana. 🦷✨ ¿Te interesa saber el precio y cómo pedirla?' },
@@ -114,6 +115,9 @@ export default function Dashboard() {
   const { user, logout, updateUser } = useAuth()
   const navigate = useNavigate()
   const [tab, setTab] = useState(0)
+
+  // Solo admins ven el tab de Precios
+  const displayTabs = user?.rol === 'admin' ? TABS_ALL : TABS_ALL.slice(0, 7)
 
   // stats
   const [stats, setStats] = useState(null)
@@ -345,7 +349,7 @@ export default function Dashboard() {
       {/* Tabs */}
       <div className="bg-white border-b border-gray-100 sticky top-[65px] z-30 overflow-x-auto">
         <div className="flex gap-0 max-w-5xl mx-auto px-4">
-          {TABS.map((t, i) => (
+          {displayTabs.map((t, i) => (
             <button key={i} onClick={() => setTab(i)}
               className={`flex-shrink-0 px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold border-b-2 transition-all ${
                 tab === i ? 'border-primary text-primary' : 'border-transparent text-gray-400 hover:text-gray-600'
@@ -1596,6 +1600,21 @@ export default function Dashboard() {
                   </p>
                 </div>
               )}
+            </div>
+          </Section>
+        )}
+
+        {/* ── TAB 7: PRECIOS (solo admin) ──────────────────────────────────────────── */}
+        {tab === 7 && user?.rol === 'admin' && (
+          <Section>
+            <PreciosTab />
+          </Section>
+        )}
+        {tab === 7 && user?.rol !== 'admin' && (
+          <Section>
+            <div className="text-center py-16 text-gray-400">
+              <div className="text-5xl mb-4">🔒</div>
+              <p className="font-semibold text-lg">Acceso solo para administradores</p>
             </div>
           </Section>
         )}

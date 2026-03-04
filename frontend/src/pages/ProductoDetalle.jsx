@@ -6,6 +6,7 @@ import ProductoCard from '../components/ProductoCard'
 import { useSEO } from '../hooks/useSEO'
 import { useCart } from '../context/CartContext'
 import ReviewsSection from '../components/ReviewsSection'
+import { usePrecios } from '../context/PreciosContext'
 
 // Acordeón individual
 function Accordion({ titulo, icono, children, defaultOpen = false }) {
@@ -245,7 +246,9 @@ function TabsInfoSection({ producto }) {
 
 export default function ProductoDetalle() {
   const { id } = useParams()
-  const producto = productos.find(p => p.id === parseInt(id))
+  const { getPrecio } = usePrecios()
+  const productoBase = productos.find(p => p.id === parseInt(id))
+  const producto = productoBase ? { ...productoBase, ...getPrecio(productoBase.id) } : undefined
   const [imgActiva, setImgActiva] = useState(0)
   const [agregado, setAgregado] = useState(false)
   const [qty, setQty] = useState(1)

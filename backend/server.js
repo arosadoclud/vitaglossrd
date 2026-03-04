@@ -12,6 +12,7 @@ const dashboardRoutes = require('./routes/dashboard')
 const reviewRoutes  = require('./routes/reviews')
 const orderRoutes   = require('./routes/orders')
 const waRoutes      = require('./routes/whatsapp')
+const preciosRoutes = require('./routes/precios')
 
 const app = express()
 const PORT = process.env.PORT || 4000
@@ -67,6 +68,7 @@ app.use('/api/sales', saleRoutes)
 app.use('/api/dashboard', dashboardRoutes)
 app.use('/api/reviews', reviewRoutes)
 app.use('/api/orders', orderRoutes)
+app.use('/api/precios', preciosRoutes)
 app.use('/webhook/whatsapp', waRoutes)  // Meta WhatsApp Business API
 
 // ── Health check ───────────────────────────────────────────────────────────
