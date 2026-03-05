@@ -36,22 +36,22 @@ No discutas temas fuera de salud, nutrición o la tienda.
 1. *Cal Mag D Nutrilite* — "Fuerza Total para tus Huesos"
    Calcio + Magnesio + Vitamina D. Para huesos y dientes más fuertes, apoyo muscular y energético.
    Ideal para mujeres y adultos activos. Precio: RD$1,270. PROMOCIÓN ESPECIAL disponible.
-   Ver producto: https://vitaglossrd.vercel.app/catalogo/10
+   Ver producto: https://vitaglossrd.com/catalogo/10
 
 2. *Pelo Piel y Uñas (Hair, Skin & Nail) Nutrilite* — "Activa tu belleza desde adentro"
    Contiene Biotina, Zinc, Vitamina C y Colágeno. Para cabello que se cae, se quiebra o ha perdido brillo.
    Formulado para la belleza femenina desde el interior. Precio: RD$1,700. PRECIO ESPECIAL.
-   Ver producto: https://vitaglossrd.vercel.app/catalogo/19
+   Ver producto: https://vitaglossrd.com/catalogo/19
 
 3. *Multivitamínico para Niños (Kids Daily) Nutrilite* — "Oferta especial por tiempo limitado"
    Vitaminas masticables sabor fresa-naranja. Fuertes defensas, más energía. Sin colorantes artificiales.
    Precio: RD$1,399 (precio de oferta limitada). Disponible a nivel nacional.
-   Ver producto: https://vitaglossrd.vercel.app/catalogo/8
+   Ver producto: https://vitaglossrd.com/catalogo/8
 
 4. *Vitamina C Plus Nutrilite* — "Defensa Immune Diaria"
    Vitamina C de liberación prolongada. Refuerza defensas naturales, apoya recuperación rápida.
    Liberación gradual para todo el día. Precio: RD$1,099.
-   Ver producto: https://vitaglossrd.vercel.app/catalogo/4
+   Ver producto: https://vitaglossrd.com/catalogo/4
 
 Cuando alguien llegue preguntando por defensas, cabello, huesos o vitaminas para niños, conéctalos automáticamente con el anuncio correcto y ofrece el precio y link.
 
@@ -71,7 +71,7 @@ ${buildCatalogContext()}
 
 === FIN DEL CATÁLOGO ===
 Para pedir, el cliente puede escribir al WhatsApp de ventas: https://wa.me/18093246663
-Sitio web: https://vitaglossrd.vercel.app`
+Sitio web: https://vitaglossrd.com`
 
 // Modelo con systemInstruction cargado una sola vez
 const aiModel = genAI
@@ -101,7 +101,7 @@ async function responderConIA(mensajeTexto, numero) {
       const p = encontrados[0]
       return `🟢 *${p.nombre}* — RD$${p.precio.toLocaleString()}\n${p.desc}\nVer más: ${p.url}\n\n¿Te gustaría pedirlo? Escríbenos: https://wa.me/18093246663`
     }
-    return `🟢 Hola, soy *Vita*, asistenta de VitaGloss RD. ¿En qué te puedo ayudar? Visita nuestro catálogo: https://vitaglossrd.vercel.app/catalogo`
+    return `🟢 Hola, soy *Vita*, asistenta de VitaGloss RD. ¿En qué te puedo ayudar? Visita nuestro catálogo: https://vitaglossrd.com/catalogo`
   }
 
   try {
