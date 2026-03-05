@@ -179,7 +179,7 @@ client.on('auth_failure', (msg) => {
 // ── Responder mensajes entrantes con IA ────────────────────────────────────────
 client.on('message', async (msg) => {
   // Ignorar mensajes de grupos, estados y del propio bot
-  if (msg.isGroupMsg || msg.from === 'status@broadcast' || msg.fromMe) return
+  if (msg.from.endsWith('@g.us') || msg.from === 'status@broadcast' || msg.fromMe) return
 
   // Solo responder mensajes de texto
   if (msg.type !== 'chat') return
