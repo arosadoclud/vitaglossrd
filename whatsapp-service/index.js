@@ -39,7 +39,7 @@ No discutas temas fuera de salud, nutrición o la tienda.
    Ver producto: https://vitaglossrd.vercel.app/catalogo/10
 
 2. *Pelo Piel y Uñas (Hair, Skin & Nail) Nutrilite* — "Activa tu belleza desde adentro"
-   Contiene Biotina, Zinc, Vitamina E y Colágeno. Para cabello que se cae, se quiebra o ha perdido brillo.
+   Contiene Biotina, Zinc, Vitamina C y Colágeno. Para cabello que se cae, se quiebra o ha perdido brillo.
    Formulado para la belleza femenina desde el interior. Precio: RD$1,700. PRECIO ESPECIAL.
    Ver producto: https://vitaglossrd.vercel.app/catalogo/19
 
