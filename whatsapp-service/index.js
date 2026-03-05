@@ -21,8 +21,7 @@ const SECRET_KEY = process.env.WA_SECRET || 'vitagloss_wa_2026'
 const GEMINI_KEY = process.env.GEMINI_API_KEY || ''
 
 // ── Gemini AI ─────────────────────────────────────────────────────────────────
-const genAI     = GEMINI_KEY ? new GoogleGenerativeAI(GEMINI_KEY) : null
-const aiModel   = genAI ? genAI.getGenerativeModel({ model: 'gemini-2.0-flash' }) : null
+const genAI = GEMINI_KEY ? new GoogleGenerativeAI(GEMINI_KEY) : null
 
 const SYSTEM_PROMPT = `Eres la asistente virtual de VitaGloss RD, una tienda de productos Amway/Nutrilite en República Dominicana.
 Tu nombre es *Vita* 🟢.
@@ -38,6 +37,14 @@ ${buildCatalogContext()}
 === FIN DEL CATÁLOGO ===
 Para pedir, el cliente puede escribir al WhatsApp de ventas: https://wa.me/18093246663
 Sitio web: https://vitaglossrd.vercel.app`
+
+// Modelo con systemInstruction cargado una sola vez
+const aiModel = genAI
+  ? genAI.getGenerativeModel({
+      model: 'gemini-1.5-flash',
+      systemInstruction: SYSTEM_PROMPT,
+    })
+  : null
 
 // Anti-spam: { numero: timestamp_ultimo_mensaje }
 const cooldowns = new Map()
@@ -63,11 +70,7 @@ async function responderConIA(mensajeTexto, numero) {
   }
 
   try {
-    const chat = aiModel.startChat({
-      history: [],
-      systemInstruction: SYSTEM_PROMPT,
-    })
-    const result = await chat.sendMessage(mensajeTexto)
+    const result = await aiModel.generateContent(mensajeTexto)
     return result.response.text()
   } catch (err) {
     console.error('⚠️  Gemini error:', err.message)
