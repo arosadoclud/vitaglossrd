@@ -132,9 +132,9 @@ export default function Home() {
           'https://www.facebook.com/vitaglossrd',
         ],
         makesOffer: [
-          { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Pasta Dental Glister™ Multi-Action' } },
-          { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Vitamina C Nutrilite™' } },
-          { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Double X Nutrilite™' } },
+          { '@type': 'Offer', itemOffered: { '@type': 'Thing', name: 'Pasta Dental Glister™ Multi-Action' } },
+          { '@type': 'Offer', itemOffered: { '@type': 'Thing', name: 'Vitamina C Nutrilite™' } },
+          { '@type': 'Offer', itemOffered: { '@type': 'Thing', name: 'Double X Nutrilite™' } },
         ],
       },
       {
@@ -1053,7 +1053,7 @@ export default function Home() {
             {[
               {
                 nombre: 'María F.',
-                foto: 'https://randomuser.me/api/portraits/women/44.jpg',
+                foto: '/Maria-Fernandez.webp',
                 hora: '9:41 AM',
                 producto: 'Pasta Dental Glister™',
                 icono: '🦷',
@@ -1066,7 +1066,7 @@ export default function Home() {
               },
               {
                 nombre: 'Carlos M.',
-                foto: 'https://randomuser.me/api/portraits/men/32.jpg',
+                foto: '/carlos-martinez.webp',
                 hora: '3:15 PM',
                 producto: 'Vitamina C Nutrilite™',
                 icono: '💪',
@@ -1079,7 +1079,7 @@ export default function Home() {
               },
               {
                 nombre: 'Luisa R.',
-                foto: 'https://randomuser.me/api/portraits/women/68.jpg',
+                foto: '/Luisa-Rodriguez.webp',
                 hora: '11:20 AM',
                 producto: 'Kit Completo Glister™',
                 icono: '✨',
@@ -1102,7 +1102,7 @@ export default function Home() {
               >
                 {/* Header WhatsApp */}
                 <div className="bg-[#075e54] px-4 py-3 flex items-center gap-3">
-                  <AvatarInitials name={chat.nombre} size={40} border="2px solid rgba(255,255,255,0.3)" />
+                  <img src={chat.foto} alt={chat.nombre} className="w-10 h-10 rounded-full object-cover object-top flex-shrink-0 border-2 border-white/30" />
                   <div className="flex-1 min-w-0">
                     <p className="text-white font-bold text-sm">{chat.nombre}</p>
                     <p className="text-green-200 text-xs">en línea</p>

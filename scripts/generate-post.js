@@ -83,7 +83,7 @@ async function generarImagenDallE(titulo, tags, slug, openaiKey) {
   const prompt = `Professional health and wellness blog cover photo for an article about: "${titulo}". \
 Visual concept: ${temasPrincipales}. \
 Style: high-quality editorial health magazine photography, clean and modern aesthetic, vibrant but professional color palette (teal, deep blue, white accents — matching a premium health brand). \
-The image must directly and clearly represent the article topic — use realistic relevant imagery (medical, nutritional, anatomical, food or lifestyle depending on the topic). \
+The image must directly and clearly represent the article topic — use realistic relevant imagery (nutritional supplements, healthy food, skincare products, or lifestyle wellness photography depending on the topic). \
 NO text, NO titles, NO watermarks, NO logos in the image. \
 Composition: wide landscape format, centered subject with clean background, professional studio lighting or natural light. \
 Feel: trustworthy, premium health brand, Latin American wellness market.`
