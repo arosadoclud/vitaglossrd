@@ -78,15 +78,16 @@ async function generarImagenDallE(titulo, tags, slug, openaiKey) {
 
   const openai = new OpenAI({ apiKey: openaiKey })
 
-  // Construir prompt: imagen editorial de salud acorde al tema, sin texto
+  // Construir prompt: fotografía realista del tema, sin texto ni animaciones
   const temasPrincipales = tags.slice(0, 3).join(', ')
-  const prompt = `Professional health and wellness blog cover photo for an article about: "${titulo}". \
-Visual concept: ${temasPrincipales}. \
-Style: high-quality editorial health magazine photography, clean and modern aesthetic, vibrant but professional color palette (teal, deep blue, white accents — matching a premium health brand). \
-The image must directly and clearly represent the article topic — use realistic relevant imagery (nutritional supplements, healthy food, skincare products, or lifestyle wellness photography depending on the topic). \
-NO text, NO titles, NO watermarks, NO logos in the image. \
-Composition: wide landscape format, centered subject with clean background, professional studio lighting or natural light. \
-Feel: trustworthy, premium health brand, Latin American wellness market.`
+  const prompt = `Photorealistic product and lifestyle photograph for a health blog article about: "${titulo}". \
+Topic keywords: ${temasPrincipales}. \
+STYLE: real DSLR photography, sharp focus, professional studio lighting, neutral or white background with subtle depth. \
+SUBJECT: show actual physical objects directly related to the topic — for supplements show real supplement bottles, capsules, pills or powder; for dental health show real toothbrush, paste or teeth; for skin show real skincare products or healthy skin closeup; for nutrition show real food ingredients. \
+REALISM: ultra-realistic, photographic, no illustration, no 3D render, no cartoon, no animation, no flat design, no vector art, no painting. \
+COLORS: clean and natural — white, soft teal, light beige. Professional health brand look. \
+NO text, NO labels readable, NO watermarks, NO logos. \
+FORMAT: wide landscape 16:9, subject centered, shallow depth of field, bokeh background.`
 
   console.log(`🎨 Generando imagen con DALL-E 3 para: "${titulo}"`)
 
