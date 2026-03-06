@@ -1550,7 +1550,7 @@ export const posts = [
     titulo: 'Manchas de café en los dientes: cómo quitarlas sin dañar tu esmalte',
     excerpt:
       'El café dominicano mancha tus dientes más de lo que crees. Aprende métodos seguros para eliminar esas manchas sin arruinar tu sonrisa.',
-    categoria: 'Salud Bucal',
+    categoria: 'Salud bucal',
     fecha: '2026-03-04',
     fechaActualizacion: '2026-03-04',
     tiempoLectura: '7 min',

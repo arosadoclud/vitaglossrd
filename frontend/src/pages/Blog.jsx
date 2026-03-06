@@ -20,11 +20,12 @@ function formatFecha(isoString) {
 
 // Colores por categoría
 const catColors = {
-  'Salud bucal': { bg: 'bg-teal-100', text: 'text-teal-700', dot: 'bg-teal-400' },
-  'Nutrición':   { bg: 'bg-green-100', text: 'text-green-700', dot: 'bg-green-400' },
-  'Productos':   { bg: 'bg-blue-100',  text: 'text-blue-700',  dot: 'bg-blue-400' },
-  'Tips':        { bg: 'bg-orange-100', text: 'text-orange-700', dot: 'bg-orange-400' },
-  'Bienestar':   { bg: 'bg-purple-100', text: 'text-purple-700', dot: 'bg-purple-400' },
+  'Salud bucal':  { bg: 'bg-teal-100',   text: 'text-teal-700',   dot: 'bg-teal-400' },
+  'Nutrición':    { bg: 'bg-green-100',  text: 'text-green-700',  dot: 'bg-green-400' },
+  'Productos':    { bg: 'bg-blue-100',   text: 'text-blue-700',   dot: 'bg-blue-400' },
+  'Tips':         { bg: 'bg-orange-100', text: 'text-orange-700', dot: 'bg-orange-400' },
+  'Bienestar':    { bg: 'bg-purple-100', text: 'text-purple-700', dot: 'bg-purple-400' },
+  'Suplementos':  { bg: 'bg-amber-100',  text: 'text-amber-700',  dot: 'bg-amber-400' },
 }
 function catStyle(cat) {
   return catColors[cat] || { bg: 'bg-gray-100', text: 'text-gray-600', dot: 'bg-gray-400' }
@@ -174,7 +175,7 @@ export default function Blog() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-12">
+      <div className="max-w-6xl mx-auto px-4 py-8">
         {postsFiltrados.length === 0 ? (
           <div className="text-center py-24">
             <span className="text-5xl block mb-4">🔍</span>
@@ -195,7 +196,7 @@ export default function Blog() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="mb-12"
+                className="mb-8"
               >
                 <Link
                   to={`/blog/${postDestacado.slug}`}
@@ -264,6 +265,13 @@ export default function Blog() {
 
             {/* ── GRID DE POSTS ── */}
             {postsGrid.length > 0 && (
+              <>
+              {postDestacado && (
+                <div className="flex items-center gap-3 mb-6">
+                  <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">Más artículos</span>
+                  <div className="flex-1 h-px bg-gray-100" />
+                </div>
+              )}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {postsGrid.map((post, i) => {
                   const cs = catStyle(post.categoria)
@@ -332,6 +340,7 @@ export default function Blog() {
                   )
                 })}
               </div>
+              </>
             )}
           </>
         )}
