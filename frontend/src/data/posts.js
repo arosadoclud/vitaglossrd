@@ -1590,7 +1590,7 @@ export const posts = [
     fecha: '2026-03-05',
     fechaActualizacion: '2026-03-05',
     tiempoLectura: '8 min',
-    imagen: '/hierro-mujerdominicana.webp',
+    imagen: '/hierro-anemia.webp',
     imagenCover: true,
     autor: 'Andy Rosado',
     tags: ["hierro","anemia","salud femenina","suplementos","nutrición dominicana"],
