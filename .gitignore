@@ -37,3 +37,4 @@ nul
 
 # Vite cache
 *.local
+.claude/settings.local.json
