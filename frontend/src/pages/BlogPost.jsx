@@ -56,18 +56,23 @@ export default function BlogPost() {
 
   const articleSchema = post ? {
     '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
+    '@type': ['BlogPosting', 'Article'],
     headline: post.titulo,
     description: post.metaDescripcion || post.excerpt,
     datePublished: post.fecha,
     dateModified: post.fechaActualizacion || post.fecha,
     url: canonicalUrl,
+    isAccessibleForFree: true,
     wordCount: post.contenido
       ? post.contenido.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length
+      : undefined,
+    articleBody: post.contenido
+      ? post.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 5000)
       : undefined,
     articleSection: post.categoria,
     inLanguage: 'es-DO',
     keywords: post.tags?.join(', '),
+    thumbnailUrl: ogImageUrl,
     image: {
       '@type': 'ImageObject',
       url: ogImageUrl,

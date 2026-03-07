@@ -61,7 +61,9 @@ export default function Blog() {
           dateModified: p.fechaActualizacion || p.fecha,
           description: p.metaDescripcion || p.excerpt,
           keywords: p.tags?.join(', '),
-          author: { '@type': 'Person', name: 'Andy Rosado' },
+          image: p.imagen ? `https://vitaglossrd.com${p.imagen}` : undefined,
+          isAccessibleForFree: true,
+          author: { '@type': 'Person', name: 'Andy Rosado', url: 'https://vitaglossrd.com/sobre-nosotros' },
         })),
       },
       {

@@ -4,7 +4,8 @@
   "description": "Scripts de automatización para VitaGloss RD",
   "private": true,
   "scripts": {
-    "generate-post": "node generate-post.js"
+    "generate-post": "node generate-post.js",
+    "generate-sitemap": "node generate-sitemap.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.30.0",

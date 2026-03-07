@@ -111,6 +111,9 @@ export function useSEO({
     setMeta('name', 'twitter:site',        '@VitaGlossRD')
     if (articleAuthor) setMeta('name', 'twitter:creator', '@VitaGlossRD')
 
+    // ── Author (E-E-A-T signal) ─────────────────────────────────────────────
+    if (articleAuthor) setMeta('name', 'author', articleAuthor)
+
   }, [fullTitle, description, resolvedUrl, resolvedImg, publishedTime, modifiedTime, articleAuthor, articleSection])
 
   // ── JSON-LD structured data ────────────────────────────────────────────────
