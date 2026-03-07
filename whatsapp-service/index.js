@@ -86,6 +86,11 @@ const aiModel = genAI
 const cooldowns = new Map()
 const COOLDOWN_MS = 2000  // 2 segundos entre respuestas por usuario
 
+// Sesiones activas: { numero: { lastActivity: timestamp, history: [] } }
+// Una vez que un lead de Facebook está en sesión, seguimos respondiendo por 30 min
+const activeSessions = new Map()
+const SESSION_TIMEOUT_MS = 30 * 60 * 1000  // 30 minutos de inactividad
+
 async function responderConIA(mensajeTexto, numero) {
   // Rate-limit por usuario
   const ahora = Date.now()
@@ -105,9 +110,28 @@ async function responderConIA(mensajeTexto, numero) {
     return `🟢 Hola, soy *Vita*, asistenta de VitaGloss RD. ¿En qué te puedo ayudar? Visita nuestro catálogo: https://vitaglossrd.com/catalogo`
   }
 
+  // Obtener o crear sesión de conversación
+  const session = activeSessions.get(numero) || { lastActivity: ahora, history: [] }
+  session.lastActivity = ahora
+
+  // Agregar mensaje del usuario al historial
+  session.history.push({ role: 'user', parts: [{ text: mensajeTexto }] })
+
+  // Limitar historial a las últimas 10 interacciones (20 entradas)
+  if (session.history.length > 20) session.history = session.history.slice(-20)
+
+  activeSessions.set(numero, session)
+
   try {
-    const result = await aiModel.generateContent(mensajeTexto)
-    return result.response.text()
+    const chat = aiModel.startChat({ history: session.history.slice(0, -1) })
+    const result = await chat.sendMessage(mensajeTexto)
+    const respuesta = result.response.text()
+
+    // Guardar respuesta del modelo en el historial
+    session.history.push({ role: 'model', parts: [{ text: respuesta }] })
+    activeSessions.set(numero, session)
+
+    return respuesta
   } catch (err) {
     console.error('⚠️  Gemini error:', err.message)
     return `🟢 Hola, en este momento tengo un problema técnico. Por favor escríbenos directamente: https://wa.me/18093246663`
@@ -189,26 +213,57 @@ client.on('message', async (msg) => {
 
   console.log(`📥 Mensaje de ${numero}: "${texto.substring(0, 60)}${texto.length > 60 ? '...' : ''}"`)
 
-  // ── Solo responder a saludos automáticos de anuncios de Facebook ──────────────
   const textoLower = texto.toLowerCase()
-  const esAutoGreeting =
+
+  // ── Limpiar sesiones expiradas ──────────────────────────────────────────
+  const ahora = Date.now()
+  for (const [num, sess] of activeSessions.entries()) {
+    if (ahora - sess.lastActivity > SESSION_TIMEOUT_MS) {
+      activeSessions.delete(num)
+      console.log(`🗑️ Sesión expirada y eliminada: ${num}`)
+    }
+  }
+
+  // ── Si el usuario ya tiene una sesión activa, responde sin filtrar ──────
+  if (activeSessions.has(numero)) {
+    console.log(`💬 Continuación de sesión activa: ${numero}`)
+    const respuesta = await responderConIA(texto, numero)
+    if (respuesta) {
+      await msg.reply(respuesta)
+      console.log(`📤 Respuesta enviada a ${numero}`)
+    }
+    return
+  }
+
+  // ── Detectar mensaje inicial de lead de Facebook ─────────────────────────
+  const esLeadFacebook =
+    textoLower.includes('vi el anuncio') ||
+    textoLower.includes('ví el anuncio') ||
+    textoLower.includes('más información') ||
+    textoLower.includes('mas informacion') ||
+    textoLower.includes('me dan más') ||
+    textoLower.includes('me dan mas') ||
     textoLower.includes('cómo podemos ayudarte') ||
     textoLower.includes('como podemos ayudarte') ||
     textoLower.includes('¿cómo puedo ayudarte') ||
     textoLower.includes('quiero más información') ||
     textoLower.includes('quiero mas informacion') ||
-    textoLower.includes('más información') ||
-    textoLower.includes('mas informacion') ||
+    textoLower.includes('pelo piel') ||
+    textoLower.includes('cal mag') ||
+    textoLower.includes('vitamina c plus') ||
+    textoLower.includes('niños nutrilite') ||
+    textoLower.includes('ninos nutrilite') ||
     textoLower === '¡hola!' ||
     textoLower === 'hola'
 
-  if (!esAutoGreeting) {
+  if (!esLeadFacebook) {
     console.log(`⏭️ Mensaje ignorado (no es lead de Facebook): ${numero}`)
     return
   }
 
-  // Es lead de Facebook → activar Gemini
+  // Es lead de Facebook → crear sesión y activar Gemini
   console.log(`🎯 Lead de Facebook detectado de ${numero}, activando Vita con IA`)
+  activeSessions.set(numero, { lastActivity: Date.now(), history: [] })
   const respuesta = await responderConIA(texto, numero)
   if (respuesta) {
     await msg.reply(respuesta)
