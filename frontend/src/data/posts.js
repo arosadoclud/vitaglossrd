@@ -794,7 +794,7 @@ export const posts = [
       <p>Restaurar el microbioma oral tarda semanas. El cambio a un enjuague sin alcohol como Glister™ es parte de esa restauración — permite que el microbioma se restablezca de forma natural.</p>
 
       <h2>Mal aliento y salud digestiva: la conexión que muchos ignoran</h2>
-      <p>Aproximadamente el 85-90% del mal aliento tiene origen oral (boça, encías, lengua). El 10-15% restante tiene origen sistémico — y el sistema digestivo es el contribuyente más importante de ese grupo. Las condiciones que generan halitosis de origen digestivo incluyen:</p>
+      <p>Aproximadamente el 85-90% del mal aliento tiene origen oral (boca, encías, lengua). El 10-15% restante tiene origen sistémico — y el sistema digestivo es el contribuyente más importante de ese grupo. Las condiciones que generan halitosis de origen digestivo incluyen:</p>
       <ul>
         <li><strong>Reflujo gastroesofágico (GERD):</strong> los gases ácidos del estómago ascienden al esófago y la boca</li>
         <li><strong>H. pylori:</strong> esta bacteria que causa gastritis produce amoniaco, que tiene un olor característico</li>
