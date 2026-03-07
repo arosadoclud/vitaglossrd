@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { m, AnimatePresence } from 'framer-motion'
 import { useSEO } from '../hooks/useSEO'
 import { posts, categorias } from '../data/posts'
@@ -106,7 +106,16 @@ export default function Blog() {
   })
 
   const [categoriaActiva, setCategoriaActiva] = useState('Todas')
-  const [busqueda, setBusqueda] = useState('')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const busqueda = searchParams.get('q') || ''
+  const setBusqueda = (val) => {
+    setSearchParams(prev => {
+      const p = new URLSearchParams(prev)
+      if (val) p.set('q', val)
+      else p.delete('q')
+      return p
+    }, { replace: true })
+  }
 
   const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 

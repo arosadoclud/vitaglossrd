@@ -1,5 +1,5 @@
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { m } from 'framer-motion'
 import { useSEO } from '../hooks/useSEO'
 import { getPostBySlug, getPostsRelacionados } from '../data/posts'
@@ -23,11 +23,12 @@ function formatFecha(isoString) {
 }
 
 const catColors = {
-  'Salud bucal': { bg: 'bg-teal-100',   text: 'text-teal-700' },
-  'Nutrición':   { bg: 'bg-green-100',  text: 'text-green-700' },
-  'Productos':   { bg: 'bg-blue-100',   text: 'text-blue-700' },
-  'Tips':        { bg: 'bg-orange-100', text: 'text-orange-700' },
-  'Bienestar':   { bg: 'bg-purple-100', text: 'text-purple-700' },
+  'Salud bucal':  { bg: 'bg-teal-100',   text: 'text-teal-700' },
+  'Nutrición':    { bg: 'bg-green-100',  text: 'text-green-700' },
+  'Productos':    { bg: 'bg-blue-100',   text: 'text-blue-700' },
+  'Tips':         { bg: 'bg-orange-100', text: 'text-orange-700' },
+  'Bienestar':    { bg: 'bg-purple-100', text: 'text-purple-700' },
+  'Suplementos':  { bg: 'bg-amber-100',  text: 'text-amber-700' },
 }
 function catStyle(cat) {
   return catColors[cat] || { bg: 'bg-gray-100', text: 'text-gray-600' }
@@ -150,6 +151,19 @@ export default function BlogPost() {
     window.scrollTo({ top: 0, behavior: 'instant' })
   }, [slug])
 
+  // Progreso de lectura
+  const [readingProgress, setReadingProgress] = useState(0)
+  useEffect(() => {
+    const update = () => {
+      const scrollTop = window.scrollY
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight
+      setReadingProgress(docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0)
+    }
+    setReadingProgress(0)
+    window.addEventListener('scroll', update, { passive: true })
+    return () => window.removeEventListener('scroll', update)
+  }, [slug])
+
   // 404 inline
   if (!post) {
     return (
@@ -170,6 +184,7 @@ export default function BlogPost() {
   const cs = catStyle(post.categoria)
   const shareUrl = typeof window !== 'undefined' ? window.location.href : ''
   const shareWA = `https://wa.me/?text=${encodeURIComponent(`${post.titulo} — VitaGloss RD\n\n${shareUrl}`)}`
+  const shareFB = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`
 
   const copyLink = () => {
     navigator.clipboard.writeText(shareUrl).catch(() => {})
@@ -177,6 +192,13 @@ export default function BlogPost() {
 
   return (
     <div className="bg-white min-h-screen">
+      {/* ── BARRA DE PROGRESO ── */}
+      <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-transparent pointer-events-none">
+        <div
+          className="h-full bg-secondary transition-all duration-100 ease-linear"
+          style={{ width: `${readingProgress}%` }}
+        />
+      </div>
       {/* ── HERO ── */}
       <div
         className="relative pt-20 sm:pt-24 pb-10 sm:pb-12 px-4"
@@ -299,10 +321,19 @@ export default function BlogPost() {
                   href={shareWA}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Compartir este artículo en WhatsApp"
+                  aria-label="Compartir en WhatsApp"
                   className="flex items-center gap-2 bg-[#25D366] hover:bg-green-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-colors mb-2"
                 >
-                  📲 Compartir en WhatsApp
+                  📲 WhatsApp
+                </a>
+                <a
+                  href={shareFB}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Compartir en Facebook"
+                  className="flex items-center gap-2 bg-[#1877F2] hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-colors mb-2"
+                >
+                  📘 Facebook
                 </a>
                 <button
                   onClick={copyLink}
@@ -365,20 +396,28 @@ export default function BlogPost() {
         </div>
 
         {/* CTA mobile compartir */}
-        <div className="lg:hidden mt-8 flex gap-3">
+        <div className="lg:hidden mt-8 flex gap-2">
           <a
             href={shareWA}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-green-700 text-white text-sm font-bold py-3 rounded-2xl transition-colors"
+            className="flex-1 flex items-center justify-center gap-1.5 bg-[#25D366] hover:bg-green-700 text-white text-sm font-bold py-3 rounded-2xl transition-colors"
           >
-            📲 Compartir
+            📲 WhatsApp
+          </a>
+          <a
+            href={shareFB}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 flex items-center justify-center gap-1.5 bg-[#1877F2] hover:bg-blue-700 text-white text-sm font-bold py-3 rounded-2xl transition-colors"
+          >
+            📘 Facebook
           </a>
           <button
             onClick={copyLink}
-            className="flex-1 flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-semibold py-3 rounded-2xl transition-colors"
+            className="flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-semibold px-4 py-3 rounded-2xl transition-colors"
           >
-            🔗 Copiar enlace
+            🔗
           </button>
         </div>
 
