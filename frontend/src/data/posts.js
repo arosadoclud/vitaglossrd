@@ -1608,7 +1608,7 @@ export const posts = [
     fecha: '2026-03-06',
     fechaActualizacion: '2026-03-06',
     tiempoLectura: '8 min',
-    imagen: '/blog/probioticos-salud-digestiva-caribe-ciencia.png',
+    imagen: '/probioticos.webp',
     imagenCover: true,
     autor: 'Andy Rosado',
     tags: ["probióticos","salud digestiva","microbiota","nutrición tropical","sistema inmune"],
