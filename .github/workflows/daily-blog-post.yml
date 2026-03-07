@@ -1,10 +1,14 @@
 name: 📝 Generar Post Diario con IA
 
 on:
-  # ─── Disparador automático: todos los días a las 8:00 AM (hora Santo Domingo = UTC-4) ───
-  # Las 12:00 UTC = 8:00 AM Santo Domingo
+  # ─── Disparador automático: 3 veces al día (hora Santo Domingo = UTC-4) ───
+  # 08:00 AM SDQ = 12:00 UTC
+  # 03:00 PM SDQ = 19:00 UTC
+  # 10:00 PM SDQ = 02:00 UTC (día siguiente)
   schedule:
     - cron: '0 12 * * *'
+    - cron: '0 19 * * *'
+    - cron: '0 2  * * *'
 
   # ─── Disparador manual desde GitHub UI (para probar o generar cuando quieras) ───
   workflow_dispatch:

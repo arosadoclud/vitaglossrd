@@ -5,7 +5,9 @@
   "private": true,
   "scripts": {
     "generate-post": "node generate-post.js",
-    "generate-sitemap": "node generate-sitemap.js"
+    "generate-sitemap": "node generate-sitemap.js",
+    "audit-posts": "node audit-posts.js",
+    "fix-posts": "node fix-short-posts.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.30.0",
