@@ -79,15 +79,27 @@ async function generarImagenDallE(titulo, tags, slug, openaiKey) {
   const openai = new OpenAI({ apiKey: openaiKey })
 
   // Construir prompt: fotografía realista del tema, sin texto ni animaciones
-  const temasPrincipales = tags.slice(0, 3).join(', ')
-  const prompt = `Photorealistic product and lifestyle photograph for a health blog article about: "${titulo}". \
-Topic keywords: ${temasPrincipales}. \
-STYLE: real DSLR photography, sharp focus, professional studio lighting, neutral or white background with subtle depth. \
-SUBJECT: show actual physical objects directly related to the topic — for supplements show real supplement bottles, capsules, pills or powder; for dental health show real toothbrush, paste or teeth; for skin show real skincare products or healthy skin closeup; for nutrition show real food ingredients. \
-REALISM: ultra-realistic, photographic, no illustration, no 3D render, no cartoon, no animation, no flat design, no vector art, no painting. \
-COLORS: clean and natural — white, soft teal, light beige. Professional health brand look. \
-NO text, NO labels readable, NO watermarks, NO logos. \
-FORMAT: wide landscape 16:9, subject centered, shallow depth of field, bokeh background.`
+  const temasPrincipales = tags.slice(0, 4).join(', ')
+  const prompt = `Photorealistic editorial photograph for a health blog article titled: "${titulo}". \
+The image MUST visually represent THIS specific topic — NOT generic health imagery or random products. \
+Keywords for context: ${temasPrincipales}. \
+\
+CRITICAL: The subject must match "${titulo}" precisely. Think like a magazine photo editor: \
+- "bleeding gums" → close-up of a hand gently touching gum area, slight dramatic lighting, clinical mood \
+- "children vitamins" → happy child holding a chewable tablet, colorful fruit around \
+- "dental whitening" → extreme close-up of bright white teeth, confident smile \
+- "probiotics / gut health" → cross-section healthy gut concept, yogurt, fermented foods \
+- "omega 3" → fresh salmon, walnuts, fish oil capsules on dark slate surface \
+- "hair biotin" → thick shiny hair flowing, biotin capsules nearby \
+- "vitamin C / immune" → sliced citrus fruits, vibrant orange colors, energetic feel \
+- "dental sensitivity" → person wincing at hot/cold drink, teeth in focus \
+- "calcium / bones" → strong person, dairy products, clean minimal style \
+\
+STYLE: editorial DSLR photography, cinematic lighting, magazine quality. \
+REALISM: ultra-realistic photograph. NOT illustration. NOT 3D render. NOT cartoon. NOT generic product shelf. \
+COLORS: natural tones that match topic mood — warm oranges for nutrition, clinical white/teal for dental, earthy green for wellness. \
+NO text, NO readable labels, NO watermarks, NO logos. \
+FORMAT: landscape 16:9, subject sharp and centered, soft bokeh background, professional health magazine cover quality.`
 
   console.log(`🎨 Generando imagen con DALL-E 3 para: "${titulo}"`)
 
@@ -97,7 +109,7 @@ FORMAT: wide landscape 16:9, subject centered, shallow depth of field, bokeh bac
       prompt,
       n: 1,
       size: '1792x1024',   // landscape, alta resolución
-      quality: 'standard', // 'hd' cuesta el doble (~$0.08)
+      quality: 'hd',       // misma calidad que usa ChatGPT (standard = $0.04, hd = $0.08)
       response_format: 'url',
     })
 
