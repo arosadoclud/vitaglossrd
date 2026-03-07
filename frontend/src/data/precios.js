@@ -42,6 +42,7 @@ export const PRECIOS = {
   26: { precio:   1035, precioOriginal:  1592 }, // Diario Nutrilite
   27: { precio:   2350, precioOriginal:  3615 }, // Magnesio Nutrilite
   28: { precio:   1600, precioOriginal:  2462 }, // Nutrilite™ Cerocarb
+  29: { precio:   3200, precioOriginal:  4923 }, // Serenoa Repens y Raíz de Ortiga
 }
 
 // ── PRECIOS DE COMBOS/KITS ──────────────────────────────────

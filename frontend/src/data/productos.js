@@ -1517,5 +1517,80 @@ export const productos = [
     usosPorEnvase: 60,
     badge: "Bloquea Carbos",
     badgeColor: "bg-blue-600"
+  },
+  {
+    id: 29,
+    nombre: "Serenoa Repens y Raíz de Ortiga Nutrilite",
+    nombreCorto: "Nutrilite™ Serenoa Repens y Raíz de Ortiga",
+    categoria: "Salud Masculina",
+    articulo: "NUTRI-SERENOA",
+    ...PRECIOS[29],
+    pv: 16.50,
+    bv: 2360.0,
+    disponible: true,
+    stock: "En stock",
+    stockUnidades: 8,
+    ventasSemana: 6,
+    descripcion: "Suplemento para hombres de 35+ con serenoa repens, raíz de ortiga y aceite de semillas de calabaza. Favorece el funcionamiento normal de la próstata y el flujo urinario. Incluye betacaroteno Nutrilite™. 100 cápsulas blandas.",
+    descripcionLarga: "Nutrilite™ Serenoa Repens y Raíz de Ortiga es un refuerzo natural diseñado especialmente para hombres de 35 años en adelante — la edad en que los expertos recomiendan empezar a prestar atención a la salud de la próstata.\n\nCombina extracto de serenoa repens y aceite de semillas de calabaza para favorecer el normal funcionamiento de la próstata, junto con extracto de raíz de ortiga para apoyar un flujo urinario normal.\n\nIncluye concentrado de betacaroteno Nutrilite™, cultivado en granjas propias de Amway. Sin conservantes agregados, colorantes ni saborizantes artificiales.\n\nCertificación NSF International y certificación Halal. Calidad Nutrilite™ desde 1934.",
+    beneficios: [
+      "Favorece el funcionamiento normal de la próstata",
+      "Apoya un flujo urinario normal gracias a la raíz de ortiga",
+      "Contiene extracto de serenoa repens y aceite de semillas de calabaza",
+      "Incluye concentrado de betacaroteno Nutrilite™",
+      "Sin conservantes, colorantes ni saborizantes artificiales",
+      "Certificado por NSF International y Halal",
+      "100 cápsulas blandas — suministro de más de un mes"
+    ],
+    instrucciones: [
+      "Tomar tres cápsulas blandas al día, preferentemente con las comidas."
+    ],
+    ingredientesTexto: "Extracto de serenoa repens · Aceite de semillas de calabaza · Extracto de raíz de ortiga · Concentrado de betacaroteno Nutrilite™\n\nSin conservantes agregados, colorantes ni saborizantes artificiales.",
+    avisos: [
+      "Cualquier persona que padezca alguna enfermedad debe consultar a un médico antes de usar este producto.",
+      "Mantener fuera del alcance de los niños.",
+      "†Esta declaración no fue evaluada por la Administración de Alimentos y Medicamentos de EE. UU. Este producto no pretende diagnosticar, tratar, curar ni prevenir ninguna enfermedad."
+    ],
+    faqs: [
+      {
+        pregunta: "¿Para quién está recomendado este suplemento?",
+        respuesta: "Está diseñado para hombres de 35 años en adelante, edad en que se recomienda prestar atención a la salud de la próstata."
+      },
+      {
+        pregunta: "¿Cuenta con certificación NSF?",
+        respuesta: "Sí. La certificación NSF International garantiza que lo que aparece en la etiqueta es exactamente lo que contiene el producto, con pruebas exhaustivas y estándares estrictos para proteger la salud pública."
+      },
+      {
+        pregunta: "¿Tiene certificación Halal?",
+        respuesta: "Sí, el suplemento Nutrilite™ Serenoa Repens y Raíz de Ortiga cuenta con certificación Halal."
+      },
+      {
+        pregunta: "¿Cuántas cápsulas trae y cuánto dura?",
+        respuesta: "El frasco contiene 100 cápsulas blandas. Tomando 3 al día con las comidas, el suministro dura aproximadamente 33 días."
+      },
+      {
+        pregunta: "¿Este producto cura enfermedades de la próstata?",
+        respuesta: "No. Este es un suplemento alimenticio que favorece el funcionamiento normal de la próstata. No pretende diagnosticar, tratar, curar ni prevenir ninguna enfermedad. Consulta a tu médico si tienes alguna condición de salud."
+      }
+    ],
+    certificaciones: [
+      { nombre: "NSF", descripcion: "Certificado por NSF International" },
+      { nombre: "Halal", descripcion: "Certificado Halal" }
+    ],
+    detalles: [
+      { label: "Contenido", valor: "100 cápsulas blandas" },
+      { label: "Uso", valor: "3 cápsulas al día con las comidas" },
+      { label: "Público objetivo", valor: "Hombres de 35 años en adelante" },
+      { label: "Ingredientes clave", valor: "Serenoa repens, raíz de ortiga, aceite de semillas de calabaza, betacaroteno" },
+      { label: "Certificaciones", valor: "NSF International · Halal" },
+      { label: "Artículo", valor: "NUTRI-SERENOA" }
+    ],
+    imagenes: ["/serenoa.webp"],
+    imagen: "/serenoa.webp",
+    rating: 4.8,
+    reviewCount: 9,
+    usosPorEnvase: 33,
+    badge: "Salud Masculina",
+    badgeColor: "bg-green-700"
   }
 ]
