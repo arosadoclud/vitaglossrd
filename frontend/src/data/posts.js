@@ -1626,7 +1626,7 @@ export const posts = [
     fecha: '2026-03-07',
     fechaActualizacion: '2026-03-07',
     tiempoLectura: '7 min',
-    imagen: '/blog/encias-sangran-causas-solucion-gingivitis.png',
+    imagen: '/encias-que-sangran.webp',
     imagenCover: true,
     autor: 'Andy Rosado',
     tags: ["encías sangrantes","gingivitis","salud bucal","Glister","cuidado dental RD"],
