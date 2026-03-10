@@ -275,6 +275,26 @@ async function guardarContacto({ numero, producto, nota = '' }) {
   }
 }
 
+// ── Simular comportamiento humano: leer → escribir → responder ──────────
+async function simularEscribiendo(msg, texto) {
+  try {
+    const chat = await msg.getChat()
+    // Pausa de "lectura": Vita lee el mensaje antes de responder (1.5–3.5 s)
+    const leerMs = 1500 + Math.random() * 2000
+    await new Promise(r => setTimeout(r, leerMs))
+    // Mostrar "escribiendo..."
+    await chat.sendStateTyping()
+    // Duración del tipeo proporcional al largo del mensaje (aprox. 5 chars/seg)
+    const palabras   = texto.trim().split(/\s+/).length
+    const tipeoMs    = Math.min(8000, Math.max(2500, palabras * 130 + Math.random() * 800))
+    await new Promise(r => setTimeout(r, tipeoMs))
+    await chat.clearState()
+  } catch {
+    // Si falla el estado de tipeo, igual enviamos el mensaje
+  }
+  await msg.reply(texto)
+}
+
 async function responderConIA(mensajeTexto, numero) {
   // Rate-limit por usuario
   const ahora = Date.now()
@@ -434,7 +454,7 @@ client.on('message', async (msg) => {
 
     const respuesta = await responderConIA(textoEfectivo, numero)
     if (respuesta) {
-      await msg.reply(respuesta)
+      await simularEscribiendo(msg, respuesta)
       console.log(`📤 Respuesta enviada a ${numero}`)
     }
     return
@@ -534,7 +554,7 @@ client.on('message', async (msg) => {
 
   const respuesta = await responderConIA(textoEfectivo, numero)
   if (respuesta) {
-    await msg.reply(respuesta)
+    await simularEscribiendo(msg, respuesta)
     console.log(`📤 Respuesta enviada a ${numero}`)
   }
 })
