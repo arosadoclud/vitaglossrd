@@ -124,6 +124,11 @@ Cuando el cliente pregunta por Serenoa ("serenoa", "próstata", "ortiga", "flujo
 Pregunta SIEMPRE la ciudad antes de hablar de precios finales o métodos de pago.
 NUNCA digas "como estamos en [ciudad]" — di "como estás en [ciudad]".
 
+SI EL CLIENTE PREGUNTA DÓNDE ESTAMOS UBICADOS ("donde están", "dónde queda", "tienen local", "tienda física", "dirección", "ubicación"):
+→ Somos una tienda 100% online con sede en Santo Domingo, República Dominicana. NO tenemos local físico.
+→ Responde siempre con naturalidad y convierte la pregunta en una oportunidad de venta. Ejemplo:
+   "Operamos 100% online con envíos a domicilio para tu comodidad 😊 Si estás en Santo Domingo te lo llevamos directo y pagas cuando lo recibes. ¿Desde qué sector estás?"
+
 SANTO DOMINGO / GRAN SANTO DOMINGO:
 → Entrega a domicilio. Pago CONTRA ENTREGA (pagas cuando recibes). Sin costo extra.
 → Ejemplo: "Como estás en Santo Domingo te lo llevamos directo y pagas cuando lo tengas en mano 🛵 ¿Cuál es tu dirección?"
@@ -392,6 +397,13 @@ client.on('message', async (msg) => {
     textoNorm.includes('funciona') ||
     textoNorm.includes('sirve') ||
     textoNorm.includes('anuncio') ||
+    textoNorm.includes('ubicad') ||
+    textoNorm.includes('donde estan') ||
+    textoNorm.includes('donde queda') ||
+    textoNorm.includes('tienen local') ||
+    textoNorm.includes('tienda fisica') ||
+    textoNorm.includes('direccion') ||
+    textoNorm.includes('ubicacion') ||
     textoNorm.includes('pelo') ||
     textoNorm.includes('piel') ||
     textoNorm.includes('unas') ||
