@@ -375,12 +375,23 @@ client.on('message', async (msg) => {
     textoNorm.includes('informacion') ||
     textoNorm.includes('quiero info') ||
     textoNorm.includes('me dan mas') ||
+    textoNorm.includes('me dan') ||
+    textoNorm.includes('dan mas') ||
+    textoNorm.includes('mas informacion') ||
     textoNorm.includes('como podemos ayudarte') ||
     textoNorm.includes('como puedo ayudarte') ||
     textoNorm.includes('para que sirve') ||
     textoNorm.includes('cuanto cuesta') ||
     textoNorm.includes('cual es el precio') ||
     textoNorm.includes('tienen disponible') ||
+    textoNorm.includes('quisiera') ||
+    textoNorm.includes('quiero saber') ||
+    textoNorm.includes('quiero conocer') ||
+    textoNorm.includes('que es') ||
+    textoNorm.includes('interesa') ||
+    textoNorm.includes('funciona') ||
+    textoNorm.includes('sirve') ||
+    textoNorm.includes('anuncio') ||
     textoNorm.includes('pelo') ||
     textoNorm.includes('piel') ||
     textoNorm.includes('unas') ||
