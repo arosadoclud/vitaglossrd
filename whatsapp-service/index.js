@@ -223,6 +223,58 @@ const COOLDOWN_MS = 2000  // 2 segundos entre respuestas por usuario
 const activeSessions = new Map()
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000  // 30 minutos de inactividad
 
+// ── Auto-guardar contactos interesados en backend ─────────────────────────
+const BACKEND_URL     = process.env.BACKEND_URL || 'https://vitagloss-backend.up.railway.app'
+const contactosGuardados = new Set()  // Evitar duplicados por número
+
+// Palabras clave que indican intención real de hacer un pedido
+const COMPRA_KEYWORDS = [
+  'quiero pedir', 'lo pido', 'confirmado', 'lo confirmo', 'confirmo el pedido',
+  'vamos', 'dale', 'listo para pagar', 'quiero comprarlo', 'lo compro', 'lo quiero',
+  'hacer el pedido', 'mi nombre es', 'a nombre de', 'mi direccion', 'direccion es',
+  'voy a transferir', 'voy a pagar', 'voy a hacer la transferencia',
+  'quiero uno', 'quiero dos', 'mandame', 'mandame uno', 'apartalo', 'separalo',
+  'pedirlo', 'lo llevo', 'lo tomamos', 'hacemos el pedido', 'colocamos el pedido',
+]
+
+// Intentar detectar qué producto mencionó el cliente en la conversación
+function detectarProducto(textoNorm, history = []) {
+  const todo = textoNorm + ' ' + history.map(h => h.parts?.[0]?.text || '').join(' ').toLowerCase()
+  if (todo.includes('pelo') || todo.includes('piel') || todo.includes('uña') || todo.includes('cabello') || todo.includes('biotina')) return 'Pelo Piel y Uñas Nutrilite'
+  if (todo.includes('cal mag') || todo.includes('calcio') || todo.includes('magnesio') || todo.includes('hueso')) return 'Cal Mag D Nutrilite'
+  if (todo.includes('serenoa') || todo.includes('prostata') || todo.includes('ortiga') || todo.includes('flujo')) return 'Serenoa Repens y Raíz de Ortiga'
+  if (todo.includes('nino') || todo.includes('niño') || todo.includes('kids') || todo.includes('masticable') || todo.includes('bebe')) return 'Kids Daily Nutrilite'
+  if (todo.includes('vitamina c') || todo.includes('defensas') || todo.includes('inmune')) return 'Vitamina C Plus Nutrilite'
+  return 'Producto VitaGloss'
+}
+
+// Guardar contacto en backend (fire-and-forget, falla en silencio)
+async function guardarContacto({ numero, producto, nota = '' }) {
+  if (contactosGuardados.has(numero)) return  // ya guardado en esta sesión
+  const telefonoLimpio = numero.replace('@c.us', '').replace(/\D/g, '')
+  try {
+    const resp = await fetch(`${BACKEND_URL}/api/leads/public`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nombre:          `Cliente WA ${telefonoLimpio}`,
+        telefono:        telefonoLimpio,
+        productoInteres: producto,
+        origen:          'whatsapp',
+        nota:            nota,
+        estado:          'interesado',
+      }),
+    })
+    if (resp.ok) {
+      contactosGuardados.add(numero)
+      console.log(`✅ Lead guardado: ${telefonoLimpio} — ${producto}`)
+    }
+  } catch (err) {
+    console.warn(`⚠️ No se pudo guardar lead ${telefonoLimpio}:`, err.message)
+    // Silent fail: nunca interrumpir el bot por esto
+  }
+}
+
 async function responderConIA(mensajeTexto, numero) {
   // Rate-limit por usuario
   const ahora = Date.now()
@@ -368,6 +420,18 @@ client.on('message', async (msg) => {
   // ── Si el usuario ya tiene una sesión activa, responde sin filtrar ──────
   if (activeSessions.has(numero)) {
     console.log(`💬 Continuación de sesión activa: ${numero}`)
+
+    // Detectar intención de compra y auto-guardar contacto
+    const textoNormComp = textoNorm.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    const hayIntencionCompra = COMPRA_KEYWORDS.some(kw =>
+      textoNormComp.includes(kw.normalize('NFD').replace(/[\u0300-\u036f]/g, ''))
+    )
+    if (hayIntencionCompra) {
+      const sess     = activeSessions.get(numero)
+      const producto = detectarProducto(textoNormComp, sess.history)
+      guardarContacto({ numero, producto, nota: `Mensaje: "${textoEfectivo.substring(0, 80)}"` })
+    }
+
     const respuesta = await responderConIA(textoEfectivo, numero)
     if (respuesta) {
       await msg.reply(respuesta)
@@ -463,6 +527,11 @@ client.on('message', async (msg) => {
   // Es lead de Facebook → crear sesión y activar Gemini
   console.log(`🎯 Lead de Facebook detectado de ${numero} [tipo:${msg.type}], activando Vita con IA`)
   activeSessions.set(numero, { lastActivity: Date.now(), history: [] })
+
+  // Guardar contacto inmediatamente como "nuevo" (antes de saber el producto)
+  const productoDetectado = detectarProducto(textoNorm)
+  guardarContacto({ numero, producto: productoDetectado, nota: `Primer mensaje: "${textoEfectivo.substring(0, 80)}"` })
+
   const respuesta = await responderConIA(textoEfectivo, numero)
   if (respuesta) {
     await msg.reply(respuesta)

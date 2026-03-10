@@ -9,6 +9,24 @@ import { m, AnimatePresence } from 'framer-motion'
 const WA_NUMBER  = '18492763532'
 const WA_MESSAGE = encodeURIComponent('¡Hola! Vi el anuncio de Pelo Piel y Uñas Nutrilite y quiero más información 💇‍♀️')
 const WA_URL     = `https://wa.me/${WA_NUMBER}?text=${WA_MESSAGE}`
+const API_URL    = import.meta.env.VITE_API_URL || 'https://vitagloss-backend.up.railway.app'
+
+const CIUDADES = [
+  'Santo Domingo',
+  'Santo Domingo Este',
+  'Santo Domingo Oeste',
+  'Santo Domingo Norte',
+  'Santiago',
+  'La Vega',
+  'San Cristóbal',
+  'San Pedro de Macorís',
+  'La Romana',
+  'Puerto Plata',
+  'Baní',
+  'Higüey',
+  'San Francisco de Macorís',
+  'Otra ciudad',
+]
 
 function trackWA() {
   if (typeof window !== 'undefined' && window.fbq) window.fbq('track', 'Contact')
@@ -108,6 +126,130 @@ function StickyBar() {
         </m.div>
       )}
     </AnimatePresence>
+  )
+}
+
+function OrderForm() {
+  const [form, setForm]       = useState({ nombre: '', telefono: '', ciudad: '' })
+  const [loading, setLoading] = useState(false)
+  const [done, setDone]       = useState(false)
+  const [error, setError]     = useState('')
+
+  const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    setError('')
+    if (!form.nombre.trim() || !form.telefono.trim() || !form.ciudad) {
+      setError('Por favor completa todos los campos.')
+      return
+    }
+    if (form.telefono.replace(/\D/g, '').length < 8) {
+      setError('Ingresa un número de WhatsApp válido.')
+      return
+    }
+    setLoading(true)
+    try {
+      await fetch(`${API_URL}/api/leads/public`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre:          form.nombre.trim(),
+          telefono:        form.telefono.trim(),
+          productoInteres: 'Pelo Piel y Uñas Nutrilite',
+          origen:          'web',
+          nota:            `Ciudad: ${form.ciudad} | Landing: /pelo-piel-unas`,
+        }),
+      })
+    } catch {
+      // Silent fail — no bloquear el flujo
+    }
+    setLoading(false)
+    setDone(true)
+    // Abrir WhatsApp con mensaje personalizado
+    const msg = encodeURIComponent(
+      `¡Hola! Me llamo ${form.nombre.trim()} y quiero pedir el Pelo Piel y Uñas Nutrilite 💇‍♀️ Estoy en ${form.ciudad}.`
+    )
+    setTimeout(() => {
+      window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, '_blank')
+    }, 600)
+  }
+
+  if (done) {
+    return (
+      <m.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-300 rounded-3xl p-8 text-center"
+      >
+        <div className="text-5xl mb-3">🎉</div>
+        <h3 className="font-extrabold text-green-800 text-xl mb-2">¡Excelente, {form.nombre.split(' ')[0]}!</h3>
+        <p className="text-green-700 text-sm leading-relaxed">
+          Tu información quedó guardada. Vita te abrirá en WhatsApp para coordinar tu pedido ahora mismo.
+        </p>
+        <p className="text-xs text-green-500 mt-3">Si no se abrió el chat, toca el botón de abajo 👇</p>
+        <m.a
+          href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(`¡Hola! Me llamo ${form.nombre.trim()} y quiero el Pelo Piel y Uñas. Estoy en ${form.ciudad}.`)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          whileTap={{ scale: 0.97 }}
+          className="inline-flex items-center gap-2 mt-4 bg-green-600 text-white font-bold px-6 py-3 rounded-2xl text-sm shadow-lg"
+        >
+          📲 Abrir WhatsApp
+        </m.a>
+      </m.div>
+    )
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className="block text-sm font-bold text-gray-700 mb-1.5">Nombre completo</label>
+        <input
+          name="nombre"
+          value={form.nombre}
+          onChange={handleChange}
+          placeholder="Ej: María García"
+          className="w-full border-2 border-pink-200 focus:border-pink-400 rounded-xl px-4 py-3 text-gray-800 text-sm outline-none transition-colors bg-white"
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-bold text-gray-700 mb-1.5">Número de WhatsApp</label>
+        <input
+          name="telefono"
+          value={form.telefono}
+          onChange={handleChange}
+          placeholder="Ej: 809-555-1234"
+          type="tel"
+          className="w-full border-2 border-pink-200 focus:border-pink-400 rounded-xl px-4 py-3 text-gray-800 text-sm outline-none transition-colors bg-white"
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-bold text-gray-700 mb-1.5">¿Desde qué ciudad?</label>
+        <select
+          name="ciudad"
+          value={form.ciudad}
+          onChange={handleChange}
+          className="w-full border-2 border-pink-200 focus:border-pink-400 rounded-xl px-4 py-3 text-gray-800 text-sm outline-none transition-colors bg-white"
+        >
+          <option value="">Selecciona tu ciudad</option>
+          {CIUDADES.map(c => <option key={c} value={c}>{c}</option>)}
+        </select>
+      </div>
+      {error && <p className="text-red-500 text-xs font-semibold">{error}</p>}
+      <m.button
+        type="submit"
+        disabled={loading}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.97 }}
+        className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-extrabold text-lg py-4 rounded-2xl shadow-[0_8px_30px_rgba(236,72,153,0.4)] transition-all duration-200 disabled:opacity-70"
+      >
+        {loading ? '⏳ Guardando...' : '📲 Quiero reservar el mío'}
+      </m.button>
+      <p className="text-center text-xs text-gray-400">
+        📱 Te abriremos WhatsApp al instante · Sin compromiso · Pago contra entrega en SD
+      </p>
+    </form>
   )
 }
 
@@ -371,6 +513,59 @@ export default function LandingPeloPiel() {
               </m.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* FORMULARIO DE PEDIDO */}
+      <section className="px-5 py-16 bg-gradient-to-br from-pink-600 via-fuchsia-600 to-purple-700 relative overflow-hidden">
+        <div className="pointer-events-none absolute -top-16 -right-16 w-64 h-64 bg-white opacity-5 rounded-full" />
+        <div className="pointer-events-none absolute bottom-0 left-0 w-48 h-48 bg-white opacity-5 rounded-full translate-y-1/3 -translate-x-1/4" />
+        <div className="relative max-w-lg mx-auto">
+          <m.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center text-white mb-8"
+          >
+            <span className="bg-white/20 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide">
+              ¡Reserva la tuya ahora!
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold mt-4 mb-3 leading-tight">
+              Escríbenos y <span className="text-pink-200">te entregamos</span>
+            </h2>
+            <p className="text-pink-100 text-sm leading-relaxed">
+              Completa tus datos y Vita te confirmará el pedido por WhatsApp.<br />
+              <strong className="text-white">Santo Domingo: pagas cuando lo recibes 🛵</strong>
+            </p>
+          </m.div>
+          <m.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
+          >
+            {/* Mini precio + producto */}
+            <div className="flex items-center gap-3 mb-6 pb-5 border-b border-pink-100">
+              <img src="/Pelo_-Piel-y-Uñas-Nutrilite.webp" alt="Pelo Piel y Uñas" className="w-14 h-14 object-contain" />
+              <div>
+                <div className="font-extrabold text-gray-900 text-sm">Pelo Piel y Uñas Nutrilite™</div>
+                <div className="text-pink-600 font-extrabold text-lg">RD$1,700</div>
+                <div className="flex items-center gap-1 mt-0.5"><Stars n={5} /><span className="text-xs text-gray-400 ml-1">86 reseñas</span></div>
+              </div>
+            </div>
+            <OrderForm />
+          </m.div>
+          {/* Social proof counter */}
+          <m.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="text-center text-pink-200 text-xs mt-5"
+          >
+            🔥 Más de 80 mujeres ya lo pidieron este mes
+          </m.p>
         </div>
       </section>
 
