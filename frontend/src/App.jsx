@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation, useSearchParams } from 'react-router-dom'
 import { useEffect, lazy, Suspense } from 'react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 
 // Scroll al inicio en cada cambio de ruta
 function ScrollToTop() {
@@ -122,6 +123,7 @@ function App() {
       <PreciosProvider>
       <BrowserRouter>
         <Layout />
+        <SpeedInsights />
       </BrowserRouter>
       </PreciosProvider>
       </CartProvider>
