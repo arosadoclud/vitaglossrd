@@ -279,14 +279,14 @@ async function guardarContacto({ numero, producto, nota = '' }) {
 async function simularEscribiendo(msg, texto) {
   try {
     const chat = await msg.getChat()
-    // Pausa de "lectura": Vita lee el mensaje antes de responder (1.5–3.5 s)
-    const leerMs = 1500 + Math.random() * 2000
+    // Pausa de "lectura": Vita lee el mensaje antes de responder (0.5–1.5 s) - más rápido para capturar leads
+    const leerMs = 500 + Math.random() * 1000
     await new Promise(r => setTimeout(r, leerMs))
     // Mostrar "escribiendo..."
     await chat.sendStateTyping()
-    // Duración del tipeo proporcional al largo del mensaje (aprox. 5 chars/seg)
+    // Duración del tipeo proporcional al largo del mensaje - reducido para respuestas más ágiles
     const palabras   = texto.trim().split(/\s+/).length
-    const tipeoMs    = Math.min(8000, Math.max(2500, palabras * 130 + Math.random() * 800))
+    const tipeoMs    = Math.min(4000, Math.max(1000, palabras * 80 + Math.random() * 500))
     await new Promise(r => setTimeout(r, tipeoMs))
     await chat.clearState()
   } catch {
