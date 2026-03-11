@@ -388,6 +388,20 @@ client.on('ready', () => {
   qrBase64 = null
   qrString = null
   console.log('✅ WhatsApp conectado y listo!')
+  
+  // Auto-apagado en 1 hora
+  console.log('⏰ Bot configurado para desactivarse automáticamente en 1 hora')
+  setTimeout(async () => {
+    console.log('⏹️  Tiempo cumplido — cerrando bot automáticamente...')
+    isReady = false
+    try {
+      await client.destroy()
+      console.log('✅ Bot cerrado limpiamente')
+    } catch (err) {
+      console.error('Error al cerrar:', err.message)
+    }
+    process.exit(0)
+  }, 3600000) // 1 hora = 3,600,000 ms
 })
 
 client.on('disconnected', (reason) => {
