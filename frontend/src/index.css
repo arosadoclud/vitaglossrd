@@ -106,6 +106,24 @@ html {
   font-style: italic;
   margin: 1.5rem 0;
 }
+/* Cajas de CTA comercial dentro del artículo — visualmente separadas del contenido editorial */
+.prose-custom .cta-inline {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-left: 4px solid #16a34a;
+  border-radius: 0.75rem;
+  padding: 0.875rem 1.125rem;
+  margin: 1.75rem 0;
+  font-size: 0.9rem;
+  color: #166534;
+  line-height: 1.6;
+}
+.prose-custom .cta-inline strong {
+  color: #14532d;
+}
+.prose-custom .cta-inline::before {
+  content: "💬 ";
+}
 
 /* ── Estilos de impresión de facturas ── */
 @media print {

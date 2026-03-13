@@ -278,6 +278,15 @@ export default function BlogPost() {
             animate="visible"
             className="min-w-0"
           >
+            {/* Divulgación comercial — siempre visible */}
+            <div className="mb-6 flex gap-3 bg-blue-50 border border-blue-200 rounded-2xl px-5 py-3.5">
+              <span className="text-blue-500 text-base flex-shrink-0 mt-0.5">ℹ️</span>
+              <p className="text-blue-800 text-xs leading-relaxed">
+                <strong>Divulgación:</strong> VitaGloss RD es distribuidor independiente de productos Amway en República Dominicana. Este artículo puede mencionar productos que vendemos y recibimos compensación por compras realizadas en nuestra tienda.{' '}
+                <Link to="/politica-editorial" className="underline hover:text-blue-900">Ver política editorial completa.</Link>
+              </p>
+            </div>
+
             {/* Disclaimer médico — solo en categorías YMYL */}
             {isYMYL && (
               <div className="mb-8 flex gap-3 bg-amber-50 border border-amber-200 rounded-2xl px-5 py-4">

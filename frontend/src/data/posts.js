@@ -99,7 +99,7 @@ export const posts = [
       <p><strong>¿Los niños pueden tomarla?</strong> La dosis adulta no es apropiada para niños pequeños. Para niños, el Multivitamínico Niños Nutrilite™ provee las cantidades adecuadas sin exceder las dosis pediátricas seguras.</p>
       <p><strong>¿Cuánto tiempo tarda en notarse el efecto?</strong> Los cambios visibles — menos episodios de enfermedad, mejor apariencia de la piel — generalmente se aprecian después de 3-6 semanas de uso diario consistente.</p>
 
-      <p>Si quieres hacer el cambio, escríbenos por WhatsApp y te asesoramos sin compromiso.</p>
+      <p class="cta-inline">Si quieres hacer el cambio, escríbenos por WhatsApp y te asesoramos sin compromiso.</p>
     `,
   },
   {
@@ -196,7 +196,7 @@ export const posts = [
       <h2>Preguntas frecuentes</h2>
       <p><strong>¿Puedo usar Glister™ si tengo ortodoncia?</strong> Sí, y de hecho es especialmente recomendable. Los brackets crean zonas de difícil acceso donde la placa se acumula. La ausencia de SLS y la suavidad del abrasivo protegen el esmalte que queda expuesto alrededor de los brackets.</p>
       <p><strong>¿El sabor a menta de Glister™ es muy intenso?</strong> La menta es de intensidad moderada y agradable. La menta Nutrilite™ es de cultivares certificados orgánicos, lo que le da una frescura limpia diferente de los saborizantes artificiales de mentol sintético.</p>
-      <p><strong>¿Glister™ está disponible para compra en RD?</strong> Sí, tenemos disponibilidad en todo el territorio. Escríbenos por WhatsApp y gestionamos el pedido directamente.</p>
+      <p class="cta-inline"><strong>¿Glister™ está disponible en RD?</strong> Sí, tenemos disponibilidad en todo el territorio. Escríbenos por WhatsApp y gestionamos el pedido.</p>
 
       <p>El precio es un poco mayor que las opciones de supermercado, pero si piensas en el costo de tratamientos dentales futuros, es una de las mejores inversiones para tu salud.</p>
     `,
@@ -382,7 +382,7 @@ export const posts = [
       <p>Hay algo que ningún suplemento puede sustituir: una dieta base nutricionalmente adecuada, actividad física regular, sueño suficiente y control del estrés crónico. Los suplementos cubren brechas — no reemplazan los pilares fundamentales de la salud. Si tu dieta consiste principalmente en ultraprocesados, carbohidratos refinados y poca variedad, tomar vitaminas encima de eso no compensará los efectos sistémicos de esa alimentación.</p>
       <p>Dicho esto, en el contexto dominicano real, donde la densidad nutricional de los alimentos disponibles y accesibles tiene limitaciones reales, una suplementación inteligente y bien elegida puede hacer una diferencia significativa en el bienestar a largo plazo.</p>
 
-      <p>Si la respuesta a cualquiera es no, probablemente estás a punto de tirar tu dinero. ¿Quieres asesoría personalizada? Escríbenos sin compromiso.</p>
+      <p class="cta-inline">Si la respuesta a cualquiera es no, probablemente estás a punto de tirar tu dinero. ¿Quieres asesoría personalizada? Escríbenos sin compromiso.</p>
     `,
   },
   {
@@ -608,7 +608,7 @@ export const posts = [
       <p><strong>¿Cuándo es el mejor momento para tomar el enjuague bucal?</strong> Después del cepillado e hilo dental, no antes. Así el enjuague trabaja sobre una boca ya mecánicamente limpia, maximizando su efecto antibacterial residual.</p>
       <p><strong>¿Glister™ es apta para embarazadas?</strong> Sí. La pasta Glister™ no contiene ingredientes contraindica¬ados en el embarazo. De hecho, la salud bucal es especialmente importante durante el embarazo: los cambios hormonales aumentan el riesgo de gingivitis gestacional, y la periodontitis se ha asociado con riesgo de parto preterm.</p>
 
-      <p>Si tienes dudas sobre qué productos son mejores para tu boca, escríbenos por WhatsApp. Te orientamos de forma personalizada y sin compromiso.</p>
+      <p class="cta-inline">Si tienes dudas sobre qué productos son mejores para tu boca, escríbenos por WhatsApp. Te orientamos de forma personalizada y sin compromiso.</p>
     `,
   },
   {
@@ -706,7 +706,7 @@ export const posts = [
       <p><strong>¿Cerdas suaves, medias o duras?</strong> Siempre suaves. Las cerdas duras danñan el esmalte y las encías. Ningún dentista recomienda cerdas duras en la actualidad, independientemente de cuál sea la pasta dental.</p>
       <p><strong>¿Puedo usar el hilo dental después de cada comida?</strong> Sí, no hay problema. Es especialmente útil después del almuerzo si no puedes cepillarte en el trabajo. El spray bucal Glister™ para los momentos donde ni hilo ni cepillo son posibles.</p>
 
-      <p>¿Tienes dudas sobre cuál pasta es mejor para tu situación específica? Escríbenos por WhatsApp y te orientamos.</p>
+      <p class="cta-inline">¿Tienes dudas sobre cuál pasta es mejor para tu situación específica? Escríbenos por WhatsApp y te orientamos.</p>
     `,
   },
   {
@@ -1001,7 +1001,7 @@ export const posts = [
       <p><strong>¿Debo enjuagar con agua después de la pasta dental?</strong> No, o sólo con una cantidad mínima. Enjuagarse mucho después del cepillado elimina el flúor activo antes de que tenga tiempo de actuar sobre el esmalte. Escupe la espuma y deja el residuo de pasta actuar 1-2 minutos.</p>
       <p><strong>¿Cuándo cambiar el cepillo?</strong> Cada 3 meses o cuando las cerdas se vean deformadas o dobladas. Las cerdas desgastadas pierden hasta un 50% de su capacidad de eliminación de placa.</p>
 
-      <p>¿Quieres conseguir el sistema completo Glister™? Escríbenos por WhatsApp y te hacemos un combo a precio especial.</p>
+      <p class="cta-inline">¿Quieres conseguir el sistema completo Glister™? Escríbenos por WhatsApp y te hacemos un combo a precio especial.</p>
     `,
   },
   {
@@ -1050,7 +1050,7 @@ export const posts = [
       <h2>El papel del enjuague bucal en el control de placa</h2>
       <p>Estudios clínicos demuestran que añadir enjuague bucal a la rutina de cepillado + hilo reduce la placa un 26% adicional comparado con solo cepillado e hilo. El <strong>Enjuague Bucal Glister™</strong> fue probado específicamente con este criterio: "Ayuda a remover más placa que solo el cepillado al usarse después de él."</p>
 
-      <p>Si quieres saber más sobre cómo cuidar tus dientes con productos que realmente funcionan, contáctanos por WhatsApp. Te orientamos sin compromiso.</p>
+      <p class="cta-inline">Si quieres saber más sobre cómo cuidar tus dientes con productos que realmente funcionan, contáctanos por WhatsApp. Te orientamos sin compromiso.</p>
     `,
   },
 
@@ -1155,7 +1155,7 @@ export const posts = [
       </ul>
       <p>Todos los productos son 100% originales Nutrilite™/Amway. Enviamos a todo el territorio dominicano.</p>
 
-      <p>¿Quieres una orientación personalizada sobre qué suplementos son mejores para tu caso? Escríbenos por WhatsApp — la consulta es gratis y sin compromiso.</p>
+      <p class="cta-inline">¿Quieres una orientación personalizada sobre qué suplementos son mejores para tu caso? Escríbenos por WhatsApp — la consulta es gratis y sin compromiso.</p>
     `,
   },
   {
@@ -1849,7 +1849,7 @@ export const posts = [
       <p><strong>¿El colesterol alto a los 40 requiere medicamento siempre?</strong> No necesariamente. Colesterol LDL ligeramente elevado (130-159 mg/dL) en una persona sin otros factores de riesgo puede manejarse con dieta, omega-3 y ejercicio durante 3-6 meses antes de considerar medicación. Con colesterol muy alto o múltiples factores de riesgo, el medicamento es necesario junto con cambios de estilo de vida.</p>
       <p><strong>¿Cuánta proteína necesito si tengo más de 50 años?</strong> Las guías actuales recomiendan 1.2-1.6g por kg de peso corporal para adultos mayores de 50 que quieren preservar masa muscular. Para alguien de 70 kg, eso es 84-112g de proteína diaria, que equivale a aproximadamente 3-4 porciones de 100g de carne, pollo o pescado, complementado con habichuelas y huevos.</p>
 
-      <p>Si estás en esta etapa de la vida y quieres una orientación personalizada sobre qué productos son mejores para ti, contáctanos por WhatsApp.</p>
+      <p class="cta-inline">Si estás en esta etapa de la vida y quieres una orientación personalizada sobre qué productos son mejores para ti, contáctanos por WhatsApp.</p>
     `,
   },
   {

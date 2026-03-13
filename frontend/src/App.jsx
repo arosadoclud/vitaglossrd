@@ -39,6 +39,7 @@ const BlogPost       = lazy(() => import('./pages/BlogPost'))
 const Privacidad     = lazy(() => import('./pages/Privacidad'))
 const Devoluciones   = lazy(() => import('./pages/Devoluciones'))
 const Terminos       = lazy(() => import('./pages/Terminos'))
+const PoliticaEditorial = lazy(() => import('./pages/PoliticaEditorial'))
 const Unete          = lazy(() => import('./pages/Unete'))
 const LandingPeloPiel = lazy(() => import('./pages/LandingPeloPiel'))
 
@@ -93,6 +94,7 @@ function Layout() {
           <Route path="/privacidad" element={<Privacidad />} />
           <Route path="/devoluciones" element={<Devoluciones />} />
           <Route path="/terminos" element={<Terminos />} />
+          <Route path="/politica-editorial" element={<PoliticaEditorial />} />
           <Route path="/unete" element={<Unete />} />
           <Route path="/pelo-piel-unas" element={<LandingPeloPiel />} />
           <Route
