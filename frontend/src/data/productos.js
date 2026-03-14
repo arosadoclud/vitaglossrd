@@ -1670,8 +1670,8 @@ export const productos = [
   },
   {
     id: 31,
-    nombre: "Jugo de Energía XS™ Burbujeante",
-    nombreCorto: "XS™ Jugo de Energía Burbujeante – Mango, Piña y Guayaba",
+    nombre: "Jugo de energía XS™ burbujeante 12 oz - Toronja rosada",
+    nombreCorto: "Jugo de energía XS™ burbujeante 12 oz - Toronja rosada",
     categoria: "Energizantes",
     articulo: "XS-JUGO-BURBUJEANTE",
     ...PRECIOS[31],
