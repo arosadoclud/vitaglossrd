@@ -42,6 +42,7 @@ const Terminos       = lazy(() => import('./pages/Terminos'))
 const PoliticaEditorial = lazy(() => import('./pages/PoliticaEditorial'))
 const Unete          = lazy(() => import('./pages/Unete'))
 const LandingPeloPiel = lazy(() => import('./pages/LandingPeloPiel'))
+const Academia       = lazy(() => import('./pages/Academia'))
 
 // Fallback mínimo mientras se carga un chunk
 function PageSpinner() {
@@ -53,7 +54,7 @@ function PageSpinner() {
 }
 
 // Páginas que NO deben mostrar el Navbar/Footer público
-const DASHBOARD_ROUTES = ['/dashboard', '/unete', '/pelo-piel-unas']
+const DASHBOARD_ROUTES = ['/dashboard', '/unete', '/pelo-piel-unas', '/academia']
 
 // Detecta ?ref= en URL y guarda en sessionStorage para atribuir leads
 function RefTracker() {
@@ -102,6 +103,14 @@ function Layout() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/academia"
+            element={
+              <ProtectedRoute>
+                <Academia />
               </ProtectedRoute>
             }
           />

@@ -4,7 +4,6 @@ import { m, AnimatePresence } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import { api } from '../services/api'
 import { useSEO } from '../hooks/useSEO'
-import AcademiaTab from '../components/academia/AcademiaTab'
 import PreciosTab from '../components/PreciosTab'
 import { productos } from '../data/productos'
 
@@ -58,7 +57,7 @@ function waMessageForEstado(order) {
   }
 }
 
-const TABS_ALL = ['📊 Resumen', '👥 Leads', '💰 Ventas', '💬 Plantillas', '🟢 Equipo VitaGlossRD', '📦 Pedidos Web', '⚙️ Perfil', '💲 Precios']
+const TABS_ALL = ['📊 Resumen', '👥 Leads', '💰 Ventas', '💬 Plantillas', '📦 Pedidos Web', '⚙️ Perfil', '💲 Precios']
 
 const WA_TEMPLATES = [
   { producto: 'Glister™ Pasta Dental', msg: '¡Hola! 👋 Te cuento sobre *Glister™*, la pasta dental con flúor activo de Amway. Combate caries, blanquea los dientes y elimina el mal aliento desde la primera semana. 🦷✨ ¿Te interesa saber el precio y cómo pedirla?' },
@@ -117,7 +116,7 @@ export default function Dashboard() {
   const [tab, setTab] = useState(0)
 
   // Solo admins ven el tab de Precios
-  const displayTabs = user?.rol === 'admin' ? TABS_ALL : TABS_ALL.slice(0, 7)
+  const displayTabs = user?.rol === 'admin' ? TABS_ALL : TABS_ALL.slice(0, 6)
 
   // stats
   const [stats, setStats] = useState(null)
@@ -240,8 +239,8 @@ export default function Dashboard() {
   useEffect(() => {
     if (tab === 1) loadLeads()
     if (tab === 2) loadSales()
-    if (tab === 5) loadOrders()
-    if (tab === 6 && user) setProfileForm({ nombre: user.nombre || '', descripcion: user.descripcion || '', whatsapp: user.whatsapp || '', metaMensual: user.metaMensual || 10000 })
+    if (tab === 4) loadOrders()
+    if (tab === 5 && user) setProfileForm({ nombre: user.nombre || '', descripcion: user.descripcion || '', whatsapp: user.whatsapp || '', metaMensual: user.metaMensual || 10000 })
   }, [tab]) // eslint-disable-line
 
   // ── lead actions ─────────────────────────────────────────────────────────
@@ -392,7 +391,7 @@ export default function Dashboard() {
                 { label: 'Nuevo lead', icon: '👤', color: 'bg-sky-50 border-sky-200 text-sky-700 hover:bg-sky-100', action: () => { setTab(1); setTimeout(() => setLeadFormOpen(true), 100) } },
                 { label: 'Nueva venta', icon: '💰', color: 'bg-green-50 border-green-200 text-green-700 hover:bg-green-100', action: () => { setTab(2); setTimeout(() => setSaleFormOpen(true), 100) } },
                 { label: 'Plantillas WA', icon: '💬', color: 'bg-purple-50 border-purple-200 text-purple-700 hover:bg-purple-100', action: () => setTab(3) },
-                { label: 'Mi equipo', icon: '🟢', color: 'bg-teal-50 border-teal-200 text-teal-700 hover:bg-teal-100', action: () => setTab(4) },
+                { label: 'Mi equipo', icon: '🟢', color: 'bg-teal-50 border-teal-200 text-teal-700 hover:bg-teal-100', action: () => navigate('/academia') },
               ].map(({ label, icon, color, action }) => (
                 <button key={label} onClick={action}
                   className={`border rounded-2xl p-4 flex flex-col items-center gap-2 text-center transition-all hover:scale-105 font-semibold text-xs ${color}`}>
@@ -759,17 +758,9 @@ export default function Dashboard() {
           </Section>
         )}
 
-        {/* ── TAB 4: ACADEMIA ─────────────────────────────────────────────── */}
         {tab === 4 && (
           <Section>
-            <AcademiaTab onChangeTab={setTab} />
-          </Section>
-        )}
-
-        {/* ── TAB 5: PEDIDOS ────────────────────────────────────────────────── */}
-        {tab === 5 && (
-          <Section>
-            {/* Mini stats del día */}
+            {/* ── TAB 5: PEDIDOS ─────────────────────────────────────────── */}
             {(() => {
               const hoy = new Date().toDateString()
               const pedidosHoy = orders.filter(o => new Date(o.createdAt).toDateString() === hoy)
@@ -1513,7 +1504,7 @@ export default function Dashboard() {
         )}
 
         {/* ── TAB 6: PERFIL ────────────────────────────────────────────────────────── */}
-        {tab === 6 && (
+        {tab === 5 && (
           <Section>
             <div className="max-w-lg mx-auto">
               <h2 className="text-2xl font-black text-primary mb-6">Mi perfil</h2>
@@ -1605,12 +1596,12 @@ export default function Dashboard() {
         )}
 
         {/* ── TAB 7: PRECIOS (solo admin) ──────────────────────────────────────────── */}
-        {tab === 7 && user?.rol === 'admin' && (
+        {tab === 6 && user?.rol === 'admin' && (
           <Section>
             <PreciosTab />
           </Section>
         )}
-        {tab === 7 && user?.rol !== 'admin' && (
+        {tab === 6 && user?.rol !== 'admin' && (
           <Section>
             <div className="text-center py-16 text-gray-400">
               <div className="text-5xl mb-4">🔒</div>
