@@ -14,7 +14,7 @@
 
 export const PRECIOS = {
   //  id   nombre                               precio  precioOriginal
-   1: { precio:    899, precioOriginal:  1383 }, // Pasta Dental Glister
+   1: { precio:    650, precioOriginal:  1000 }, // Pasta Dental Glister
    2: { precio:    820, precioOriginal:  1262 }, // Spray Bucal Glister
    3: { precio:   1169, precioOriginal:  1799 }, // Enjuague Bucal Glister
    4: { precio:   1099, precioOriginal:  1691 }, // Vitamina C Nutrilite
