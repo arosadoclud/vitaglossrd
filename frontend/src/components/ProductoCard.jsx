@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom'
 import { usePrecios } from '../context/PreciosContext'
+import { useAuth } from '../context/AuthContext'
 import { slugify } from '../utils/slugify'
 
 export default function ProductoCard({ producto }) {
   const stockBajo = producto.stockUnidades && producto.stockUnidades <= 5
   const { getPrecio } = usePrecios()
+  const { user } = useAuth()
   const livePrice = getPrecio(producto.id)
   const precio = livePrice?.precio ?? producto.precio
   const precioOriginal = livePrice?.precioOriginal ?? producto.precioOriginal
@@ -85,18 +87,24 @@ export default function ProductoCard({ producto }) {
           </div>
         )}
 
-        {/* Precio */}
-        <div className="flex items-center gap-2 mb-3 flex-wrap">
-          <span className="text-xl font-extrabold text-primary">RD${precio.toLocaleString('es-DO', { minimumFractionDigits: precio % 1 !== 0 ? 2 : 0, maximumFractionDigits: 2 })}</span>
-          {precioOriginal && (
-            <>
-              <span className="text-gray-300 text-xs line-through">RD${precioOriginal.toLocaleString('es-DO')}</span>
-              <span className="bg-red-100 text-red-500 text-[10px] font-bold px-1.5 py-0.5 rounded-full">
-                -{Math.round(((precioOriginal - precio) / precioOriginal) * 100)}%
-              </span>
-            </>
-          )}
-        </div>
+        {/* Precio — solo para usuarios autenticados */}
+        {user ? (
+          <div className="flex items-center gap-2 mb-3 flex-wrap">
+            <span className="text-xl font-extrabold text-primary">RD${precio.toLocaleString('es-DO', { minimumFractionDigits: precio % 1 !== 0 ? 2 : 0, maximumFractionDigits: 2 })}</span>
+            {precioOriginal && (
+              <>
+                <span className="text-gray-300 text-xs line-through">RD${precioOriginal.toLocaleString('es-DO')}</span>
+                <span className="bg-red-100 text-red-500 text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                  -{Math.round(((precioOriginal - precio) / precioOriginal) * 100)}%
+                </span>
+              </>
+            )}
+          </div>
+        ) : (
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-xs text-gray-400 italic">Inicia sesión para ver el precio</span>
+          </div>
+        )}
 
         {/* Botones */}
         <div className="flex gap-2">

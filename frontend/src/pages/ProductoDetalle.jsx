@@ -7,6 +7,7 @@ import ProductoCard from '../components/ProductoCard'
 import { useSEO } from '../hooks/useSEO'
 import ReviewsSection from '../components/ReviewsSection'
 import { usePrecios } from '../context/PreciosContext'
+import { useAuth } from '../context/AuthContext'
 
 // Acordeón individual
 function Accordion({ titulo, icono, children, defaultOpen = false }) {
@@ -264,6 +265,7 @@ export default function ProductoDetalle() {
   const [qty, setQty] = useState(1)
   const [showStickyBar, setShowStickyBar] = useState(false)
   const buyRef = useRef(null)
+  const { user } = useAuth()
 
   useEffect(() => {
     const el = buyRef.current
@@ -552,26 +554,32 @@ export default function ProductoDetalle() {
             )}
 
             {/* Precio */}
-            <div className="py-4 border-y border-gray-100 mb-5">
-              <div className="flex items-baseline gap-3 mb-1.5">
-                <span className="text-4xl font-black text-gray-900 tracking-tight">
-                  RD${producto.precio.toLocaleString('es-DO', { minimumFractionDigits: producto.precio % 1 !== 0 ? 2 : 0, maximumFractionDigits: 2 })}
-                </span>
-                {producto.precioOriginal && (
-                  <span className="text-gray-400 text-lg line-through">
-                    RD${producto.precioOriginal.toLocaleString('es-DO')}
+            {user ? (
+              <div className="py-4 border-y border-gray-100 mb-5">
+                <div className="flex items-baseline gap-3 mb-1.5">
+                  <span className="text-4xl font-black text-gray-900 tracking-tight">
+                    RD${producto.precio.toLocaleString('es-DO', { minimumFractionDigits: producto.precio % 1 !== 0 ? 2 : 0, maximumFractionDigits: 2 })}
                   </span>
-                )}
-                {producto.precioOriginal && (
-                  <span className="text-xs font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full">
-                    -{Math.round(((producto.precioOriginal - producto.precio) / producto.precioOriginal) * 100)}%
-                  </span>
-                )}
+                  {producto.precioOriginal && (
+                    <span className="text-gray-400 text-lg line-through">
+                      RD${producto.precioOriginal.toLocaleString('es-DO')}
+                    </span>
+                  )}
+                  {producto.precioOriginal && (
+                    <span className="text-xs font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full">
+                      -{Math.round(((producto.precioOriginal - producto.precio) / producto.precioOriginal) * 100)}%
+                    </span>
+                  )}
+                </div>
+                <p className="text-gray-400 text-sm">
+                  <span className="text-xs text-blue-500">Envío en Santo Domingo</span>
+                </p>
               </div>
-              <p className="text-gray-400 text-sm">
-                <span className="text-xs text-blue-500">Envío en Santo Domingo</span>
-              </p>
-            </div>
+            ) : (
+              <div className="py-4 border-y border-gray-100 mb-5">
+                <p className="text-sm text-gray-400 italic">Inicia sesión para ver el precio</p>
+              </div>
+            )}
 
             {/* Descripción corta */}
             <p className="text-[14px] text-gray-500 leading-[1.75] mb-6 border-l-2 border-gray-200 pl-4">
@@ -590,8 +598,8 @@ export default function ProductoDetalle() {
               ))}
             </div>
 
-            {/* Calculadora costo/día */}
-            {producto.usosPorEnvase && (() => {
+            {/* Calculadora costo/día — solo autenticados */}
+            {user && producto.usosPorEnvase && (() => {
               const usos = producto.usosPorEnvase
               const costoDia = (producto.precio / usos).toFixed(1)
               const unidad = producto.categoria === 'Suplementos' ? 'día' : 'uso'
@@ -999,7 +1007,9 @@ export default function ProductoDetalle() {
             <div className="flex items-center gap-3">
               <div className="flex-1 min-w-0">
                 <p className="text-[11px] text-gray-400 truncate leading-tight">{producto.nombre}</p>
-                <p className="text-lg font-black text-gray-900 leading-tight">RD${producto.precio.toLocaleString('es-DO')}</p>
+                {user && (
+                  <p className="text-lg font-black text-gray-900 leading-tight">RD${producto.precio.toLocaleString('es-DO')}</p>
+                )}
               </div>
               <a
                 href={whatsappURL}
