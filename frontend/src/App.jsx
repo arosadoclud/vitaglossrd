@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation, useSearchParams } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation, useSearchParams, Navigate } from 'react-router-dom'
 import { useEffect, lazy, Suspense } from 'react'
 
 // Scroll al inicio en cada cambio de ruta
@@ -19,7 +19,6 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import WhatsAppFloat from './components/WhatsAppFloat'
 import LeadPopup from './components/LeadPopup'
-import CartDrawer from './components/CartDrawer'
 import CookieConsent from './components/CookieConsent'
 // Home es la ruta inicial — eager para que el LCP no espere un chunk extra
 import Home from './pages/Home'
@@ -103,7 +102,7 @@ function Layout() {
           <Route path="/unete" element={<Unete />} />
           <Route path="/pelo-piel-unas" element={<LandingPeloPiel />} />
           <Route path="/empieza" element={<IniciaEnAmway />} />
-          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/checkout" element={<Navigate to="/" replace />} />
           <Route path="/orden-confirmada" element={<OrdenConfirmada />} />
           <Route path="/cert-pagadito" element={<CertPagadito />} />
           <Route
@@ -136,7 +135,6 @@ function Layout() {
       {!isDashboard && <Footer />}
       {!isDashboard && <WhatsAppFloat />}
       {!isDashboard && <LeadPopup />}
-      {!isDashboard && <CartDrawer />}
       <CookieConsent />
     </div>
   )

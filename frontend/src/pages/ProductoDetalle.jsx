@@ -5,7 +5,6 @@ import { productos } from '../data/productos'
 import { slugify } from '../utils/slugify'
 import ProductoCard from '../components/ProductoCard'
 import { useSEO } from '../hooks/useSEO'
-import { useCart } from '../context/CartContext'
 import ReviewsSection from '../components/ReviewsSection'
 import { usePrecios } from '../context/PreciosContext'
 
@@ -262,11 +261,9 @@ export default function ProductoDetalle() {
     }
   }, [foundById, navigate])
   const [imgActiva, setImgActiva] = useState(0)
-  const [agregado, setAgregado] = useState(false)
   const [qty, setQty] = useState(1)
   const [showStickyBar, setShowStickyBar] = useState(false)
   const buyRef = useRef(null)
-  const { addItem } = useCart()
 
   useEffect(() => {
     const el = buyRef.current
@@ -278,22 +275,6 @@ export default function ProductoDetalle() {
     obs.observe(el)
     return () => obs.disconnect()
   }, [producto?.id])
-
-  const handleAgregar = () => {
-    for (let i = 0; i < qty; i++) addItem(producto)
-    setAgregado(true)
-    setTimeout(() => setAgregado(false), 2000)
-    // Meta Pixel
-    if (typeof window.fbq === 'function') {
-      window.fbq('track', 'AddToCart', {
-        content_name: producto.nombre,
-        content_ids: [String(producto.id)],
-        content_type: 'product',
-        value: producto.precio,
-        currency: 'DOP',
-      })
-    }
-  }
 
   const SITE = 'https://www.vitaglossrd.com'
   useSEO({
@@ -674,22 +655,6 @@ export default function ProductoDetalle() {
               </svg>
               Pedir por WhatsApp
             </a>
-
-            {/* Btn carrito */}
-            <button
-              onClick={handleAgregar}
-              className={`w-full py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 mb-5 border ${
-                agregado
-                  ? 'border-green-500 text-green-600 bg-green-50'
-                  : 'border-gray-300 text-gray-700 hover:border-primary hover:text-primary bg-white'
-              }`}
-            >
-              {agregado ? (
-                <>✓ Agregado al pedido</>
-              ) : (
-                <><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg> Agregar al pedido</>
-              )}
-            </button>
 
             {/* Confianza */}
             <div className="border-t border-gray-100 pt-5 space-y-3">
