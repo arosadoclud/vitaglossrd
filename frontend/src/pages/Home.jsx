@@ -494,12 +494,6 @@ export default function Home() {
                   />
                 </div>
 
-                {/* Badge precio */}
-                <div className="animate-float-up absolute top-2 sm:top-4 right-0 sm:right-2 bg-white rounded-2xl px-3 sm:px-4 py-2 sm:py-3 shadow-2xl">
-                  <p className="text-xs text-gray-600 font-medium">Precio especial</p>
-                  <p className="text-primary font-black text-base sm:text-lg">RD${slidePrecio}</p>
-                </div>
-
                 {/* Badge stock */}
                 <div className="animate-float-down absolute bottom-2 sm:bottom-6 left-0 sm:left-2 bg-green-700 text-white rounded-2xl px-3 sm:px-4 py-2 sm:py-2.5 shadow-xl flex items-center gap-2">
                   <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
@@ -938,15 +932,7 @@ export default function Home() {
                       <CountdownTimer label="Oferta válida por:" />
                     </div>
                   </div>
-                  {/* Precio badge */}
-                  <div className="bg-white/10 border border-white/20 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 text-right backdrop-blur-sm self-start sm:self-auto">
-                    <p className="text-white/50 text-xs font-medium mb-0.5">Por separado</p>
-                    <p className="text-white/40 text-base line-through">RD$2,888</p>
-                    <p className="text-[#2EC4B6] font-black text-2xl">RD$2,700</p>
-                    <span className="inline-block bg-green-700 text-white text-xs font-bold px-2 py-0.5 rounded-full mt-1">
-                      Cliente ahorra RD$188
-                    </span>
-                  </div>
+
                 </div>
 
                 {/* Productos del kit */}
@@ -975,7 +961,6 @@ export default function Home() {
                         />
                       </div>
                       <p className="text-white text-xs font-semibold text-center leading-snug">{item.nombre}</p>
-                      <span className="text-[#2EC4B6] font-bold text-sm">RD${item.precio}</span>
                     </m.div>
                   ))}
                 </div>
