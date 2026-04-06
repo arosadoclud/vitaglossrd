@@ -2,6 +2,7 @@ import { m } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { combos } from '../data/combos'
+import { useAuth } from '../context/AuthContext'
 
 
 const categorias = ['Todos', 'Bucal', 'Inmunidad', 'Energía', 'Figura', 'Belleza', 'Articulaciones', 'Familia', 'Deportes', 'Hombre', 'Mujer', 'Antioxidante', 'Bienestar']
@@ -13,6 +14,7 @@ const fadeUp = {
 
 export default function Combos() {
   const [categoriaActiva, setCategoriaActiva] = useState('Todos')
+  const { user } = useAuth()
   const combosFiltrados = categoriaActiva === 'Todos' ? combos : combos.filter(c => c.categoria === categoriaActiva)
   const maxAhorro = Math.max(...combos.map(c => c.ahorro))
   const totalAhorro = combos.reduce((sum, c) => sum + c.ahorro, 0)
@@ -82,7 +84,7 @@ export default function Combos() {
 
       {/* Banner de ahorro */}
       <div className="bg-secondary text-white text-center py-2.5 text-sm font-semibold tracking-wide">
-        🔥 Combos con hasta <strong>16% de descuento</strong> · Ahorra hasta <strong>RD${maxAhorro.toLocaleString()}</strong> · Envío a todo el país
+        🔥 Combos con hasta <strong>16% de descuento</strong> · Envío a todo el país
       </div>
 
       {/* Filtros por categoría */}
@@ -163,25 +165,33 @@ export default function Combos() {
                           <p className="text-dark font-semibold text-sm leading-tight">{p.nombre}</p>
                           <p className="text-gray-400 text-xs">{p.cantidad}</p>
                         </div>
-                        <span className="text-primary font-bold text-sm flex-shrink-0">RD${p.precio.toLocaleString()}</span>
+                        {user && (
+                          <span className="text-primary font-bold text-sm flex-shrink-0">RD${p.precio.toLocaleString()}</span>
+                        )}
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* Precio */}
-                <div className="bg-gray-50 rounded-2xl p-4 mb-6 border border-gray-100 mt-auto">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-gray-400 text-sm">Precio normal</span>
-                    <span className="text-gray-300 line-through text-sm">RD${combo.precioNormal.toLocaleString()}</span>
+                {user ? (
+                  <div className="bg-gray-50 rounded-2xl p-4 mb-6 border border-gray-100 mt-auto">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-gray-400 text-sm">Precio normal</span>
+                      <span className="text-gray-300 line-through text-sm">RD${combo.precioNormal.toLocaleString()}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-2xl font-black text-primary">RD${combo.precioCombo.toLocaleString()}</span>
+                      <span className="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">
+                        Ahorras RD${combo.ahorro.toLocaleString()}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl font-black text-primary">RD${combo.precioCombo.toLocaleString()}</span>
-                    <span className="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">
-                      Ahorras RD${combo.ahorro.toLocaleString()}
-                    </span>
+                ) : (
+                  <div className="bg-gray-50 rounded-2xl p-4 mb-6 border border-gray-100 mt-auto">
+                    <p className="text-sm text-gray-400 italic">Inicia sesión para ver el precio</p>
                   </div>
-                </div>
+                )}
 
                 {/* Acciones */}
                 <div className="flex gap-3">
