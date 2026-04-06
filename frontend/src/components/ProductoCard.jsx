@@ -5,6 +5,7 @@ import { slugify } from '../utils/slugify'
 export default function ProductoCard({ producto }) {
   const stockBajo = producto.stockUnidades && producto.stockUnidades <= 5
   const { getPrecio } = usePrecios()
+  const livePrice = getPrecio(producto.id)
   const precio = livePrice?.precio ?? producto.precio
   const precioOriginal = livePrice?.precioOriginal ?? producto.precioOriginal
 
