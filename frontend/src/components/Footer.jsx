@@ -140,6 +140,8 @@ export default function Footer() {
             <span className="opacity-30">·</span>
             <Link to="/politica-editorial" className="hover:text-white transition-colors">Política Editorial</Link>
             <span className="opacity-30">·</span>
+            <a href="/mapa-del-sitio.html" className="hover:text-white transition-colors">Mapa del sitio</a>
+            <span className="opacity-30">·</span>
             <p>Distribuidor independiente Amway — No somos Amway Corp.</p>
           </div>
         </div>

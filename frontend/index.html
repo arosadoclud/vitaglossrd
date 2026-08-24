@@ -23,7 +23,8 @@
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="author" content="Andy Rosado — VitaGloss RD" />
     <link rel="author" href="https://www.vitaglossrd.com/sobre-nosotros" />
-    <link rel="canonical" href="https://www.vitaglossrd.com/" />
+    <!-- Canonical y hreflang se generan por ruta desde useSEO. Dejarlos fijos
+         aquí haría que todas las rutas de la SPA apunten incorrectamente al inicio. -->
     <!-- Google AdSense — la meta tag basta para la verificación de propiedad.
          El script se carga de forma diferida (init-adsense.js) para no bloquear render. -->
     <meta name="google-adsense-account" content="ca-pub-2971696184390995" />
@@ -50,11 +51,6 @@
          fbq() funciona de inmediato gracias a la cola interna; fbevents.js
          se descarga solo después de que el navegador queda inactivo (≥3 s). -->
     <script src="/init-fb.js" defer></script>
-
-    <!-- hreflang: contenido en español dominicano -->
-    <link rel="alternate" hreflang="es" href="https://www.vitaglossrd.com/" />
-    <link rel="alternate" hreflang="es-DO" href="https://www.vitaglossrd.com/" />
-    <link rel="alternate" hreflang="x-default" href="https://www.vitaglossrd.com/" />
 
     <!-- ── Schema.org: Organization + WebSite (sitewide authority + sitelinks) ── -->
     <script type="application/ld+json">
@@ -144,7 +140,7 @@
 
         <section aria-labelledby="confianza-vitagloss" style="padding:28px 0;border-top:1px solid #dfe8eb">
           <h2 id="confianza-vitagloss" style="font-size:30px;color:#08243a">Información clara y servicio responsable</h2>
-          <p>Nuestra política editorial exige distinguir hechos, opiniones y material oficial. Evitamos promesas de salud, resultados automáticos, presión comercial y testimonios que no puedan documentarse. Puedes conocer quién administra el proyecto en <a href="/sobre-nosotros">Sobre nosotros</a>, revisar la <a href="/politica-editorial">política editorial</a> y consultar las condiciones de <a href="/devoluciones">devoluciones</a>, <a href="/privacidad">privacidad</a> y <a href="/terminos">uso del sitio</a>.</p>
+          <p>Nuestra política editorial exige distinguir hechos, opiniones y material oficial. Evitamos promesas de salud, resultados automáticos, presión comercial y testimonios que no puedan documentarse. Puedes conocer quién administra el proyecto en <a href="/sobre-nosotros">Sobre nosotros</a>, revisar la <a href="/politica-editorial">política editorial</a> y consultar las condiciones de <a href="/devoluciones">devoluciones</a>, <a href="/privacidad">privacidad</a> y <a href="/terminos">uso del sitio</a>. El <a href="/mapa-del-sitio.html">mapa del sitio</a> reúne todas las páginas públicas.</p>
         </section>
       </main>
       <noscript><p style="max-width:1120px;margin:0 auto;padding:0 24px 32px;font-family:Arial,sans-serif">La navegación básica está disponible arriba. Activa JavaScript para utilizar el catálogo interactivo y las demás funciones de VitaGloss RD.</p></noscript>

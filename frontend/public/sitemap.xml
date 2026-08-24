@@ -49,6 +49,18 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.vitaglossrd.com/politica-editorial</loc>
+    <lastmod>2026-08-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.vitaglossrd.com/pelo-piel-unas</loc>
+    <lastmod>2026-08-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.vitaglossrd.com/privacidad</loc>
     <lastmod>2026-08-24</lastmod>
     <changefreq>yearly</changefreq>
@@ -67,22 +79,10 @@
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://www.vitaglossrd.com/politica-editorial</loc>
+    <loc>https://www.vitaglossrd.com/mapa-del-sitio.html</loc>
     <lastmod>2026-08-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://www.vitaglossrd.com/pelo-piel-unas</loc>
-    <lastmod>2026-08-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.vitaglossrd.com/empieza</loc>
-    <lastmod>2026-08-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://www.vitaglossrd.com/producto/pasta-dental-glister</loc>

@@ -25,6 +25,18 @@ function setLink(rel, href) {
   el.setAttribute('href', href)
 }
 
+// Helper: upsert de enlaces alternativos por idioma sin reutilizar el de otra ruta
+function setAlternate(hreflang, href) {
+  let el = document.querySelector(`link[rel="alternate"][hreflang="${hreflang}"]`)
+  if (!el) {
+    el = document.createElement('link')
+    el.setAttribute('rel', 'alternate')
+    el.setAttribute('hreflang', hreflang)
+    document.head.appendChild(el)
+  }
+  el.setAttribute('href', href)
+}
+
 /**
  * useSEO — inyecta todas las señales SEO críticas en el <head>
  * @param {string}   title             — Título de la página (sin sufijo de site)
@@ -57,6 +69,11 @@ export function useSEO({
 
     // ── Canonical ───────────────────────────────────────────────────────────
     setLink('canonical', resolvedUrl)
+
+    // ── Idioma y región: cada variante apunta a la URL canónica actual ──────
+    setAlternate('es', resolvedUrl)
+    setAlternate('es-DO', resolvedUrl)
+    setAlternate('x-default', resolvedUrl)
 
     // ── Meta description ────────────────────────────────────────────────────
     if (description) setMeta('name', 'description', description)
