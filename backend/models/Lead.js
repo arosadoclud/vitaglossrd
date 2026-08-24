@@ -48,6 +48,33 @@ const leadSchema = new mongoose.Schema({
     enum: ['cliente', 'vendedor', 'ambos', 'otro'],
     default: 'cliente',
   },
+  // Separa el origen comercial del estado oficial. Un contacto nunca se
+  // considera parte del equipo hasta que se confirme manualmente su registro.
+  relacion: {
+    type: String,
+    enum: ['prospecto_cliente', 'prospecto_vendedor', 'cliente', 'miembro_equipo'],
+    default: function defaultRelacion() {
+      return ['vendedor', 'ambos'].includes(this.tipoInteres) ? 'prospecto_vendedor' : 'prospecto_cliente'
+    },
+  },
+  etapaConversion: {
+    type: String,
+    enum: ['contacto', 'informacion', 'registro_iniciado', 'registro_completado', 'activo', 'inactivo', 'descartado'],
+    default: 'contacto',
+  },
+  registroOficial: {
+    confirmado: { type: Boolean, default: false },
+    fecha: { type: Date, default: null },
+    verificadoAt: { type: Date, default: null },
+  },
+  actividadEquipo: {
+    estado: {
+      type: String,
+      enum: ['no_aplica', 'sin_compra', 'activo', 'inactivo'],
+      default: 'no_aplica',
+    },
+    ultimaCompra: { type: Date, default: null },
+  },
   fechaContacto: {
     type: Date,
     default: Date.now,
@@ -110,5 +137,7 @@ leadSchema.index({ vendedor: 1, leido: 1 })
 leadSchema.index({ proximoSeguimiento: 1, estado: 1 })
 leadSchema.index({ telefono: 1, createdAt: -1 })
 leadSchema.index({ email: 1, createdAt: -1 })
+leadSchema.index({ relacion: 1, etapaConversion: 1, createdAt: -1 })
+leadSchema.index({ 'registroOficial.confirmado': 1, 'actividadEquipo.estado': 1 })
 
 module.exports = mongoose.model('Lead', leadSchema)

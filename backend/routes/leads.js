@@ -115,6 +115,7 @@ router.post('/public', publicLeadRateLimit, async (req, res) => {
       nota:            trim(nota, 500),
       origen:          allowedOrigins.includes(origen) ? origen : 'web',
       tipoInteres:     ['cliente', 'vendedor', 'ambos', 'otro'].includes(tipoInteres) ? tipoInteres : 'cliente',
+      relacion:        ['vendedor', 'ambos'].includes(tipoInteres) ? 'prospecto_vendedor' : 'prospecto_cliente',
       refCode:         trim(refCode, 80),
       ciudad:          trim(ciudad, 80),
       consentimientoContacto: consentimientoContacto === true,
@@ -188,7 +189,7 @@ router.patch('/mark-seen', async (req, res) => {
 // ── POST /api/leads — Crear lead ──────────────────────────────────────────
 router.post('/', async (req, res) => {
   try {
-    const { nombre, telefono, email, productoInteres, estado, nota, origen, tipoInteres, consentimientoContacto, proximoSeguimiento } = req.body
+    const { nombre, telefono, email, productoInteres, estado, nota, origen, tipoInteres, relacion, etapaConversion, consentimientoContacto, proximoSeguimiento } = req.body
     const lead = await Lead.create({
       vendedor: req.user._id,
       nombre,
@@ -199,6 +200,8 @@ router.post('/', async (req, res) => {
       nota,
       origen,
       tipoInteres,
+      relacion: relacion || (['vendedor', 'ambos'].includes(tipoInteres) ? 'prospecto_vendedor' : 'prospecto_cliente'),
+      etapaConversion: etapaConversion || 'contacto',
       consentimientoContacto: consentimientoContacto === true,
       consentimientoFecha: consentimientoContacto === true ? new Date() : null,
       leido: true,
@@ -222,7 +225,7 @@ router.patch('/:id', async (req, res) => {
     if (req.user.rol !== 'admin' && (!lead.vendedor || lead.vendedor.toString() !== req.user._id.toString())) {
       return res.status(403).json({ error: 'Sin permiso.' })
     }
-    const { estado, nota, nombre, telefono, email, productoInteres, origen, vendedor, tipoInteres, leido, ultimoContacto, proximoSeguimiento, consentimientoContacto } = req.body
+    const { estado, nota, nombre, telefono, email, productoInteres, origen, vendedor, tipoInteres, relacion, etapaConversion, registroOficial, actividadEquipo, leido, ultimoContacto, proximoSeguimiento, consentimientoContacto } = req.body
     if (estado) lead.estado = estado
     if (nota !== undefined) lead.nota = nota
     if (nombre) lead.nombre = nombre
@@ -231,6 +234,24 @@ router.patch('/:id', async (req, res) => {
     if (productoInteres !== undefined) lead.productoInteres = productoInteres
     if (origen !== undefined) lead.origen = origen
     if (tipoInteres !== undefined) lead.tipoInteres = tipoInteres
+    if (relacion !== undefined) lead.relacion = relacion
+    if (etapaConversion !== undefined) lead.etapaConversion = etapaConversion
+    if (registroOficial !== undefined) {
+      const confirmado = registroOficial?.confirmado === true
+      lead.registroOficial.confirmado = confirmado
+      lead.registroOficial.fecha = confirmado ? (registroOficial.fecha || lead.registroOficial.fecha || new Date()) : null
+      lead.registroOficial.verificadoAt = confirmado ? new Date() : null
+      if (confirmado) lead.relacion = 'miembro_equipo'
+      if (!confirmado && lead.relacion === 'miembro_equipo') lead.relacion = 'prospecto_vendedor'
+    }
+    if (actividadEquipo !== undefined) {
+      if (actividadEquipo.estado !== undefined) lead.actividadEquipo.estado = actividadEquipo.estado
+      if (actividadEquipo.ultimaCompra !== undefined) lead.actividadEquipo.ultimaCompra = actividadEquipo.ultimaCompra || null
+    }
+    if (lead.actividadEquipo?.estado === 'activo' && !lead.registroOficial?.confirmado) {
+      return res.status(400).json({ error: 'Confirma primero el registro oficial antes de marcar un miembro como activo.' })
+    }
+    if (lead.registroOficial?.confirmado && lead.actividadEquipo?.estado === 'activo') lead.etapaConversion = 'activo'
     if (leido !== undefined) { lead.leido = Boolean(leido); lead.leidoAt = lead.leido ? new Date() : null }
     if (ultimoContacto !== undefined) lead.ultimoContacto = ultimoContacto || null
     if (proximoSeguimiento !== undefined) lead.proximoSeguimiento = proximoSeguimiento || null

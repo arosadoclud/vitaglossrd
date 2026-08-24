@@ -47,6 +47,11 @@ router.get('/', async (req, res) => {
       proximoSeguimiento: { $ne: null, $lt: ahora },
       estado: { $nin: ['cerrado', 'perdido'] },
     })
+    const prospectosVendedores = await Lead.countDocuments({ ...vendedorFilter, relacion: 'prospecto_vendedor' })
+    const registrosIniciados = await Lead.countDocuments({ ...vendedorFilter, etapaConversion: 'registro_iniciado' })
+    const miembrosConfirmados = await Lead.countDocuments({ ...vendedorFilter, 'registroOficial.confirmado': true })
+    const miembrosActivos = await Lead.countDocuments({ ...vendedorFilter, 'registroOficial.confirmado': true, 'actividadEquipo.estado': 'activo' })
+    const clientesConfirmados = await Lead.countDocuments({ ...vendedorFilter, relacion: 'cliente' })
 
     // Últimas 5 ventas
     const ultimasVentas = await Sale.find(vendedorFilter)
@@ -99,6 +104,11 @@ router.get('/', async (req, res) => {
         seguimientosVencidos,
         cerrados: leadsCerrados,
         tasaConversion: totalLeads > 0 ? ((leadsCerrados / totalLeads) * 100).toFixed(1) : '0.0',
+        prospectosVendedores,
+        registrosIniciados,
+        miembrosConfirmados,
+        miembrosActivos,
+        clientesConfirmados,
       },
       ultimos: {
         ventas: ultimasVentas,

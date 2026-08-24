@@ -10,6 +10,21 @@ import './Dashboard.css'
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 const ESTADO_LEAD = ['nuevo', 'contactado', 'interesado', 'cerrado', 'perdido']
+const ETAPA_CONVERSION = [
+  ['contacto', 'Contacto recibido'],
+  ['informacion', 'Información solicitada'],
+  ['registro_iniciado', 'Registro oficial iniciado'],
+  ['registro_completado', 'Registro oficial completado'],
+  ['activo', 'Miembro activo'],
+  ['inactivo', 'Miembro inactivo'],
+  ['descartado', 'Descartado'],
+]
+const RELACIONES = [
+  ['prospecto_cliente', 'Prospecto de productos'],
+  ['prospecto_vendedor', 'Prospecto de negocio'],
+  ['cliente', 'Cliente confirmado'],
+  ['miembro_equipo', 'Miembro oficial del equipo'],
+]
 const ESTADO_VENTA = ['pendiente', 'pagado', 'enviado', 'entregado', 'cancelado']
 const METODO_PAGO = ['transferencia', 'efectivo', 'tarjeta', 'pago_movil', 'otro']
 
@@ -60,8 +75,8 @@ function waMessageForEstado(order) {
 
 const TABS_ALL = [
   { label: 'Resumen', icon: 'overview' },
-  { label: 'Leads', icon: 'users' },
-  { label: 'Ventas', icon: 'sales' },
+  { label: 'Prospectos y equipo', icon: 'users' },
+  { label: 'My Shop', icon: 'sales' },
   { label: 'Plantillas', icon: 'message' },
   { label: 'Pedidos web', icon: 'orders' },
   { label: 'Mi perfil', icon: 'profile' },
@@ -185,11 +200,16 @@ function LeadDetailModal({ lead, setLead, onClose, onSave, onContact, onDelete, 
             <label>Teléfono<input value={lead.telefono || ''} onChange={event => setLead(current => ({ ...current, telefono: event.target.value }))} /></label>
             <label>Correo<input type="email" value={lead.email || ''} onChange={event => setLead(current => ({ ...current, email: event.target.value }))} /></label>
             <label>Tipo de interés<select value={lead.tipoInteres || 'cliente'} onChange={event => setLead(current => ({ ...current, tipoInteres: event.target.value }))}><option value="cliente">Productos</option><option value="vendedor">Negocio independiente</option><option value="ambos">Ambos</option><option value="otro">Otro</option></select></label>
+            <label>Clasificación<select value={lead.relacion || (lead.tipoInteres === 'vendedor' ? 'prospecto_vendedor' : 'prospecto_cliente')} onChange={event => setLead(current => ({ ...current, relacion: event.target.value }))}>{RELACIONES.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+            <label>Etapa de conversión<select value={lead.etapaConversion || 'contacto'} onChange={event => setLead(current => ({ ...current, etapaConversion: event.target.value }))}>{ETAPA_CONVERSION.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
             <label>Estado<select value={lead.estado || 'nuevo'} onChange={event => setLead(current => ({ ...current, estado: event.target.value }))}>{ESTADO_LEAD.map(estado => <option key={estado} value={estado}>{estado}</option>)}</select></label>
             <label>Próximo seguimiento<input type="datetime-local" value={lead.proximoSeguimiento || ''} onChange={event => setLead(current => ({ ...current, proximoSeguimiento: event.target.value }))} /></label>
             {isAdmin && <label>Responsable<select value={lead.vendedor || ''} onChange={event => setLead(current => ({ ...current, vendedor: event.target.value }))}><option value="">Sin asignar</option>{teamMembers.map(member => <option key={member._id} value={member._id}>{member.nombre}</option>)}</select></label>}
             <label>Interés específico<input value={lead.productoInteres || ''} onChange={event => setLead(current => ({ ...current, productoInteres: event.target.value }))} /></label>
+            <label>Actividad en equipo<select value={lead.actividadEquipo?.estado || 'no_aplica'} onChange={event => setLead(current => ({ ...current, actividadEquipo: { ...(current.actividadEquipo || {}), estado: event.target.value } }))}><option value="no_aplica">No aplica / no confirmado</option><option value="sin_compra">Sin compras registradas</option><option value="activo">Activo</option><option value="inactivo">Inactivo</option></select></label>
+            <label>Última compra conocida<input type="date" value={lead.actividadEquipo?.ultimaCompra ? new Date(lead.actividadEquipo.ultimaCompra).toISOString().slice(0, 10) : ''} onChange={event => setLead(current => ({ ...current, actividadEquipo: { ...(current.actividadEquipo || {}), ultimaCompra: event.target.value } }))} /></label>
           </div>
+          <label className="vg-official-check"><span><input type="checkbox" checked={lead.registroOficial?.confirmado === true} onChange={event => setLead(current => ({ ...current, registroOficial: { ...(current.registroOficial || {}), confirmado: event.target.checked }, relacion: event.target.checked ? 'miembro_equipo' : (current.relacion === 'miembro_equipo' ? 'prospecto_vendedor' : current.relacion), actividadEquipo: event.target.checked ? current.actividadEquipo : { ...(current.actividadEquipo || {}), estado: 'no_aplica' } }))} /> Confirmé manualmente que terminó el registro oficial</span><small>Márcalo solamente después de comprobarlo en el portal oficial. Un lead por sí solo no pertenece a tu línea.</small></label>
           <label>Notas<textarea rows={4} value={lead.nota || ''} onChange={event => setLead(current => ({ ...current, nota: event.target.value }))} /></label>
           <div className="vg-lead-source-grid">
             <div><span>Origen</span><strong>{lead.origen || 'web'}</strong></div>
@@ -227,7 +247,7 @@ export default function Dashboard() {
   // leads
   const [leads, setLeads] = useState([])
   const [loadingLeads, setLoadingLeads] = useState(false)
-  const [leadForm, setLeadForm] = useState({ nombre: '', telefono: '', email: '', productoInteres: '', nota: '', origen: 'whatsapp', tipoInteres: 'cliente', consentimientoContacto: false, proximoSeguimiento: '' })
+  const [leadForm, setLeadForm] = useState({ nombre: '', telefono: '', email: '', productoInteres: '', nota: '', origen: 'whatsapp', tipoInteres: 'cliente', relacion: 'prospecto_cliente', etapaConversion: 'contacto', consentimientoContacto: false, proximoSeguimiento: '' })
   const [leadFormOpen, setLeadFormOpen] = useState(false)
   const [savingLead, setSavingLead] = useState(false)
   const [leadQuery, setLeadQuery] = useState('')
@@ -330,8 +350,8 @@ export default function Dashboard() {
     URL.revokeObjectURL(url)
   }
   const exportLeadsCSV = () => {
-    const h = ['Nombre', 'Teléfono', 'Producto', 'Estado', 'Origen', 'Nota', 'Fecha']
-    const r = leads.map(l => [l.nombre, l.telefono, l.productoInteres, l.estado, l.origen, l.nota, new Date(l.createdAt).toLocaleDateString('es-DO')])
+    const h = ['Nombre', 'Teléfono', 'Producto', 'Clasificación', 'Etapa de conversión', 'Registro oficial confirmado', 'Actividad', 'Estado de seguimiento', 'Origen', 'Nota', 'Fecha']
+    const r = leads.map(l => [l.nombre, l.telefono, l.productoInteres, l.relacion || 'sin_clasificar', l.etapaConversion || 'contacto', l.registroOficial?.confirmado ? 'Sí' : 'No', l.actividadEquipo?.estado || 'no_aplica', l.estado, l.origen, l.nota, new Date(l.createdAt).toLocaleDateString('es-DO')])
     downloadCSV(toCSV(h, r), `leads-${new Date().toISOString().split('T')[0]}.csv`)
   }
   const exportSalesCSV = () => {
@@ -398,7 +418,7 @@ export default function Dashboard() {
     try {
       await api.createLead(leadForm)
       setLeadFormOpen(false)
-      setLeadForm({ nombre: '', telefono: '', email: '', productoInteres: '', nota: '', origen: 'whatsapp', tipoInteres: 'cliente', consentimientoContacto: false, proximoSeguimiento: '' })
+      setLeadForm({ nombre: '', telefono: '', email: '', productoInteres: '', nota: '', origen: 'whatsapp', tipoInteres: 'cliente', relacion: 'prospecto_cliente', etapaConversion: 'contacto', consentimientoContacto: false, proximoSeguimiento: '' })
       loadLeads()
     } catch (err) { alert(err.message) }
     finally { setSavingLead(false) }
@@ -420,6 +440,10 @@ export default function Dashboard() {
   const openLeadDetail = async (lead) => {
     setLeadDetail({
       ...lead,
+      relacion: lead.relacion || (['vendedor', 'ambos'].includes(lead.tipoInteres) ? 'prospecto_vendedor' : 'prospecto_cliente'),
+      etapaConversion: lead.etapaConversion || 'contacto',
+      registroOficial: lead.registroOficial || { confirmado: false },
+      actividadEquipo: lead.actividadEquipo || { estado: 'no_aplica', ultimaCompra: null },
       vendedor: lead.vendedor?._id || lead.vendedor || '',
       proximoSeguimiento: lead.proximoSeguimiento ? new Date(lead.proximoSeguimiento).toISOString().slice(0, 16) : '',
     })
@@ -445,6 +469,10 @@ export default function Dashboard() {
         nota: leadDetail.nota,
         estado: leadDetail.estado,
         tipoInteres: leadDetail.tipoInteres,
+        relacion: leadDetail.relacion,
+        etapaConversion: leadDetail.etapaConversion,
+        registroOficial: leadDetail.registroOficial,
+        actividadEquipo: leadDetail.actividadEquipo,
         proximoSeguimiento: leadDetail.proximoSeguimiento || null,
         vendedor: leadDetail.vendedor || null,
         leido: true,
@@ -532,6 +560,10 @@ export default function Dashboard() {
     const matchesFilter = leadFilter === 'todos'
       || (leadFilter === 'atencion' && needsLeadAttention(lead))
       || (leadFilter === 'sin-asignar' && !lead.vendedor)
+      || (leadFilter === 'prospectos-vendedor' && lead.relacion === 'prospecto_vendedor')
+      || (leadFilter === 'miembros-equipo' && lead.registroOficial?.confirmado === true)
+      || (leadFilter === 'miembros-activos' && lead.registroOficial?.confirmado === true && lead.actividadEquipo?.estado === 'activo')
+      || (leadFilter === 'clientes' && lead.relacion === 'cliente')
       || lead.estado === leadFilter
     return matchesQuery && matchesFilter
   })
@@ -758,8 +790,8 @@ export default function Dashboard() {
             <div className="flex flex-wrap justify-between items-end gap-4 mb-5">
               <div>
                 <p className="vg-eyebrow !text-secondary mb-2">Relaciones comerciales</p>
-                <h2 className="text-3xl font-black text-primary tracking-tight">Centro de leads</h2>
-                <p className="text-gray-500 text-sm mt-1">Prioriza cada contacto, registra el seguimiento y conoce qué campaña funcionó.</p>
+                <h2 className="text-3xl font-black text-primary tracking-tight">Prospectos, clientes y equipo</h2>
+                <p className="text-gray-500 text-sm mt-1">Separa contactos de campaña, clientes reales y registros oficiales confirmados.</p>
               </div>
               <div className="flex items-center gap-2 flex-wrap">
                 {leads.length > 0 && (
@@ -779,7 +811,7 @@ export default function Dashboard() {
                 ['Por atender', leads.filter(needsLeadAttention).length, 'Requieren una acción'],
                 ['Sin revisar', unreadLeads, 'Entraron recientemente'],
                 ['Seguimiento vencido', overdueLeads, 'Fecha ya cumplida'],
-                ['Conversión', `${stats?.leads?.tasaConversion || 0}%`, `${leads.filter(l => l.estado === 'cerrado').length} cerrados`],
+                ['Equipo confirmado', stats?.leads?.miembrosConfirmados || leads.filter(l => l.registroOficial?.confirmado).length, `${stats?.leads?.miembrosActivos || 0} activos`],
               ].map(([label, value, hint], index) => (
                 <div key={label} className={`vg-lead-metric ${index === 0 && Number(value) > 0 ? 'is-priority' : ''}`}>
                   <p>{label}</p><strong>{value}</strong><span>{hint}</span>
@@ -800,6 +832,10 @@ export default function Dashboard() {
               <select value={leadFilter} onChange={e => setLeadFilter(e.target.value)} aria-label="Filtrar leads">
                 <option value="atencion">Requieren atención</option>
                 <option value="todos">Todos los leads</option>
+                <option value="prospectos-vendedor">Prospectos de negocio</option>
+                <option value="miembros-equipo">Equipo confirmado</option>
+                <option value="miembros-activos">Equipo activo</option>
+                <option value="clientes">Clientes confirmados</option>
                 <option value="nuevo">Nuevos</option>
                 <option value="contactado">Contactados</option>
                 <option value="interesado">Interesados</option>
@@ -828,12 +864,16 @@ export default function Dashboard() {
                       className="border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-primary" />
                     <input placeholder="Producto de interés" value={leadForm.productoInteres} onChange={e => setLeadForm(f => ({ ...f, productoInteres: e.target.value }))}
                       className="border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-primary" />
-                    <select value={leadForm.tipoInteres} onChange={e => setLeadForm(f => ({ ...f, tipoInteres: e.target.value }))}
+                    <select value={leadForm.tipoInteres} onChange={e => setLeadForm(f => ({ ...f, tipoInteres: e.target.value, relacion: e.target.value === 'vendedor' ? 'prospecto_vendedor' : f.relacion }))}
                       className="border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-primary">
                       <option value="cliente">Interés en productos</option>
                       <option value="vendedor">Interés en negocio independiente</option>
                       <option value="ambos">Productos y negocio</option>
                       <option value="otro">Otro interés</option>
+                    </select>
+                    <select value={leadForm.relacion} onChange={e => setLeadForm(f => ({ ...f, relacion: e.target.value }))}
+                      className="border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-primary">
+                      {RELACIONES.slice(0, 2).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
                     </select>
                     <select value={leadForm.origen} onChange={e => setLeadForm(f => ({ ...f, origen: e.target.value }))}
                       className="border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-primary">
@@ -896,7 +936,8 @@ export default function Dashboard() {
                         <div className="space-y-2 min-h-[60px]">
                           {colLeads.map(l => (
                             <button type="button" key={l._id} onClick={() => openLeadDetail(l)} className={`w-full text-left bg-white rounded-xl p-3 border shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${!l.leido ? 'border-secondary/50' : 'border-white'}`}>
-                              <div className="flex items-center gap-2"><p className="font-semibold text-gray-800 text-sm leading-tight">{l.nombre}</p>{!l.leido && <span className="w-2 h-2 bg-secondary rounded-full" title="Sin revisar" />}</div>
+                        <div className="flex items-center gap-2"><p className="font-semibold text-gray-800 text-sm leading-tight">{l.nombre}</p>{!l.leido && <span className="w-2 h-2 bg-secondary rounded-full" title="Sin revisar" />}</div>
+                              <span className="vg-relation-chip">{RELACIONES.find(([value]) => value === l.relacion)?.[1] || 'Prospecto'}</span>
                               {l.productoInteres && <p className="text-gray-400 text-xs mb-2 truncate">{l.productoInteres}</p>}
                               <div className="flex items-center justify-between gap-2 mt-3"><span className="text-[10px] text-gray-400 capitalize">{l.campana?.name || l.origen}</span><span className="text-[10px] font-bold text-primary">Abrir ficha</span></div>
                             </button>
@@ -926,7 +967,7 @@ export default function Dashboard() {
                         )}
                         {l.email && <p className="text-gray-400 text-xs truncate max-w-[180px]">{l.email}</p>}
                       </div>
-                      <div><p className="text-gray-600 text-xs">{l.productoInteres || '—'}</p><span className="text-[10px] text-gray-400 capitalize">{l.tipoInteres || 'cliente'}</span></div>
+                      <div><p className="text-gray-600 text-xs">{l.productoInteres || '—'}</p><span className="vg-relation-chip">{RELACIONES.find(([value]) => value === l.relacion)?.[1] || (l.tipoInteres === 'vendedor' ? 'Prospecto de negocio' : 'Prospecto de productos')}</span></div>
                       <div><span className="text-gray-500 text-xs capitalize">{l.campana?.name || l.origen}</span>{l.proximoSeguimiento && <p className={`text-[10px] mt-1 ${new Date(l.proximoSeguimiento).getTime() < now ? 'text-red-600 font-bold' : 'text-gray-400'}`}>{new Date(l.proximoSeguimiento).toLocaleString('es-DO', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}</p>}</div>
                       <select value={l.estado} onChange={e => changeLeadEstado(l._id, e.target.value)} aria-label="Cambiar estado del lead"
                         className={`text-xs font-bold px-2 py-1.5 rounded-xl border-0 cursor-pointer focus:ring-2 focus:ring-primary/20 ${BADGE_LEAD[l.estado] || 'bg-gray-100'}`}>
@@ -970,11 +1011,11 @@ export default function Dashboard() {
           </Section>
         )}
 
-        {/* ── TAB 2: VENTAS ──────────────────────────────────────────────── */}
+        {/* ── TAB 2: MY SHOP ─────────────────────────────────────────────── */}
         {tab === 2 && (
           <Section>
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-black text-primary">Registro de Ventas</h2>
+            <div className="flex justify-between items-start gap-4 mb-6 flex-wrap">
+              <div><p className="vg-eyebrow !text-secondary mb-2">Clientes y recompra</p><h2 className="text-3xl font-black text-primary">My Shop</h2><p className="text-gray-500 text-sm mt-1">Registra ventas reales a clientes y detecta oportunidades de seguimiento.</p></div>
               <div className="flex items-center gap-2">
                 {sales.length > 0 && (
                   <button onClick={exportSalesCSV} className="border border-gray-200 text-gray-500 hover:bg-gray-50 text-xs font-semibold px-3 py-2 rounded-xl flex items-center gap-1.5 transition-all">
@@ -987,6 +1028,27 @@ export default function Dashboard() {
                 </button>
               </div>
             </div>
+
+            {(() => {
+              const customerMap = new Map()
+              sales.filter(sale => sale.estado !== 'cancelado').forEach(sale => {
+                const key = (sale.telefono || sale.cliente || '').trim().toLowerCase()
+                const current = customerMap.get(key) || { compras: 0, total: 0 }
+                current.compras += 1
+                current.total += sale.total || 0
+                customerMap.set(key, current)
+              })
+              const total = sales.filter(sale => sale.estado !== 'cancelado').reduce((sum, sale) => sum + (sale.total || 0), 0)
+              const recurrentes = [...customerMap.values()].filter(customer => customer.compras > 1).length
+              return <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">{[
+                ['Clientes', customerMap.size, 'Compradores identificados'],
+                ['Ventas registradas', sales.length, 'Historial de My Shop'],
+                ['Ingresos', `RD$ ${total.toLocaleString()}`, 'Sin ventas canceladas'],
+                ['Clientes recurrentes', recurrentes, 'Más de una compra'],
+              ].map(([label, value, hint]) => <div key={label} className="vg-lead-metric"><p>{label}</p><strong>{value}</strong><span>{hint}</span></div>)}</div>
+            })()}
+
+            <div className="vg-shop-note"><DashboardIcon name="orders" className="h-5 w-5" /><div><strong>Separación comercial activa</strong><p>Las ventas de esta sección corresponden a clientes. Los candidatos y miembros del equipo se administran en “Prospectos y equipo”.</p></div></div>
 
             {/* Sale form */}
             <AnimatePresence>
