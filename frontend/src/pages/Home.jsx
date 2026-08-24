@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { AnimatePresence, m, useReducedMotion } from 'framer-motion'
 import { productos } from '../data/productos'
 import ProductoCard from '../components/ProductoCard'
 import { useSEO } from '../hooks/useSEO'
@@ -20,7 +21,7 @@ const heroSlides = [
   },
   {
     eyebrow: 'Nutrición y bienestar',
-    title: 'Complementa tu alimentación,',
+    title: 'Tu nutrición diaria,',
     accent: 'con información clara.',
     description: 'Revisa la presentación, los ingredientes y el uso indicado de Vitamina C Nutrilite™.',
     image: '/109741CO-690px-01.webp',
@@ -63,15 +64,33 @@ function Icon({ name, className = 'w-5 h-5' }) {
 export default function Home() {
   const [activeSlide, setActiveSlide] = useState(0)
   const [carouselPaused, setCarouselPaused] = useState(false)
+  const [slideDirection, setSlideDirection] = useState(1)
+  const prefersReducedMotion = useReducedMotion()
 
   useEffect(() => {
-    if (carouselPaused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+    if (carouselPaused || prefersReducedMotion) return undefined
     const timer = window.setInterval(
-      () => setActiveSlide(current => (current + 1) % heroSlides.length),
+      () => {
+        setSlideDirection(1)
+        setActiveSlide(current => (current + 1) % heroSlides.length)
+      },
       7000,
     )
     return () => window.clearInterval(timer)
-  }, [carouselPaused])
+  }, [carouselPaused, prefersReducedMotion])
+
+  useEffect(() => {
+    const preload = () => heroSlides.slice(1).forEach(item => {
+      const image = new Image()
+      image.src = item.image400
+    })
+    const idleId = window.requestIdleCallback?.(preload, { timeout: 2500 })
+    if (!idleId) {
+      const timeoutId = window.setTimeout(preload, 1200)
+      return () => window.clearTimeout(timeoutId)
+    }
+    return () => window.cancelIdleCallback?.(idleId)
+  }, [])
 
   useSEO({
     title: 'Productos de bienestar y cuidado personal en República Dominicana',
@@ -83,8 +102,11 @@ export default function Home() {
   const featured = productos.slice(0, 4)
   const slide = heroSlides[activeSlide]
 
-  const selectSlide = index => {
-    setActiveSlide((index + heroSlides.length) % heroSlides.length)
+  const selectSlide = (index, direction = index > activeSlide ? 1 : -1) => {
+    const nextSlide = (index + heroSlides.length) % heroSlides.length
+    if (nextSlide === activeSlide) return
+    setSlideDirection(direction)
+    setActiveSlide(nextSlide)
   }
 
   return (
@@ -100,23 +122,53 @@ export default function Home() {
       >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_40%,rgba(46,196,182,.22),transparent_34%)]" />
         <div className="relative max-w-7xl mx-auto px-5 sm:px-8 grid lg:grid-cols-[1.05fr_.95fr] items-center gap-12 lg:gap-6">
-          <div key={`copy-${slide.href}`} className="max-w-2xl" aria-live="polite" aria-atomic="true">
-            <p className="text-secondary text-xs sm:text-sm font-bold uppercase tracking-[.22em] mb-5">{slide.eyebrow}</p>
-            <h1 className="text-white text-4xl sm:text-6xl lg:text-7xl font-black tracking-[-.045em] leading-[1.02] mb-6">{slide.title} <span className="text-secondary">{slide.accent}</span></h1>
-            <p className="text-white/70 text-base sm:text-xl leading-relaxed max-w-xl mb-9">{slide.description}</p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link to={slide.href} className="inline-flex items-center justify-center gap-3 bg-secondary hover:bg-[#22b5a8] text-[#07192f] font-extrabold px-7 py-4 rounded-xl transition-colors">{slide.cta} <Icon name="arrow" /></Link>
-              <a href={WA_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 border border-white/25 hover:border-white/50 hover:bg-white/5 text-white font-bold px-7 py-4 rounded-xl transition-colors">Recibir orientación</a>
-            </div>
-            <p className="mt-6 text-white/45 text-sm">Atención de un Empresario Independiente de Amway en República Dominicana.</p>
+          <div className="max-w-2xl min-h-[390px] sm:min-h-[410px] flex items-center" aria-live="polite" aria-atomic="true">
+            <AnimatePresence mode="wait" initial={false} custom={slideDirection}>
+              <m.div
+                key={`copy-${slide.href}`}
+                custom={slideDirection}
+                initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, x: slideDirection * 28 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, x: slideDirection * -20 }}
+                transition={{ duration: prefersReducedMotion ? 0 : 0.52, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <p className="text-secondary text-xs sm:text-sm font-bold uppercase tracking-[.22em] mb-5">{slide.eyebrow}</p>
+                <h1 className="text-white text-4xl sm:text-6xl lg:text-7xl font-black tracking-[-.045em] leading-[1.02] mb-6">{slide.title} <span className="text-secondary">{slide.accent}</span></h1>
+                <p className="text-white/70 text-base sm:text-xl leading-relaxed max-w-xl mb-9">{slide.description}</p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Link to={slide.href} className="inline-flex items-center justify-center gap-3 bg-secondary hover:bg-[#22b5a8] text-[#07192f] font-extrabold px-7 py-4 rounded-xl transition-colors">{slide.cta} <Icon name="arrow" /></Link>
+                  <a href={WA_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 border border-white/25 hover:border-white/50 hover:bg-white/5 text-white font-bold px-7 py-4 rounded-xl transition-colors">Recibir orientación</a>
+                </div>
+                <p className="mt-6 text-white/45 text-sm">Atención de un Empresario Independiente de Amway en República Dominicana.</p>
+              </m.div>
+            </AnimatePresence>
           </div>
           <div className="relative min-h-[360px] sm:min-h-[470px] flex items-center justify-center">
             <div className="absolute w-[330px] h-[330px] sm:w-[450px] sm:h-[450px] rounded-full border border-secondary/30 bg-secondary/5" />
             <div className="absolute w-[250px] h-[250px] sm:w-[340px] sm:h-[340px] rounded-full bg-secondary/10 blur-2xl" />
-            <img key={slide.image} src={slide.image} srcSet={`${slide.image400} 400w, ${slide.image} 690w`} sizes="(max-width: 640px) 260px, 410px" alt={slide.imageAlt} width="420" height="520" loading={activeSlide === 0 ? 'eager' : 'lazy'} fetchPriority={activeSlide === 0 ? 'high' : 'auto'} decoding="async" className="relative z-10 w-auto h-[310px] sm:h-[440px] object-contain drop-shadow-[0_35px_35px_rgba(0,0,0,.35)]" />
+            <AnimatePresence initial={false} custom={slideDirection}>
+              <m.img
+                key={slide.image}
+                src={slide.image}
+                srcSet={`${slide.image400} 400w, ${slide.image} 690w`}
+                sizes="(max-width: 640px) 260px, 410px"
+                alt={slide.imageAlt}
+                width="420"
+                height="520"
+                loading={activeSlide === 0 ? 'eager' : 'lazy'}
+                fetchPriority={activeSlide === 0 ? 'high' : 'auto'}
+                decoding="async"
+                custom={slideDirection}
+                initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, x: slideDirection * 42, scale: 0.96 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: slideDirection * -34, scale: 1.025 }}
+                transition={{ duration: prefersReducedMotion ? 0 : 0.68, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute z-10 inset-0 m-auto w-auto h-[310px] sm:h-[440px] object-contain drop-shadow-[0_35px_35px_rgba(0,0,0,.35)]"
+              />
+            </AnimatePresence>
 
-            <div className="absolute z-20 inset-x-0 bottom-0 flex items-center justify-center gap-3" aria-label="Seleccionar producto destacado">
-              <button type="button" onClick={() => selectSlide(activeSlide - 1)} className="w-10 h-10 rounded-full border border-white/25 bg-[#07192f]/80 text-white hover:border-secondary hover:text-secondary transition-colors" aria-label="Producto anterior">‹</button>
+            <div className="absolute z-20 bottom-0 flex items-center justify-center gap-3 rounded-full border border-white/10 bg-[#07192f]/65 px-2.5 py-2 backdrop-blur-md shadow-lg" aria-label="Seleccionar producto destacado">
+              <button type="button" onClick={() => selectSlide(activeSlide - 1, -1)} className="w-8 h-8 rounded-full text-white/75 hover:bg-white/10 hover:text-secondary transition-colors text-xl leading-none" aria-label="Producto anterior">‹</button>
               <div className="flex gap-2">
                 {heroSlides.map((item, index) => (
                   <button
@@ -129,7 +181,7 @@ export default function Home() {
                   />
                 ))}
               </div>
-              <button type="button" onClick={() => selectSlide(activeSlide + 1)} className="w-10 h-10 rounded-full border border-white/25 bg-[#07192f]/80 text-white hover:border-secondary hover:text-secondary transition-colors" aria-label="Producto siguiente">›</button>
+              <button type="button" onClick={() => selectSlide(activeSlide + 1, 1)} className="w-8 h-8 rounded-full text-white/75 hover:bg-white/10 hover:text-secondary transition-colors text-xl leading-none" aria-label="Producto siguiente">›</button>
             </div>
           </div>
         </div>
