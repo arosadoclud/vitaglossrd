@@ -67,13 +67,24 @@ async function sendPasswordResetEmail({ to, resetUrl }) {
 
   const transporter = mailTransport()
   if (!transporter) throw new Error('No hay proveedor de correo configurado')
-  await transporter.sendMail({
-    from: `"VitaGloss RD" <${process.env.SMTP_USER}>`,
-    to,
-    subject,
-    text,
-    html,
-  })
+  let timeout
+  try {
+    await Promise.race([
+      transporter.sendMail({
+        from: `"VitaGloss RD" <${process.env.SMTP_USER}>`,
+        to,
+        subject,
+        text,
+        html,
+      }),
+      new Promise((_, reject) => {
+        timeout = setTimeout(() => reject(new Error('El proveedor SMTP no respondió dentro de 8 segundos')), 8000)
+      }),
+    ])
+  } finally {
+    clearTimeout(timeout)
+    transporter.close()
+  }
 }
 
 // ── POST /api/auth/register ───────────────────────────────────────────────
