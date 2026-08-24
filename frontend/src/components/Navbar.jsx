@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion as Motion, AnimatePresence } from 'framer-motion'
+import { MYSHOP_URL } from '../config/myshop'
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -100,13 +101,13 @@ export default function Navbar() {
               Acceso equipo
             </Link>
             <a
-              href="https://wa.me/18492763532?text=Hola!%20Quiero%20conocer%20los%20productos%20de%20VitaGloss%20RD"
+              href={MYSHOP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Pedir ahora por WhatsApp"
-                  className="bg-green-700 hover:bg-green-800 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 flex items-center gap-2 shadow-md shadow-green-200 hover:shadow-lg hover:scale-105"
+                  aria-label="Comprar en MyShop de VitaGloss RD"
+                  className="bg-secondary hover:bg-[#16a89f] text-primary px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 flex items-center gap-2 shadow-md shadow-secondary/20 hover:shadow-lg hover:scale-105"
             >
-              <span>Consultar</span>
+              <span>Comprar en MyShop</span>
             </a>
           </div>
 
@@ -183,12 +184,12 @@ export default function Navbar() {
                   Iniciar sesión en el equipo
                 </Link>
                 <a
-                  href="https://wa.me/18492763532?text=Hola!%20Quiero%20conocer%20los%20productos%20de%20VitaGloss%20RD"
+                  href={MYSHOP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full bg-green-700 hover:bg-green-800 text-white px-4 py-3.5 rounded-xl font-bold text-sm transition-colors shadow-md shadow-green-100"
+                  className="flex items-center justify-center gap-2 w-full bg-secondary hover:bg-[#16a89f] text-primary px-4 py-3.5 rounded-xl font-bold text-sm transition-colors shadow-md shadow-secondary/20"
                 >
-                  Pedir por WhatsApp
+                  Comprar en MyShop
                 </a>
               </Motion.div>
             </div>

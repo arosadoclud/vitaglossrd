@@ -32,21 +32,21 @@ export default function Terminos() {
           <section>
             <h2 className="text-xl font-bold text-primary mb-3">3. Proceso de compra</h2>
             <p>
-              Todas las compras se realizan a través de WhatsApp. La aceptación del pedido se confirma cuando el distribuidor envía la confirmación escrita por WhatsApp. Nos reservamos el derecho de rechazar pedidos por razones de disponibilidad o error en precios.
+              Las compras iniciadas desde los botones “Comprar en MyShop” se completan en el sitio oficial de Amway y quedan sujetas a sus precios, disponibilidad, términos y proceso de confirmación. VitaGloss RD ofrece orientación independiente antes y después de la compra, pero no procesa el pago de esos pedidos.
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-bold text-primary mb-3">4. Precios y pagos</h2>
             <p>
-              Los precios están expresados en pesos dominicanos (RD$) e incluyen impuestos aplicables. Aceptamos transferencia bancaria, depósito y efectivo. Los precios pueden cambiar sin previo aviso hasta la confirmación del pedido.
+              Los precios públicos, impuestos y métodos de pago aplicables se muestran en MyShop durante el proceso de compra. Los precios internos visibles en áreas privadas de VitaGloss RD no constituyen una oferta pública y pueden cambiar sin previo aviso.
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-bold text-primary mb-3">5. Envíos y entregas</h2>
             <p>
-              Realizamos envíos a toda República Dominicana. El tiempo de entrega estimado es de 1 a 3 días hábiles, sujeto a la disponibilidad del servicio de mensajería. VitaGloss RD no se hace responsable por demoras causadas por terceros o circunstancias ajenas a nuestra operación.
+              Para los pedidos completados en MyShop, el cliente debe elegir una de las opciones de entrega que Amway muestre durante el checkout. Los costos, plazos, disponibilidad territorial y cualquier opción de retiro son determinados y confirmados en ese proceso. VitaGloss RD no promete una modalidad de entrega que no aparezca en el checkout oficial.
             </p>
           </section>
 

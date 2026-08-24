@@ -164,25 +164,25 @@ export default function Catalogo() {
         )}
       </div>
 
-      {/* Banner WhatsApp */}
+      {/* Acceso al catálogo oficial */}
       <div className="max-w-7xl mx-auto px-4 pb-16">
         <Motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-gradient-to-r from-green-500 to-green-600 rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6 text-white shadow-xl shadow-green-200"
+          className="bg-gradient-to-r from-primary to-[#173f73] rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6 text-white shadow-xl shadow-primary/20"
         >
           <div>
-            <h3 className="text-2xl font-black mb-1">¿No encuentras lo que buscas?</h3>
-            <p className="text-green-100">Tenemos acceso a todos los productos Amway. Consúltanos por WhatsApp.</p>
+            <h3 className="text-2xl font-black mb-1">Explora el catálogo completo</h3>
+            <p className="text-blue-100">Los seis favoritos son una selección. En MyShop puedes buscar los demás productos disponibles en Amway.</p>
           </div>
           <a
-            href="https://wa.me/18492763532?text=Hola!%20Busco%20un%20producto%20que%20no%20encuentro%20en%20el%20cat%C3%A1logo"
+            href="https://www.amway.com.do/myshop/vitaglossrd"
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-white text-green-600 hover:bg-green-50 px-8 py-4 rounded-2xl font-bold transition-all duration-200 hover:scale-105 shadow-lg whitespace-nowrap flex items-center gap-2"
+            className="bg-secondary text-primary hover:bg-[#38d4ca] px-8 py-4 rounded-2xl font-bold transition-all duration-200 hover:scale-105 shadow-lg whitespace-nowrap flex items-center gap-2"
           >
-            Consultar ahora
+            Abrir MyShop
           </a>
         </Motion.div>
       </div>

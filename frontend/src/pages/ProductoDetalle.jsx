@@ -8,6 +8,7 @@ import { useSEO } from '../hooks/useSEO'
 import ReviewsSection from '../components/ReviewsSection'
 import { usePrecios } from '../context/PreciosContext'
 import { useAuth } from '../context/AuthContext'
+import { getMyShopUrl, hasDirectMyShopLink } from '../config/myshop'
 
 // Acordeón individual
 function Accordion({ titulo, icono, children, defaultOpen = false }) {
@@ -262,7 +263,6 @@ export default function ProductoDetalle() {
     }
   }, [foundById, navigate])
   const [imgActiva, setImgActiva] = useState(0)
-  const [qty, setQty] = useState(1)
   const [showStickyBar, setShowStickyBar] = useState(false)
   const buyRef = useRef(null)
   const { user } = useAuth()
@@ -403,6 +403,7 @@ export default function ProductoDetalle() {
     `Hola VitaGloss RD! 👋 Quiero hacer un pedido de:\n\n*${producto.nombre}*\nArt. ${producto.articulo} | Precio: RD$${producto.precio}\n\n¿Cuál es el proceso de compra? Gracias!`
   )
   const whatsappURL = `https://wa.me/18492763532?text=${whatsappMsg}`
+  const myShopURL = getMyShopUrl(producto.articulo)
 
   return (
     <div className="min-h-screen bg-white">
@@ -531,27 +532,11 @@ export default function ProductoDetalle() {
             {/* Artículo + Disponibilidad */}
             <div className="flex items-center gap-4 mb-4">
               <span className="text-gray-400 text-sm">Art. {producto.articulo}</span>
-              <span className="flex items-center gap-1.5 text-sm font-semibold text-green-600">
-                <span className="w-2 h-2 bg-green-500 rounded-full inline-block"></span>
-                Disponible
+              <span className="flex items-center gap-1.5 text-sm font-semibold text-primary">
+                <span className="w-2 h-2 bg-secondary rounded-full inline-block"></span>
+                Disponibilidad en MyShop
               </span>
             </div>
-
-            {/* Alertas urgencia */}
-            {(producto.stockUnidades <= 6 || producto.ventasSemana) && (
-              <div className="flex flex-wrap gap-2 mb-5">
-                {producto.stockUnidades && producto.stockUnidades <= 6 && (
-                  <span className="inline-flex items-center gap-1.5 bg-red-50 text-red-600 text-xs font-semibold px-3 py-1.5 rounded-full border border-red-100">
-                    🔥 Solo quedan {producto.stockUnidades} unidades
-                  </span>
-                )}
-                {producto.ventasSemana && (
-                  <span className="inline-flex items-center gap-1.5 bg-orange-50 text-orange-600 text-xs font-semibold px-3 py-1.5 rounded-full border border-orange-100">
-                    📦 {producto.ventasSemana} compras esta semana
-                  </span>
-                )}
-              </div>
-            )}
 
             {/* Precio */}
             {user ? (
@@ -631,37 +616,26 @@ export default function ProductoDetalle() {
               </div>
             )}
 
-            {/* Selector de cantidad */}
-            <div className="flex items-center gap-4 mb-4">
-              <span className="text-sm font-medium text-gray-600">Cantidad</span>
-              <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
-                <button
-                  onClick={() => setQty(q => Math.max(1, q - 1))}
-                  className="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors text-lg font-light"
-                >−</button>
-                <span className="w-10 text-center text-sm font-semibold text-gray-800">{qty}</span>
-                <button
-                  onClick={() => setQty(q => q + 1)}
-                  className="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors text-lg font-light"
-                >+</button>
-              </div>
-              {producto.stockUnidades && producto.stockUnidades <= 6 && (
-                <span className="text-xs text-red-500 font-medium">{producto.stockUnidades} disp.</span>
-              )}
-            </div>
-
-            {/* Botón WhatsApp — principal */}
+            {/* Compra oficial en MyShop */}
             <a
               ref={buyRef}
-              href={whatsappURL}
+              href={myShopURL}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white py-4 rounded-xl font-bold text-base transition-all duration-200 flex items-center justify-center gap-3 mb-3"
+              className="w-full bg-primary hover:bg-[#173a6b] text-white py-4 rounded-xl font-bold text-base transition-all duration-200 flex items-center justify-center gap-3 mb-3"
             >
-              <svg className="w-5 h-5 fill-white flex-shrink-0" viewBox="0 0 24 24">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-              </svg>
-              Pedir por WhatsApp
+              Comprar en el MyShop oficial
+            </a>
+            <div className="rounded-xl border border-blue-100 bg-blue-50/70 px-4 py-3 mb-4">
+              <p className="text-xs leading-relaxed text-blue-900">
+                La compra y el pago se completan en Amway. Allí verás el precio, la disponibilidad y las opciones de entrega habilitadas para tu dirección.
+              </p>
+              {!hasDirectMyShopLink(producto.articulo) && (
+                <p className="text-[11px] text-blue-700 mt-1">Busca el artículo <strong>{producto.articulo}</strong> dentro de MyShop.</p>
+              )}
+            </div>
+            <a href={whatsappURL} target="_blank" rel="noopener noreferrer" className="w-full border border-green-200 bg-green-50 hover:bg-green-100 text-green-800 py-3 rounded-xl font-semibold text-sm transition-colors flex items-center justify-center mb-3">
+              Necesito ayuda antes de comprar
             </a>
 
             {/* Confianza */}
@@ -1012,16 +986,12 @@ export default function ProductoDetalle() {
                 )}
               </div>
               <a
-                href={whatsappURL}
+                href={myShopURL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-shrink-0 bg-[#25D366] hover:bg-[#20b858] active:scale-95 text-white font-bold px-5 py-3 rounded-xl flex items-center gap-2 text-sm transition-all"
+                className="flex-shrink-0 bg-primary hover:bg-[#173a6b] active:scale-95 text-white font-bold px-5 py-3 rounded-xl flex items-center gap-2 text-sm transition-all"
               >
-                <svg className="w-4 h-4 fill-white flex-shrink-0" viewBox="0 0 24 24">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                  <path d="M12 0C5.373 0 0 5.373 0 12c0 2.106.55 4.083 1.512 5.802L0 24l6.363-1.487A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.808 9.808 0 01-5.001-1.368l-.36-.214-3.777.883.896-3.69-.234-.38A9.79 9.79 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182c5.429 0 9.818 4.388 9.818 9.818 0 5.429-4.389 9.818-9.818 9.818z"/>
-                </svg>
-                Pedir ahora
+                Comprar
               </a>
             </div>
           </m.div>

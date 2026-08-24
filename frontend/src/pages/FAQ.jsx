@@ -89,19 +89,19 @@ const faqs = [
     preguntas: [
       {
         p: '¿Cómo hago un pedido en VitaGloss RD?',
-        r: 'Es muy sencillo: elige tu producto en el catálogo, haz clic en "Pedir por WhatsApp" y te conectamos directamente al (849) 276-3532. Respondemos en menos de 1 hora en horario laboral (Lun–Sáb, 8am–8pm).',
+        r: 'Elige un producto y pulsa “Comprar en MyShop”. La compra y el pago se completan en el sitio oficial de Amway, donde verás la disponibilidad y las opciones de entrega para tu dirección. Si necesitas orientación antes de comprar, puedes escribirnos por WhatsApp.',
       },
       {
         p: '¿Cuáles son los métodos de pago?',
-        r: 'Aceptamos transferencia bancaria (BanReservas, Popular, BHD), pago móvil, efectivo en mano y tarjeta de crédito/débito con Azul (pedidos mayores a RD$1,000). Coordinamos el método más conveniente para ti.',
+        r: 'MyShop mostrará los métodos de pago habilitados por Amway al finalizar la compra. VitaGloss RD no recibe ni almacena los datos de pago de esos pedidos.',
       },
       {
         p: '¿Hacen envíos a todo el país?',
-        r: 'Sí, a todo el territorio de República Dominicana. Santo Domingo: mismo día o siguiente hábil (envío gratis en pedidos de RD$2,500+). Interior del país: 1–3 días hábiles con Caribe Express, MotoVelo o RapiDomicilio.',
+        r: 'Escribe tu dirección durante el checkout de MyShop para consultar las opciones, costos y plazos de entrega disponibles. Si Amway ofrece retiro u otra modalidad, aparecerá allí antes de confirmar el pedido.',
       },
       {
         p: '¿Puedo comprar más de un producto a la vez?',
-        r: 'Sí. Puedes combinar cualquier producto en un solo pedido. Tenemos kits y combos con descuentos especiales armados para que ahorres más.',
+        r: 'Sí. Los seis favoritos son solo una selección inicial; puedes usar “Comprar productos” dentro de MyShop para explorar el catálogo disponible y agregar varios artículos al carrito.',
       },
     ],
   },
@@ -118,7 +118,7 @@ const faqs = [
       },
       {
         p: '¿Qué es VitaGloss RD?',
-        r: 'VitaGloss RD es una distribuidora independiente certificada de productos Amway en República Dominicana. Nos especializamos en suplementos Nutrilite™, salud bucal Glister™ y nutrición deportiva. Llevamos los productos directamente a tu puerta en todo el país.',
+        r: 'VitaGloss RD es un negocio independiente de Amway en República Dominicana. Ofrecemos contenido educativo y orientación; los pedidos enlazados desde la web se completan en nuestro MyShop oficial.',
       },
     ],
   },

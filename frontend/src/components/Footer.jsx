@@ -9,10 +9,10 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
             {[
-              { icono: '✅', titulo: 'Productos Originales', desc: 'Certificados Amway' },
-              { icono: '🚚', titulo: 'Envío a Todo RD', desc: 'Gratis desde RD$2,500' },
-              { icono: '🔄', titulo: 'Garantía', desc: 'Satisfacción garantizada' },
-              { icono: '📲', titulo: 'Soporte WhatsApp', desc: 'Lun–Sáb 8am–8pm' },
+              { icono: '✓', titulo: 'Compra oficial', desc: 'Pago dentro de MyShop' },
+              { icono: '→', titulo: 'Entrega informada', desc: 'Opciones visibles al pagar' },
+              { icono: '✓', titulo: 'Productos originales', desc: 'Catálogo oficial Amway' },
+              { icono: '→', titulo: 'Orientación personal', desc: 'Soporte por WhatsApp' },
             ].map((item, i) => (
               <div key={i} className="flex flex-col items-center gap-1.5">
                 <span className="text-2xl">{item.icono}</span>
@@ -73,15 +73,15 @@ export default function Footer() {
             <ul className="space-y-2 text-sm text-gray-300">
               <li className="flex items-start gap-2">
                 <span className="text-secondary mt-0.5">&#10003;</span>
-                <span>Envío nacional: RD$150–400</span>
+                <span>Compra y pago en MyShop</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-secondary mt-0.5">&#10003;</span>
-                <span>Envío gratis ≥ RD$2,500 (STO)</span>
+                <span>Precio confirmado por Amway</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-secondary mt-0.5">&#10003;</span>
-                <span>Entrega 1–3 días hábiles</span>
+                <span>Entrega elegida en el checkout</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-secondary mt-0.5">&#10003;</span>
@@ -89,7 +89,7 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-secondary mt-0.5">&#10003;</span>
-                <span>Cambios por producto dañado</span>
+                <span>Asesoría antes de comprar</span>
               </li>
             </ul>
           </div>
