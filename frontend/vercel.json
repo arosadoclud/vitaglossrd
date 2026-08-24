@@ -5,13 +5,33 @@
       "has": [{ "type": "host", "value": "vitaglossrd.com" }],
       "destination": "https://www.vitaglossrd.com/$1",
       "permanent": true
-    }
+    },
+    { "source": "/empieza", "destination": "/equipo", "permanent": true },
+    { "source": "/unete", "destination": "/equipo", "permanent": true },
+    { "source": "/checkout", "destination": "/", "permanent": false }
   ],
   "rewrites": [
-    { 
-      "source": "/:path((?!ads\\.txt$|robots\\.txt$|sitemap\\.xml$|google-merchant-feed\\.xml$|.*\\..+$).*)", 
-      "destination": "/index.html" 
-    }
+    { "source": "/producto/:slug", "destination": "/producto/:slug.html" },
+    { "source": "/blog/:slug", "destination": "/blog/:slug.html" },
+    { "source": "/combos/:id", "destination": "/combos/:id.html" },
+    { "source": "/catalogo", "destination": "/catalogo.html" },
+    { "source": "/combos", "destination": "/combos.html" },
+    { "source": "/blog", "destination": "/blog.html" },
+    { "source": "/sobre-nosotros", "destination": "/sobre-nosotros.html" },
+    { "source": "/equipo", "destination": "/equipo.html" },
+    { "source": "/contacto", "destination": "/contacto.html" },
+    { "source": "/faq", "destination": "/faq.html" },
+    { "source": "/privacidad", "destination": "/privacidad.html" },
+    { "source": "/devoluciones", "destination": "/devoluciones.html" },
+    { "source": "/terminos", "destination": "/terminos.html" },
+    { "source": "/politica-editorial", "destination": "/politica-editorial.html" },
+    { "source": "/pelo-piel-unas", "destination": "/pelo-piel-unas.html" },
+    { "source": "/dashboard", "destination": "/_app.html" },
+    { "source": "/academia", "destination": "/_app.html" },
+    { "source": "/mi-equipo-ventas", "destination": "/_app.html" },
+    { "source": "/orden-confirmada", "destination": "/_app.html" },
+    { "source": "/cert-pagadito", "destination": "/_app.html" },
+    { "source": "/restablecer-contrasena", "destination": "/_app.html" }
   ],
   "headers": [
     {      "source": "/assets/(.*)",

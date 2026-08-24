@@ -23,8 +23,7 @@
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="author" content="Andy Rosado — VitaGloss RD" />
     <link rel="author" href="https://www.vitaglossrd.com/sobre-nosotros" />
-    <!-- Canonical y hreflang se generan por ruta desde useSEO. Dejarlos fijos
-         aquí haría que todas las rutas de la SPA apunten incorrectamente al inicio. -->
+    <link rel="canonical" href="https://www.vitaglossrd.com/" />
     <!-- Google AdSense — la meta tag basta para la verificación de propiedad.
          El script se carga de forma diferida (init-adsense.js) para no bloquear render. -->
     <meta name="google-adsense-account" content="ca-pub-2971696184390995" />
@@ -51,6 +50,12 @@
          fbq() funciona de inmediato gracias a la cola interna; fbevents.js
          se descarga solo después de que el navegador queda inactivo (≥3 s). -->
     <script src="/init-fb.js" defer></script>
+
+    <!-- La portada conserva sus señales estáticas; las demás rutas reciben
+         etiquetas propias durante el prerender de producción. -->
+    <link rel="alternate" hreflang="es" href="https://www.vitaglossrd.com/" />
+    <link rel="alternate" hreflang="es-DO" href="https://www.vitaglossrd.com/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vitaglossrd.com/" />
 
     <!-- ── Schema.org: Organization + WebSite (sitewide authority + sitelinks) ── -->
     <script type="application/ld+json">
