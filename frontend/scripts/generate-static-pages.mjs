@@ -28,6 +28,15 @@ const plainText = value => String(value || '')
 
 const description = value => plainText(value).slice(0, 155).replace(/\s+\S*$/, '')
 
+const titleTag = value => {
+  const suffix = ' | VitaGloss RD'
+  const limit = 60 - suffix.length
+  const clean = plainText(value)
+  if (clean.length <= limit) return `${clean}${suffix}`
+  const shortened = clean.slice(0, limit - 1).replace(/\s+\S*$/, '')
+  return `${shortened}…${suffix}`
+}
+
 const nav = `<nav aria-label="Navegación principal"><a href="/">Inicio</a> · <a href="/catalogo">Catálogo</a> · <a href="/combos">Combos</a> · <a href="/blog">Blog</a> · <a href="/contacto">Contacto</a></nav>`
 
 const pageShell = ({ title, intro, body, path }) => `
@@ -38,18 +47,23 @@ const pageShell = ({ title, intro, body, path }) => `
       <h1 style="font-size:clamp(2rem,5vw,3.4rem);line-height:1.1;color:#08243a">${escapeHtml(title)}</h1>
       <p>${escapeHtml(intro)}</p>
       ${body}
+      <aside aria-label="Criterios de orientación">
+        <h2>Cómo utilizar esta información</h2>
+        <p>Esta página sobre ${escapeHtml(title)} se ofrece como orientación general para lectores de República Dominicana. Antes de elegir o utilizar cualquier producto, comprueba la presentación, los ingredientes, las instrucciones y las advertencias vigentes en su etiqueta oficial. Las necesidades pueden variar según la edad, los hábitos y las condiciones personales.</p>
+        <p>VitaGloss RD distingue la información educativa de una recomendación médica. Si tienes una condición diagnosticada, utilizas medicamentos, estás embarazada o necesitas una evaluación individual, consulta al profesional de salud correspondiente. También puedes escribirnos para localizar la ficha oficial o aclarar el proceso de compra, sin compromiso ni promesas de resultados.</p>
+      </aside>
     </article>
     <p><a href="${path.startsWith('/blog/') ? '/blog' : path.startsWith('/combos/') ? '/combos' : '/catalogo'}">Explorar contenido relacionado</a> · <a href="/mapa-del-sitio.html">Mapa del sitio</a></p>
   </main>`
 
-function render({ path, title, description: metaDescription, content, robots = 'index, follow' }) {
+function render({ path, title, seoTitle, description: metaDescription, content, robots = 'index, follow' }) {
   const canonical = `${site}${path === '/' ? '/' : path}`
   const cleanTemplate = template
     .replace(/\s*<link rel="canonical"[^>]*>/gi, '')
     .replace(/\s*<link rel="alternate"[^>]*hreflang[^>]*>/gi, '')
 
   return cleanTemplate
-    .replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(title)} | VitaGloss RD</title>`)
+    .replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(seoTitle || titleTag(title))}</title>`)
     .replace(/<meta name="description" content="[^"]*"\s*\/>/i, `<meta name="description" content="${escapeHtml(metaDescription)}" />`)
     .replace(/<meta name="robots" content="[^"]*"\s*\/>/i, `<meta name="robots" content="${robots}" />`)
     .replace('</head>', `    <link rel="canonical" href="${canonical}" />\n    <link rel="alternate" hreflang="es" href="${canonical}" />\n    <link rel="alternate" hreflang="es-DO" href="${canonical}" />\n    <link rel="alternate" hreflang="x-default" href="${canonical}" />\n  </head>`)
@@ -61,6 +75,25 @@ async function save(page) {
   const target = join(root, relative)
   await mkdir(dirname(target), { recursive: true })
   await writeFile(target, render(page), 'utf8')
+}
+
+const directoryLinks = slug => {
+  const sources = {
+    catalogo: [
+      ['/pelo-piel-unas', 'Guía para cabello, piel y uñas'],
+      ...productos.map(producto => [`/producto/${slugify(producto.nombre)}`, producto.nombre]),
+    ],
+    combos: combos.map(combo => [`/combos/${combo.id}`, combo.nombre]),
+    blog: posts.map(post => [`/blog/${post.slug}`, post.titulo]),
+  }
+  const items = sources[slug] || [
+    ['/catalogo', 'Consultar el catálogo'],
+    ['/blog', 'Leer el blog educativo'],
+    ['/faq', 'Revisar preguntas frecuentes'],
+    ['/sobre-nosotros', 'Conocer VitaGloss RD'],
+    ['/contacto', 'Solicitar orientación'],
+  ]
+  return `<h2>${sources[slug] ? 'Directorio de contenidos' : 'Continúa explorando'}</h2><ul>${items.map(([href, label]) => `<li><a href="${href}">${escapeHtml(label)}</a></li>`).join('')}</ul>`
 }
 
 const staticPages = [
@@ -84,7 +117,7 @@ const staticPages = [
     title,
     intro,
     path: `/${slug}`,
-    body: `<h2>Información útil y transparente</h2><p>${escapeHtml(intro)} Esta página forma parte de la guía pública de VitaGloss RD para República Dominicana. Presentamos la información de manera organizada, distinguimos la orientación comercial del consejo profesional y remitimos a las etiquetas y fuentes oficiales cuando corresponde.</p><p>Antes de elegir un producto, revisa sus instrucciones, advertencias y condiciones vigentes. Para preguntas particulares puedes utilizar nuestros canales de contacto y recibir acompañamiento sin presión.</p>`,
+    body: `<h2>Información útil y transparente</h2><p>${escapeHtml(intro)} Esta página forma parte de la guía pública de VitaGloss RD para República Dominicana. Presentamos la información de manera organizada, distinguimos la orientación comercial del consejo profesional y remitimos a las etiquetas y fuentes oficiales cuando corresponde.</p><p>Antes de elegir un producto, revisa sus instrucciones, advertencias y condiciones vigentes. Para preguntas particulares puedes utilizar nuestros canales de contacto y recibir acompañamiento sin presión.</p>${directoryLinks(slug)}`,
   }),
 }))
 
@@ -92,15 +125,18 @@ const productPages = productos.map(producto => {
   const path = `/producto/${slugify(producto.nombre)}`
   const intro = producto.descripcionLarga || producto.descripcion
   const benefits = (producto.beneficios || []).map(item => `<li>${escapeHtml(item)}</li>`).join('')
+  const instructions = (producto.instrucciones || []).map(item => `<li>${escapeHtml(item)}</li>`).join('')
+  const questions = (producto.faqs || []).slice(0, 3).map(item => `<h3>${escapeHtml(item.pregunta)}</h3><p>${escapeHtml(item.respuesta)}</p>`).join('')
   return {
     path,
     title: producto.nombreCorto || producto.nombre,
+    seoTitle: titleTag(producto.nombre),
     description: description(producto.descripcion),
     content: pageShell({
       title: producto.nombreCorto || producto.nombre,
       intro: producto.descripcion,
       path,
-      body: `<h2>Descripción</h2>${plainText(intro).split(/\n+/).filter(Boolean).map(text => `<p>${escapeHtml(text)}</p>`).join('')}<h2>Características principales</h2><ul>${benefits}</ul><p>Consulta siempre la etiqueta, las instrucciones y las advertencias oficiales antes de usar el producto. Esta ficha es informativa y no sustituye consejo médico u odontológico.</p>`,
+      body: `<h2>Descripción</h2>${plainText(intro).split(/\n+/).filter(Boolean).map(text => `<p>${escapeHtml(text)}</p>`).join('')}<h2>Características principales</h2><ul>${benefits}</ul>${instructions ? `<h2>Indicaciones de uso</h2><ul>${instructions}</ul>` : ''}${questions ? `<h2>Preguntas sobre el producto</h2>${questions}` : ''}<p>Consulta siempre la etiqueta, las instrucciones y las advertencias oficiales antes de usar el producto. Esta ficha es informativa y no sustituye consejo médico u odontológico.</p>`,
     }),
   }
 })
