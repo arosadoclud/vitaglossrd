@@ -43,6 +43,7 @@ export function useSEO({
   title, description, canonical, ogImage,
   jsonLd, jsonLdList,
   publishedTime, modifiedTime, articleAuthor, articleTags, articleSection,
+  robots = 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
 } = {}) {
   const fullTitle    = title ? `${title} | VitaGloss RD` : 'VitaGloss RD — Tu salud, tu sonrisa'
   const resolvedImg  = ogImage || SITE_OG_IMAGE
@@ -61,7 +62,7 @@ export function useSEO({
     if (description) setMeta('name', 'description', description)
 
     // ── Robots con permisos de fragmentos ricos ──────────────────────────────
-    setMeta('name', 'robots', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1')
+    setMeta('name', 'robots', robots)
 
     // ── Geo targeting República Dominicana ───────────────────────────────────
     setMeta('name', 'geo.region',    'DO')
@@ -121,7 +122,7 @@ export function useSEO({
     return () => {
       document.querySelectorAll('meta[property="article:tag"]').forEach(el => el.remove())
     }
-  }, [fullTitle, title, description, resolvedUrl, resolvedImg, resolvedImgType, isArticle, publishedTime, modifiedTime, articleAuthor, articleTags, articleSection])
+  }, [fullTitle, title, description, resolvedUrl, resolvedImg, resolvedImgType, isArticle, publishedTime, modifiedTime, articleAuthor, articleTags, articleSection, robots])
 
   // ── JSON-LD structured data ────────────────────────────────────────────────
   useEffect(() => {

@@ -163,6 +163,14 @@ export default function LoginModal({ open, onClose }) {
                   </button>
                 </form>
 
+                <button
+                  type="button"
+                  onClick={() => { handleClose(); navigate('/restablecer-contrasena') }}
+                  className="mt-4 w-full text-center text-sm font-semibold text-primary hover:underline"
+                >
+                  ¿Olvidaste tu contraseña?
+                </button>
+
                 {/* Footer */}
                 <div className="mt-6 pt-6 border-t border-gray-100 text-center">
                   <p className="text-gray-400 text-xs">

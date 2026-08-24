@@ -1,5 +1,7 @@
 const router = require('express').Router()
 const jwt = require('jsonwebtoken')
+const crypto = require('crypto')
+const nodemailer = require('nodemailer')
 const User = require('../models/User')
 const protect = require('../middleware/auth')
 
@@ -7,6 +9,23 @@ const protect = require('../middleware/auth')
 function generateToken(id) {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
+  })
+}
+
+function frontendUrl() {
+  return (process.env.FRONTEND_URL || 'https://www.vitaglossrd.com')
+    .split(',')[0]
+    .trim()
+    .replace(/\/$/, '')
+}
+
+function mailTransport() {
+  if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) return null
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT || 587),
+    secure: process.env.SMTP_SECURE === 'true',
+    auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
   })
 }
 
@@ -68,6 +87,89 @@ router.post('/login', async (req, res) => {
     res.json({ token, user }) // toJSON() quita la password
   } catch (err) {
     res.status(500).json({ error: 'Error al iniciar sesión.' })
+  }
+})
+
+// ── POST /api/auth/forgot-password ───────────────────────────────────────
+// Siempre devuelve el mismo mensaje para no revelar qué correos existen.
+router.post('/forgot-password', async (req, res) => {
+  const genericMessage = 'Si el correo está registrado, recibirás un enlace para restaurar tu contraseña.'
+  try {
+    const email = String(req.body?.email || '').trim().toLowerCase()
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.json({ message: genericMessage })
+    }
+
+    const user = await User.findOne({ email, activo: true })
+    if (!user) return res.json({ message: genericMessage })
+
+    const rawToken = crypto.randomBytes(32).toString('hex')
+    user.resetPasswordToken = crypto.createHash('sha256').update(rawToken).digest('hex')
+    user.resetPasswordExpires = new Date(Date.now() + 30 * 60 * 1000)
+    await user.save({ validateBeforeSave: false })
+
+    const transporter = mailTransport()
+    if (!transporter) {
+      user.resetPasswordToken = undefined
+      user.resetPasswordExpires = undefined
+      await user.save({ validateBeforeSave: false })
+      console.error('[Password reset] SMTP no configurado')
+      return res.json({ message: genericMessage })
+    }
+
+    const resetUrl = `${frontendUrl()}/restablecer-contrasena?token=${encodeURIComponent(rawToken)}`
+    try {
+      await transporter.sendMail({
+        from: `"VitaGloss RD" <${process.env.SMTP_USER}>`,
+        to: user.email,
+        subject: 'Restaura tu contraseña de VitaGloss RD',
+        text: `Solicitaste restaurar tu contraseña. Abre este enlace dentro de los próximos 30 minutos: ${resetUrl}\n\nSi no hiciste esta solicitud, ignora este mensaje.`,
+        html: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;color:#15243b"><h1 style="font-size:24px">Restaura tu contraseña</h1><p>Recibimos una solicitud para cambiar la contraseña de tu cuenta de VitaGloss RD.</p><p><a href="${resetUrl}" style="display:inline-block;background:#173b67;color:#fff;text-decoration:none;padding:14px 22px;border-radius:10px;font-weight:700">Crear nueva contraseña</a></p><p style="font-size:13px;color:#667085">Este enlace vence en 30 minutos y solo puede utilizarse una vez. Si no hiciste esta solicitud, puedes ignorar el mensaje.</p></div>`,
+      })
+    } catch (mailError) {
+      user.resetPasswordToken = undefined
+      user.resetPasswordExpires = undefined
+      await user.save({ validateBeforeSave: false })
+      console.error('[Password reset] No se pudo enviar el correo:', mailError.message)
+    }
+
+    res.json({ message: genericMessage })
+  } catch (err) {
+    console.error('[Password reset] Error al crear solicitud:', err.message)
+    res.json({ message: genericMessage })
+  }
+})
+
+// ── POST /api/auth/reset-password ────────────────────────────────────────
+router.post('/reset-password', async (req, res) => {
+  try {
+    const token = String(req.body?.token || '')
+    const password = String(req.body?.password || '')
+    if (!token || !password) return res.status(400).json({ error: 'El enlace y la nueva contraseña son requeridos.' })
+
+    const tokenHash = crypto.createHash('sha256').update(token).digest('hex')
+    const user = await User.findOne({
+      resetPasswordToken: tokenHash,
+      resetPasswordExpires: { $gt: new Date() },
+      activo: true,
+    }).select('+resetPasswordToken +resetPasswordExpires')
+
+    if (!user) return res.status(400).json({ error: 'El enlace es inválido o ya venció. Solicita uno nuevo.' })
+
+    user.password = password
+    user.passwordChangedAt = new Date(Date.now() - 1000)
+    user.resetPasswordToken = undefined
+    user.resetPasswordExpires = undefined
+    await user.save()
+
+    res.json({ message: 'Contraseña actualizada. Ya puedes iniciar sesión.' })
+  } catch (err) {
+    if (err.name === 'ValidationError') {
+      const message = Object.values(err.errors).map(item => item.message).join('. ')
+      return res.status(400).json({ error: message })
+    }
+    console.error('[Password reset] Error al cambiar contraseña:', err.message)
+    res.status(500).json({ error: 'No se pudo actualizar la contraseña.' })
   }
 })
 

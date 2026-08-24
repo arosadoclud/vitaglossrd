@@ -20,9 +20,13 @@ module.exports = async function protect(req, res, next) {
     }
 
     // 3. Verificar que el usuario sigue existiendo
-    const user = await User.findById(decoded.id)
+    const user = await User.findById(decoded.id).select('+passwordChangedAt')
     if (!user || !user.activo) {
       return res.status(401).json({ error: 'Usuario no encontrado o inactivo.' })
+    }
+
+    if (user.passwordChangedAt && Math.floor(user.passwordChangedAt.getTime() / 1000) > decoded.iat) {
+      return res.status(401).json({ error: 'Tu contraseña cambió. Inicia sesión nuevamente.' })
     }
 
     req.user = user

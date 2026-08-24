@@ -28,14 +28,13 @@ async function request(method, path, body, auth = false) {
 export const api = {
   // Auth
   login: (email, password) => request('POST', '/auth/login', { email, password }),
+  forgotPassword: (email) => request('POST', '/auth/forgot-password', { email }),
+  resetPassword: (token, password) => request('POST', '/auth/reset-password', { token, password }),
   register: (body) => request('POST', '/auth/register', body, true),
   me: () => request('GET', '/auth/me', null, true),
   updateProfile: (body) => request('PATCH', '/auth/me', body, true),
   changePassword: (body) => request('PATCH', '/auth/password', body, true),
   trackRef: (code) => request('GET', `/auth/ref/${code}`),
-
-  // Members (público)
-  getMembers: () => request('GET', '/members'),
 
   // Dashboard
   getDashboard: () => request('GET', '/dashboard', null, true),

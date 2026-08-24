@@ -45,6 +45,7 @@ const IniciaEnAmway  = lazy(() => import('./pages/IniciaEnAmway'))
 const Checkout       = lazy(() => import('./pages/Checkout'))
 const OrdenConfirmada = lazy(() => import('./pages/OrdenConfirmada'))
 const CertPagadito   = lazy(() => import('./pages/CertPagadito'))
+const RestablecerContrasena = lazy(() => import('./pages/RestablecerContrasena'))
 
 // Fallback mínimo mientras se carga un chunk
 function PageSpinner() {
@@ -104,6 +105,7 @@ function Layout() {
           <Route path="/checkout" element={<Navigate to="/" replace />} />
           <Route path="/orden-confirmada" element={<OrdenConfirmada />} />
           <Route path="/cert-pagadito" element={<CertPagadito />} />
+          <Route path="/restablecer-contrasena" element={<RestablecerContrasena />} />
           <Route
             path="/dashboard"
             element={
