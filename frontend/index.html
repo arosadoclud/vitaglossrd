@@ -114,7 +114,41 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Respaldo HTML visible para visitantes y rastreadores sin JavaScript.
+           React reemplaza este contenido al iniciar la aplicación. -->
+      <main class="seo-fallback" style="max-width:1120px;margin:0 auto;padding:32px 24px 56px;font-family:Inter,Arial,sans-serif;color:#173044;line-height:1.65">
+        <header style="display:flex;align-items:center;justify-content:space-between;gap:24px;padding-bottom:28px;border-bottom:1px solid #dfe8eb">
+          <a href="/" style="font-size:22px;font-weight:800;color:#0a3850;text-decoration:none">VitaGloss RD</a>
+          <nav aria-label="Navegación principal" style="display:flex;flex-wrap:wrap;gap:18px">
+            <a href="/catalogo">Catálogo</a>
+            <a href="/combos">Combos</a>
+            <a href="/blog">Blog</a>
+            <a href="/equipo">Vende con nosotros</a>
+            <a href="/sobre-nosotros">Nosotros</a>
+          </nav>
+        </header>
+
+        <section style="padding:56px 0 34px">
+          <p style="margin:0 0 10px;color:#138f8a;font-weight:800;letter-spacing:.12em;text-transform:uppercase">Bienestar elegido con intención</p>
+          <h1 style="max-width:800px;margin:0 0 22px;font-size:48px;line-height:1.08;color:#08243a">Orientación responsable para tu rutina de bienestar en República Dominicana</h1>
+          <p>VitaGloss RD es un espacio de información y acompañamiento para personas que desean conocer opciones de nutrición, cuidado personal, salud bucal y hogar. El proyecto es administrado por Andy Rosado, Empresario Independiente de Amway. Nuestro propósito es ayudarte a localizar información oficial, leer las indicaciones de cada producto y tomar decisiones con mayor claridad.</p>
+          <p>No realizamos diagnósticos ni sustituimos el consejo de médicos, odontólogos u otros profesionales. Cuando una pregunta requiere evaluación clínica, recomendamos acudir al profesional correspondiente. Las características, instrucciones y advertencias de productos deben comprobarse siempre en la etiqueta y en la fuente oficial vigente para República Dominicana.</p>
+        </section>
+
+        <section aria-labelledby="explorar-vitagloss" style="padding:28px 0;border-top:1px solid #dfe8eb">
+          <h2 id="explorar-vitagloss" style="font-size:30px;color:#08243a">Explora VitaGloss RD</h2>
+          <p>En el <a href="/catalogo">catálogo</a> puedes organizar tu búsqueda por categorías y revisar las fichas disponibles. La sección de <a href="/combos">combos</a> agrupa opciones por tipo de rutina, mientras que el <a href="/blog">blog educativo</a> desarrolla preguntas frecuentes con un enfoque editorial y fuentes identificables. También puedes consultar las <a href="/faq">preguntas frecuentes</a> o escribir mediante la página de <a href="/contacto">contacto</a>.</p>
+          <p>Las personas interesadas en conocer el negocio independiente cuentan con una ruta distinta en <a href="/equipo">Vende con nosotros</a>. Allí se explica el proceso como una actividad de venta directa, no como empleo o ingreso garantizado. Los clientes, los interesados en el negocio y los integrantes confirmados del equipo se administran como audiencias separadas.</p>
+        </section>
+
+        <section aria-labelledby="confianza-vitagloss" style="padding:28px 0;border-top:1px solid #dfe8eb">
+          <h2 id="confianza-vitagloss" style="font-size:30px;color:#08243a">Información clara y servicio responsable</h2>
+          <p>Nuestra política editorial exige distinguir hechos, opiniones y material oficial. Evitamos promesas de salud, resultados automáticos, presión comercial y testimonios que no puedan documentarse. Puedes conocer quién administra el proyecto en <a href="/sobre-nosotros">Sobre nosotros</a>, revisar la <a href="/politica-editorial">política editorial</a> y consultar las condiciones de <a href="/devoluciones">devoluciones</a>, <a href="/privacidad">privacidad</a> y <a href="/terminos">uso del sitio</a>.</p>
+        </section>
+      </main>
+      <noscript><p style="max-width:1120px;margin:0 auto;padding:0 24px 32px;font-family:Arial,sans-serif">La navegación básica está disponible arriba. Activa JavaScript para utilizar el catálogo interactivo y las demás funciones de VitaGloss RD.</p></noscript>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

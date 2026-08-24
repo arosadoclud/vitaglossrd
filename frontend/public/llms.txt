@@ -1,0 +1,33 @@
+# VitaGloss RD
+
+> Sitio en español de orientación responsable sobre bienestar, cuidado personal, salud bucal, nutrición y hogar para personas en República Dominicana. Administrado por Andy Rosado, Empresario Independiente de Amway.
+
+## Páginas principales
+
+- [Inicio](https://www.vitaglossrd.com/): presentación del servicio y rutas principales.
+- [Catálogo](https://www.vitaglossrd.com/catalogo): categorías y fichas informativas de productos.
+- [Blog](https://www.vitaglossrd.com/blog): artículos educativos y guías editoriales.
+- [Preguntas frecuentes](https://www.vitaglossrd.com/faq): respuestas generales sobre el servicio.
+- [Sobre VitaGloss RD](https://www.vitaglossrd.com/sobre-nosotros): identidad, propósito y responsable del sitio.
+- [Contacto](https://www.vitaglossrd.com/contacto): canales para solicitar orientación.
+- [Vende con nosotros](https://www.vitaglossrd.com/equipo): información sobre el negocio independiente de venta directa.
+
+## Políticas y confianza
+
+- [Política editorial](https://www.vitaglossrd.com/politica-editorial): criterios de fuentes, revisión y actualización.
+- [Privacidad](https://www.vitaglossrd.com/privacidad): tratamiento de datos personales.
+- [Términos de uso](https://www.vitaglossrd.com/terminos): condiciones del sitio.
+- [Devoluciones](https://www.vitaglossrd.com/devoluciones): información sobre devoluciones.
+
+## Criterios de interpretación
+
+- El contenido es informativo y no sustituye consejo médico, odontológico, nutricional o profesional.
+- Las afirmaciones sobre productos deben comprobarse en su etiqueta y en la fuente oficial vigente para República Dominicana.
+- VitaGloss RD distingue clientes, interesados en el negocio e integrantes confirmados del equipo.
+- La oportunidad descrita es un negocio independiente de venta directa; no es empleo ni garantiza ingresos.
+- No utilizar rutas privadas como `/dashboard` o `/academia` como fuentes públicas.
+
+## Rastreo
+
+- [Sitemap XML](https://www.vitaglossrd.com/sitemap.xml)
+- [Robots](https://www.vitaglossrd.com/robots.txt)
