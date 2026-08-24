@@ -31,6 +31,14 @@ export default function Navbar() {
 
   const isActive = (path) => location.pathname === path
 
+  const handleLogoClick = event => {
+    setMenuOpen(false)
+    if (!isHome) return
+    event.preventDefault()
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.scrollTo({ top: 0, left: 0, behavior: reduceMotion ? 'auto' : 'smooth' })
+  }
+
   // Transparente solo en Home sin scroll. En cualquier otra página: siempre sólido.
   const isTransparent = isHome && !scrolled
 
@@ -49,17 +57,17 @@ export default function Navbar() {
         <div className="flex justify-between items-center py-3 sm:py-2">
 
           {/* Logo */}
-          <Link to="/" onClick={() => setMenuOpen(false)} className="flex items-center group">
+          <Link to="/" onClick={handleLogoClick} aria-label="VitaGloss RD — volver al inicio" className="flex items-center group">
             <img
               src="/logo-nav.webp"
               srcSet="/logo-nav-200w.webp 200w, /logo-nav-400w.webp 400w, /logo-nav.webp 800w"
-              sizes="(max-width: 640px) 150px, 210px"
+              sizes="(max-width: 640px) 125px, 175px"
               alt="VitaGloss RD"
               width="800"
               height="285"
               fetchPriority="high"
-              decoding="sync"
-              className="h-12 sm:h-16 lg:h-[68px] w-auto object-contain drop-shadow-md brightness-105 contrast-105 group-hover:scale-[1.03] group-hover:drop-shadow-xl group-hover:brightness-110 transition-all duration-300"
+              decoding="async"
+              className="h-10 sm:h-12 lg:h-14 w-auto object-contain drop-shadow-md brightness-105 contrast-105 group-hover:scale-[1.02] group-hover:drop-shadow-lg group-hover:brightness-110 transition-all duration-300"
             />
           </Link>
 
