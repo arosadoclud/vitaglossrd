@@ -1,14 +1,15 @@
 import { useState } from 'react'
-import { m, AnimatePresence } from 'framer-motion'
+import { useSearchParams } from 'react-router-dom'
+import { motion as Motion, AnimatePresence } from 'framer-motion'
 import { productos } from '../data/productos'
 import ProductoCard from '../components/ProductoCard'
 import { useSEO } from '../hooks/useSEO'
 
 const categorias = [
-  { label: 'Todos', icono: '✨' },
-  { label: 'Salud Bucal', icono: '🦷' },
-  { label: 'Vitaminas', icono: '🌿' },
-  { label: 'Energizantes', icono: '⚡' },
+  { label: 'Todos' },
+  { label: 'Salud Bucal' },
+  { label: 'Vitaminas' },
+  { label: 'Energizantes' },
 ]
 
 const fadeUp = {
@@ -24,7 +25,9 @@ export default function Catalogo() {
     title: 'Catálogo de Productos',
     description: 'Explora los productos Amway originales en VitaGloss RD: Pasta Dental Glister™, Vitamina C Nutrilite™, Spray y Enjuague Bucal. Envío a todo RD.',
   })
-  const [categoriaActiva, setCategoriaActiva] = useState('Todos')
+  const [searchParams] = useSearchParams()
+  const categoriaInicial = searchParams.get('categoria')
+  const [categoriaActiva, setCategoriaActiva] = useState(categorias.some(c => c.label === categoriaInicial) ? categoriaInicial : 'Todos')
   const [busqueda, setBusqueda] = useState('')
 
   const productosFiltrados = productos.filter(p => {
@@ -49,29 +52,29 @@ export default function Catalogo() {
         <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl" />
 
         <div className="relative max-w-7xl mx-auto text-center">
-          <m.span
+          <Motion.span
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             className="inline-block bg-secondary/20 text-secondary border border-secondary/30 text-xs font-bold px-4 py-2 rounded-full uppercase tracking-widest mb-4"
           >
-            Distribuidor Amway RD
-          </m.span>
-          <m.h1
+            Empresario Independiente de Amway
+          </Motion.span>
+          <Motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
             className="text-3xl sm:text-5xl md:text-6xl font-black mb-4"
           >
             Nuestro Catálogo
-          </m.h1>
-          <m.p
+          </Motion.h1>
+          <Motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
             className="text-white/60 text-lg max-w-xl mx-auto"
           >
             Productos Amway originales para tu salud bucal y bienestar. Con envío a domicilio en toda República Dominicana.
-          </m.p>
+          </Motion.p>
         </div>
       </div>
 
@@ -113,7 +116,6 @@ export default function Catalogo() {
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
-                <span>{cat.icono}</span>
                 <span>{cat.label}</span>
                 <span className={`text-xs px-1.5 py-0.5 rounded-md font-bold ${categoriaActiva === cat.label ? 'bg-white/20 text-white' : 'bg-gray-200 text-gray-500'}`}>
                   {cat.label === 'Todos' ? productos.length : productos.filter(p => p.categoria === cat.label).length}
@@ -127,7 +129,7 @@ export default function Catalogo() {
       {/* Grid de productos */}
       <div className="max-w-7xl mx-auto px-4 py-12">
         <AnimatePresence mode="wait">
-          <m.div
+          <Motion.div
             key={categoriaActiva}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -136,7 +138,7 @@ export default function Catalogo() {
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
           >
             {productosFiltrados.map((p, i) => (
-              <m.div
+              <Motion.div
                 key={p.id}
                 variants={fadeUp}
                 initial="hidden"
@@ -144,14 +146,14 @@ export default function Catalogo() {
                 custom={i}
               >
                 <ProductoCard producto={p} />
-              </m.div>
+              </Motion.div>
             ))}
-          </m.div>
+          </Motion.div>
         </AnimatePresence>
 
         {productosFiltrados.length === 0 && (
           <div className="text-center py-24 text-gray-400">
-            <span className="text-6xl block mb-4">🔍</span>
+            <svg className="w-14 h-14 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 21l-5-5m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
             <p className="text-xl font-semibold">
               {busqueda ? `No encontramos “${busqueda}” en el catálogo.` : 'No hay productos en esta categoría aún.'}
             </p>
@@ -164,7 +166,7 @@ export default function Catalogo() {
 
       {/* Banner WhatsApp */}
       <div className="max-w-7xl mx-auto px-4 pb-16">
-        <m.div
+        <Motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -180,9 +182,9 @@ export default function Catalogo() {
             rel="noopener noreferrer"
             className="bg-white text-green-600 hover:bg-green-50 px-8 py-4 rounded-2xl font-bold transition-all duration-200 hover:scale-105 shadow-lg whitespace-nowrap flex items-center gap-2"
           >
-            📲 Consultar ahora
+            Consultar ahora
           </a>
-        </m.div>
+        </Motion.div>
       </div>
     </div>
   )

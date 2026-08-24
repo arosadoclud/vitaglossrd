@@ -14,7 +14,7 @@ API REST para el sistema de gestión de ventas de VitaGloss RD. Autenticación J
 ```bash
 npm install
 cp .env.example .env   # Completa las variables
-npm run seed           # Crea el admin inicial
+npm run seed:admin     # Crea o actualiza el admin con variables privadas
 npm run dev            # Servidor en http://localhost:4000
 ```
 
@@ -26,7 +26,19 @@ MONGODB_URI=mongodb+srv://<user>:<pass>@cluster.mongodb.net/vitagloss
 JWT_SECRET=clave_secreta_muy_larga
 JWT_EXPIRES_IN=7d
 FRONTEND_URL=http://localhost:5174
+ADMIN_NAME=Administrador VitaGloss RD
+ADMIN_EMAIL=admin@tudominio.com
+ADMIN_PASSWORD=una_clave_unica_de_14_o_mas_caracteres
+ADMIN_WHATSAPP=18492763532
 ```
+
+Para producción, agrega temporalmente las cuatro variables `ADMIN_*` al
+servicio de Railway y ejecuta `npm run seed:admin`. El proceso nunca imprime la
+contraseña y MongoDB almacena únicamente su hash con bcrypt. Al finalizar,
+elimina `ADMIN_PASSWORD` de Railway y vuelve a desplegar el servicio.
+
+El registro público no puede crear al primer administrador. Los vendedores se
+crean desde una sesión de administrador autenticada.
 
 ## Endpoints principales
 

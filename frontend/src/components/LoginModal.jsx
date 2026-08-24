@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AnimatePresence, m } from 'framer-motion'
+import { AnimatePresence, motion as Motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 
 export default function LoginModal({ open, onClose }) {
@@ -40,7 +40,7 @@ export default function LoginModal({ open, onClose }) {
       {open && (
         <>
           {/* Backdrop */}
-          <m.div
+          <Motion.div
             key="backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -52,7 +52,7 @@ export default function LoginModal({ open, onClose }) {
 
           {/* Modal */}
           <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-            <m.div
+            <Motion.div
               key="modal"
               initial={{ opacity: 0, scale: 0.92, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -72,11 +72,11 @@ export default function LoginModal({ open, onClose }) {
                 >
                   ✕
                 </button>
-                <div className="w-14 h-14 bg-white/10 border border-white/20 rounded-2xl flex items-center justify-center text-2xl mb-4">
-                  <span aria-hidden="true">🔐</span>
+                <div className="w-14 h-14 bg-white/10 border border-white/20 rounded-2xl flex items-center justify-center mb-4">
+                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" strokeWidth="1.8" /><path d="M8 10V7a4 4 0 018 0v3" strokeWidth="1.8" strokeLinecap="round" /></svg>
                 </div>
-                <h2 id="login-modal-title" className="text-2xl font-black">Área del equipo</h2>
-                <p className="text-white/60 text-sm mt-1">Inicia sesión para acceder al dashboard</p>
+                <h2 id="login-modal-title" className="text-2xl font-black">Administración y equipo</h2>
+                <p className="text-white/60 text-sm mt-1">Acceso privado al panel de VitaGloss RD</p>
               </div>
 
               {/* Form */}
@@ -85,16 +85,16 @@ export default function LoginModal({ open, onClose }) {
                   {/* Error */}
                   <AnimatePresence>
                     {error && (
-                      <m.div
+                      <Motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-2xl px-4 py-3 mb-5 flex items-center gap-2"
                         role="alert"
                       >
-                        <span aria-hidden="true">⚠️</span>
+                        <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9v4m0 4h.01M10.3 4.6L2.7 18a2 2 0 001.7 3h15.2a2 2 0 001.7-3L13.7 4.6a2 2 0 00-3.4 0z" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
                         {error}
-                      </m.div>
+                      </Motion.div>
                     )}
                   </AnimatePresence>
 
@@ -135,9 +135,13 @@ export default function LoginModal({ open, onClose }) {
                         type="button"
                         onClick={() => setShowPass(p => !p)}
                         aria-label={showPass ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
                       >
-                        {showPass ? '🙈' : '👁️'}
+                        {showPass ? (
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 10.7a2 2 0 002.7 2.7M9.9 4.2A10.8 10.8 0 0112 4c5.5 0 9 5 9 5a16.7 16.7 0 01-2.2 2.6M6.6 6.6C4.3 8 3 10 3 10s3.5 5 9 5c1 0 2-.2 2.9-.5" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                        ) : (
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12s3.5-5 9-5 9 5 9 5-3.5 5-9 5-9-5-9-5z" strokeWidth="1.8" strokeLinejoin="round" /><circle cx="12" cy="12" r="2.5" strokeWidth="1.8" /></svg>
+                        )}
                       </button>
                     </div>
                   </div>
@@ -154,7 +158,7 @@ export default function LoginModal({ open, onClose }) {
                         Iniciando sesión…
                       </>
                     ) : (
-                      <><span aria-hidden="true">🚪</span> Iniciar sesión</>
+                      <>Iniciar sesión</>
                     )}
                   </button>
                 </form>
@@ -175,7 +179,7 @@ export default function LoginModal({ open, onClose }) {
                   </p>
                 </div>
               </div>
-            </m.div>
+            </Motion.div>
           </div>
         </>
       )}

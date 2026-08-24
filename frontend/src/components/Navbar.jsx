@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { m, AnimatePresence } from 'framer-motion'
+import { motion as Motion, AnimatePresence } from 'framer-motion'
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -16,18 +16,16 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  useEffect(() => { setMenuOpen(false) }, [location])
-
   // primaryOnly: se muestra en desktop. Todos aparecen en el menú mobile.
   const links = [
-    { to: '/', label: 'Inicio', primary: true },
+    { to: '/', label: 'Inicio', primary: false },
     { to: '/catalogo', label: 'Catálogo', primary: true },
-    { to: '/combos', label: 'Combos', emoji: '🔥', primary: true },
+    { to: '/combos', label: 'Combos', primary: true },
     { to: '/blog', label: 'Blog', primary: true },
-    { to: '/faq', label: 'Preguntas', primary: true },
-    { to: '/equipo', label: 'Únete al equipo', emoji: '✨', primary: true },
+    { to: '/faq', label: 'Preguntas', primary: false },
+    { to: '/equipo', label: 'Vende con nosotros', primary: true },
     { to: '/sobre-nosotros', label: 'Nosotros', primary: true },
-    { to: '/contacto', label: 'Contacto', primary: true },
+    { to: '/contacto', label: 'Contacto', primary: false },
   ]
 
   const isActive = (path) => location.pathname === path
@@ -36,7 +34,7 @@ export default function Navbar() {
   const isTransparent = isHome && !scrolled
 
   return (
-    <m.nav
+    <Motion.nav
       initial={{ y: -80 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -50,17 +48,17 @@ export default function Navbar() {
         <div className="flex justify-between items-center py-3 sm:py-2">
 
           {/* Logo */}
-          <Link to="/" className="flex items-center group -my-3 sm:-my-6">
+          <Link to="/" onClick={() => setMenuOpen(false)} className="flex items-center group">
             <img
-              src="/logo_final.webp"
-              srcSet="/logo_final-200w.webp 200w, /logo_final-400w.webp 400w, /logo_final.webp 1536w"
-              sizes="(max-width: 640px) 100px, 150px"
+              src="/logo-nav.webp"
+              srcSet="/logo-nav-200w.webp 200w, /logo-nav-400w.webp 400w, /logo-nav.webp 800w"
+              sizes="(max-width: 640px) 150px, 210px"
               alt="VitaGloss RD"
-              width="168"
-              height="96"
+              width="800"
+              height="285"
               fetchPriority="high"
               decoding="sync"
-              className="h-16 sm:h-24 w-auto object-contain drop-shadow-md brightness-105 contrast-105 group-hover:scale-105 group-hover:drop-shadow-xl group-hover:brightness-110 transition-all duration-300"
+              className="h-12 sm:h-16 lg:h-[68px] w-auto object-contain drop-shadow-md brightness-105 contrast-105 group-hover:scale-[1.03] group-hover:drop-shadow-xl group-hover:brightness-110 transition-all duration-300"
             />
           </Link>
 
@@ -78,10 +76,9 @@ export default function Navbar() {
                       : 'text-gray-600 hover:text-primary hover:bg-gray-50'
                 }`}
               >
-                {link.emoji && <span aria-hidden="true" className="mr-1">{link.emoji}</span>}
                 {link.label}
                 {isActive(link.to) && (
-                  <m.div
+                  <Motion.div
                     layoutId="navbar-indicator"
                     className="absolute bottom-0 left-2 right-2 h-0.5 bg-secondary rounded-full"
                   />
@@ -99,8 +96,7 @@ export default function Navbar() {
                   aria-label="Pedir ahora por WhatsApp"
                   className="bg-green-700 hover:bg-green-800 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 flex items-center gap-2 shadow-md shadow-green-200 hover:shadow-lg hover:scale-105"
             >
-              <span aria-hidden="true">📲</span>
-              <span>Pedir ahora</span>
+              <span>Consultar</span>
             </a>
           </div>
 
@@ -112,15 +108,15 @@ export default function Navbar() {
             aria-expanded={menuOpen}
             className={`flex flex-col justify-center gap-1.5 p-2 rounded-lg transition-colors ${isTransparent ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
             >
-            <m.span
+            <Motion.span
               animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 8 : 0 }}
               className={`block w-6 h-0.5 rounded-full origin-center ${isTransparent ? 'bg-white' : 'bg-gray-700'}`}
             />
-            <m.span
+            <Motion.span
               animate={{ opacity: menuOpen ? 0 : 1, scaleX: menuOpen ? 0 : 1 }}
               className={`block w-6 h-0.5 rounded-full ${isTransparent ? 'bg-white' : 'bg-gray-700'}`}
             />
-            <m.span
+            <Motion.span
               animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -8 : 0 }}
               className={`block w-6 h-0.5 rounded-full origin-center ${isTransparent ? 'bg-white' : 'bg-gray-700'}`}
             />
@@ -132,7 +128,7 @@ export default function Navbar() {
       {/* Mobile menu */}
       <AnimatePresence>
         {menuOpen && (
-          <m.div
+          <Motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
@@ -141,7 +137,7 @@ export default function Navbar() {
           >
             <div className="px-4 py-5 flex flex-col gap-1">
               {links.map((link, i) => (
-                <m.div
+                <Motion.div
                   key={link.to}
                   initial={{ opacity: 0, x: -16 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -149,6 +145,7 @@ export default function Navbar() {
                 >
                   <Link
                     to={link.to}
+                    onClick={() => setMenuOpen(false)}
                     className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${
                       isActive(link.to)
                         ? 'bg-primary/5 text-primary'
@@ -160,9 +157,9 @@ export default function Navbar() {
                     </span>
                     {isActive(link.to) && <span className="w-2 h-2 bg-secondary rounded-full" aria-hidden="true" />}
                   </Link>
-                </m.div>
+                </Motion.div>
               ))}
-              <m.div
+              <Motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
@@ -174,13 +171,13 @@ export default function Navbar() {
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 w-full bg-green-700 hover:bg-green-800 text-white px-4 py-3.5 rounded-xl font-bold text-sm transition-colors shadow-md shadow-green-100"
                 >
-                  📲 Pedir por WhatsApp
+                  Pedir por WhatsApp
                 </a>
-              </m.div>
+              </Motion.div>
             </div>
-          </m.div>
+          </Motion.div>
         )}
       </AnimatePresence>
-    </m.nav>
+    </Motion.nav>
   )
 }

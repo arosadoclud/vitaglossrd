@@ -18,7 +18,11 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, 'La contraseña es requerida'],
-    minlength: [6, 'Mínimo 6 caracteres'],
+    minlength: [12, 'La contraseña debe tener un mínimo de 12 caracteres'],
+    validate: {
+      validator: value => /[a-z]/.test(value) && /[A-Z]/.test(value) && /\d/.test(value) && /[^A-Za-z0-9]/.test(value),
+      message: 'La contraseña debe incluir mayúscula, minúscula, número y símbolo',
+    },
     select: false, // No se devuelve por defecto
   },
   rol: {

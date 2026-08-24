@@ -4,7 +4,6 @@ import { useAuth } from '../context/AuthContext'
 import { slugify } from '../utils/slugify'
 
 export default function ProductoCard({ producto }) {
-  const stockBajo = producto.stockUnidades && producto.stockUnidades <= 5
   const { getPrecio } = usePrecios()
   const { user } = useAuth()
   const livePrice = getPrecio(producto.id)
@@ -34,12 +33,6 @@ export default function ProductoCard({ producto }) {
           <span className={`w-1.5 h-1.5 rounded-full ${producto.disponible ? 'bg-green-500' : 'bg-red-400'}`}></span>
           {producto.stock}
         </span>
-        {/* Badge stock bajo */}
-        {stockBajo && (
-          <span className="absolute bottom-3 left-3 z-10 bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow animate-pulse">
-            🔥 Solo {producto.stockUnidades} disponibles
-          </span>
-        )}
         <img
           src={producto.imagen}
           srcSet={producto.imagen400w ? `${producto.imagen400w} 400w, ${producto.imagen} 690w` : undefined}
@@ -79,14 +72,6 @@ export default function ProductoCard({ producto }) {
           </div>
         )}
 
-        {/* Contador ventas */}
-        {producto.ventasSemana && (
-          <div className="flex items-center gap-1.5 text-xs text-orange-500 font-semibold mb-3">
-            <span>🔥</span>
-            <span>{producto.ventasSemana} personas compraron esta semana</span>
-          </div>
-        )}
-
         {/* Precio — solo para usuarios autenticados */}
         {user ? (
           <div className="flex items-center gap-2 mb-3 flex-wrap">
@@ -102,14 +87,14 @@ export default function ProductoCard({ producto }) {
           </div>
         ) : (
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-xs text-gray-400 italic">Inicia sesión para ver el precio</span>
+            <span className="text-xs text-gray-400">Precio disponible al iniciar sesión</span>
           </div>
         )}
 
         {/* Botones */}
         <div className="flex gap-2">
           <span className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-600 text-[11px] sm:text-xs font-semibold px-2 sm:px-3 py-2.5 rounded-xl transition-colors duration-200 flex items-center justify-center gap-1 whitespace-nowrap">
-            Ver más →
+            Ver detalles
           </span>
           <a
             href={whatsappURL}

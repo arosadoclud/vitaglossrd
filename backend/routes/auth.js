@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
+const protect = require('../middleware/auth')
 
 // ── Generar JWT ──────────────────────────────────────────────────────────
 function generateToken(id) {
@@ -10,28 +11,14 @@ function generateToken(id) {
 }
 
 // ── POST /api/auth/register ───────────────────────────────────────────────
-// Solo admin puede crear usuarios (o el primero que se registre si no hay nadie)
-router.post('/register', async (req, res) => {
+// Solo un administrador autenticado puede crear nuevos usuarios.
+// El primer administrador se prepara mediante `npm run seed:admin`.
+router.post('/register', protect, async (req, res) => {
   try {
     const { nombre, email, password, whatsapp, rol, descripcion } = req.body
 
-    // Si ya existe algún usuario, requerir token de admin
-    const count = await User.countDocuments()
-    if (count > 0) {
-      // Verificar token (simplificado — en producción usa el middleware)
-      const authHeader = req.headers.authorization
-      if (!authHeader?.startsWith('Bearer ')) {
-        return res.status(403).json({ error: 'Solo un admin puede registrar nuevos usuarios.' })
-      }
-      const jwt2 = require('jsonwebtoken')
-      let decoded
-      try { decoded = jwt2.verify(authHeader.split(' ')[1], process.env.JWT_SECRET) } catch {
-        return res.status(403).json({ error: 'Token inválido.' })
-      }
-      const requester = await User.findById(decoded.id)
-      if (!requester || requester.rol !== 'admin') {
-        return res.status(403).json({ error: 'Solo admin puede crear usuarios.' })
-      }
+    if (req.user.rol !== 'admin') {
+      return res.status(403).json({ error: 'Solo un administrador puede registrar usuarios.' })
     }
 
     const user = await User.create({
@@ -39,7 +26,7 @@ router.post('/register', async (req, res) => {
       email,
       password,
       whatsapp: whatsapp || '',
-      rol: count === 0 ? 'admin' : (rol || 'vendedor'), // El primero es admin
+      rol: rol === 'admin' ? 'admin' : 'vendedor',
       descripcion: descripcion || undefined,
     })
 
@@ -85,7 +72,6 @@ router.post('/login', async (req, res) => {
 })
 
 // ── GET /api/auth/me ──────────────────────────────────────────────────────
-const protect = require('../middleware/auth')
 router.get('/me', protect, (req, res) => {
   res.json({ user: req.user })
 })
