@@ -10,7 +10,7 @@ export default function Footer() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
             {[
               { icono: '✓', titulo: 'Compra oficial', desc: 'Pago dentro de MyShop' },
-              { icono: '→', titulo: 'Entrega informada', desc: 'Opciones visibles al pagar' },
+              { icono: '→', titulo: 'Total transparente', desc: 'Impuestos y entrega al pagar' },
               { icono: '✓', titulo: 'Productos originales', desc: 'Catálogo oficial Amway' },
               { icono: '→', titulo: 'Orientación personal', desc: 'Soporte por WhatsApp' },
             ].map((item, i) => (
@@ -77,11 +77,11 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-secondary mt-0.5">&#10003;</span>
-                <span>Precio confirmado por Amway</span>
+                <span>Precio del producto en MyShop</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-secondary mt-0.5">&#10003;</span>
-                <span>Entrega elegida en el checkout</span>
+                <span>Impuestos y entrega en el checkout</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-secondary mt-0.5">&#10003;</span>

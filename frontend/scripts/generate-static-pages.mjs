@@ -136,7 +136,7 @@ const productPages = productos.map(producto => {
       title: producto.nombreCorto || producto.nombre,
       intro: producto.descripcion,
       path,
-      body: `<h2>Descripción</h2>${plainText(intro).split(/\n+/).filter(Boolean).map(text => `<p>${escapeHtml(text)}</p>`).join('')}<h2>Características principales</h2><ul>${benefits}</ul>${instructions ? `<h2>Indicaciones de uso</h2><ul>${instructions}</ul>` : ''}${questions ? `<h2>Preguntas sobre el producto</h2>${questions}` : ''}<p>Consulta siempre la etiqueta, las instrucciones y las advertencias oficiales antes de usar el producto. Esta ficha es informativa y no sustituye consejo médico u odontológico.</p>`,
+      body: `<h2>Descripción</h2>${plainText(intro).split(/\n+/).filter(Boolean).map(text => `<p>${escapeHtml(text)}</p>`).join('')}<h2>Características principales</h2><ul>${benefits}</ul>${instructions ? `<h2>Indicaciones de uso</h2><ul>${instructions}</ul>` : ''}${questions ? `<h2>Preguntas sobre el producto</h2>${questions}` : ''}<p>El precio mostrado corresponde al producto. Los impuestos, gastos de entrega y el total final se calculan en el checkout oficial de Amway antes de confirmar el pago.</p><p>Consulta siempre la etiqueta, las instrucciones y las advertencias oficiales antes de usar el producto. Esta ficha es informativa y no sustituye consejo médico u odontológico.</p>`,
     }),
   }
 })
@@ -153,7 +153,7 @@ const comboPages = combos.map(combo => {
       title: combo.nombre,
       intro: combo.descripcion,
       path,
-      body: `<h2>¿Qué incluye?</h2><ul>${included}</ul><h2>Descripción de la rutina</h2><p>${escapeHtml(plainText(combo.descripcionLarga))}</p><h2>Características</h2><ul>${benefits}</ul><p>Verifica disponibilidad, precio e instrucciones de cada producto en la fuente oficial antes de comprar.</p>`,
+      body: `<h2>¿Qué incluye?</h2><ul>${included}</ul><h2>Descripción de la rutina</h2><p>${escapeHtml(plainText(combo.descripcionLarga))}</p><h2>Características</h2><ul>${benefits}</ul><p>Verifica disponibilidad, precio e instrucciones de cada producto en la fuente oficial antes de comprar. Los impuestos, gastos de entrega y el total final se calculan en el checkout oficial de Amway.</p>`,
     }),
   }
 })

@@ -175,6 +175,7 @@ export default function Catalogo() {
           <div>
             <h3 className="text-2xl font-black mb-1">Explora el catálogo completo</h3>
             <p className="text-blue-100">Los seis favoritos son una selección. En MyShop puedes buscar los demás productos disponibles en Amway.</p>
+            <p className="text-blue-200 text-sm mt-2">El precio inicial corresponde al producto; impuestos, entrega y total final se calculan durante el checkout.</p>
           </div>
           <a
             href="https://www.amway.com.do/myshop/vitaglossrd"

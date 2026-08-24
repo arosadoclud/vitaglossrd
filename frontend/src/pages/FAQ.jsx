@@ -89,7 +89,11 @@ const faqs = [
     preguntas: [
       {
         p: '¿Cómo hago un pedido en VitaGloss RD?',
-        r: 'Elige un producto y pulsa “Comprar en MyShop”. La compra y el pago se completan en el sitio oficial de Amway, donde verás la disponibilidad y las opciones de entrega para tu dirección. Si necesitas orientación antes de comprar, puedes escribirnos por WhatsApp.',
+        r: 'Elige un producto y pulsa “Comprar en MyShop”. La compra y el pago se completan en el sitio oficial de Amway, donde verás la disponibilidad, los impuestos aplicables, las opciones de entrega y el total final antes de pagar. Si necesitas orientación, puedes escribirnos por WhatsApp.',
+      },
+      {
+        p: '¿El precio mostrado en MyShop incluye impuestos y envío?',
+        r: 'No necesariamente. El precio mostrado inicialmente corresponde al producto. Amway calcula los impuestos, gastos de entrega y cualquier otro cargo aplicable durante el checkout, según la dirección y modalidad elegidas, y muestra el total final antes de confirmar el pago.',
       },
       {
         p: '¿Cuáles son los métodos de pago?',
@@ -97,7 +101,7 @@ const faqs = [
       },
       {
         p: '¿Hacen envíos a todo el país?',
-        r: 'Escribe tu dirección durante el checkout de MyShop para consultar las opciones, costos y plazos de entrega disponibles. Si Amway ofrece retiro u otra modalidad, aparecerá allí antes de confirmar el pedido.',
+        r: 'Escribe tu dirección durante el checkout de MyShop para consultar las opciones, costos y plazos de entrega disponibles. El envío no está incluido en el precio inicial del producto. Si Amway ofrece retiro u otra modalidad, aparecerá allí antes de confirmar el pedido.',
       },
       {
         p: '¿Puedo comprar más de un producto a la vez?',

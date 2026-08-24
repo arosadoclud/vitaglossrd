@@ -11,7 +11,7 @@ export default function Terminos() {
     <div className="min-h-screen bg-white pt-28 pb-20 px-4">
       <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl font-black text-primary mb-2">Términos de Uso</h1>
-        <p className="text-gray-400 text-sm mb-10">Última actualización: enero 2025</p>
+        <p className="text-gray-400 text-sm mb-10">Última actualización: agosto 2026</p>
 
         <div className="prose prose-gray max-w-none space-y-8 text-gray-600 leading-relaxed">
 
@@ -39,14 +39,14 @@ export default function Terminos() {
           <section>
             <h2 className="text-xl font-bold text-primary mb-3">4. Precios y pagos</h2>
             <p>
-              Los precios públicos, impuestos y métodos de pago aplicables se muestran en MyShop durante el proceso de compra. Los precios internos visibles en áreas privadas de VitaGloss RD no constituyen una oferta pública y pueden cambiar sin previo aviso.
+              El precio mostrado inicialmente en MyShop corresponde al producto y no incluye necesariamente impuestos, gastos de entrega u otros cargos aplicables. Amway calcula y muestra el total final —producto, impuestos, entrega y cualquier cargo adicional— durante el checkout, antes de que el cliente confirme el pago. Los precios internos visibles en áreas privadas de VitaGloss RD no constituyen una oferta pública y pueden cambiar sin previo aviso.
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-bold text-primary mb-3">5. Envíos y entregas</h2>
             <p>
-              Para los pedidos completados en MyShop, el cliente debe elegir una de las opciones de entrega que Amway muestre durante el checkout. Los costos, plazos, disponibilidad territorial y cualquier opción de retiro son determinados y confirmados en ese proceso. VitaGloss RD no promete una modalidad de entrega que no aparezca en el checkout oficial.
+              Los gastos de entrega no están incluidos en el precio inicial del producto. Para los pedidos completados en MyShop, el cliente debe elegir una de las opciones que Amway muestre durante el checkout. Los costos, plazos, disponibilidad territorial y cualquier opción de retiro son determinados y confirmados en ese proceso. VitaGloss RD no promete una modalidad ni una tarifa de entrega que no aparezca en el checkout oficial.
             </p>
           </section>
 

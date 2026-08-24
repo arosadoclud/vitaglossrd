@@ -48,7 +48,7 @@ export const PRECIOS = {
 }
 
 // ── PRECIOS DE COMBOS/KITS ──────────────────────────────────
-// precioCombo = precio final del bundle (decisión de negocio)
+// precioCombo = precio de referencia del bundle; no incluye impuestos ni entrega
 // precioNormal se calcula automáticamente como suma de productos.
 // Para actualizar: cambia solo precioCombo.
 

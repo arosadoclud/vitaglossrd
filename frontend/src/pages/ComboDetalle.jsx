@@ -161,7 +161,9 @@ export default function ComboDetalle() {
                     <div className="p-3">
                       <p className="font-bold text-gray-900 text-sm leading-tight mb-1">{p.nombre}</p>
                       <p className="text-gray-400 text-xs mb-2">{p.cantidad}</p>
-                      <p className="text-primary font-black text-base">RD${p.precio.toLocaleString()}</p>
+                      {user && (
+                        <p className="text-primary font-black text-base">RD${p.precio.toLocaleString()}</p>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -205,6 +207,7 @@ export default function ComboDetalle() {
                         <span className="text-primary">RD${combo.precioCombo.toLocaleString()}</span>
                       </div>
                     </div>
+                    <p className="text-[11px] leading-relaxed text-gray-400 mb-5">Precio de referencia del kit; no incluye impuestos ni gastos de entrega. El total se confirma antes de pagar.</p>
                   </>
                 ) : (
                   <div className="mb-5">
@@ -240,7 +243,7 @@ export default function ComboDetalle() {
                     <svg className="w-4 h-4 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
                     </svg>
-                    <span>Envío a todo el país</span>
+                    <span>Costo y modalidad de entrega se confirman al comprar</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm text-gray-500">
                     <svg className="w-4 h-4 text-purple-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

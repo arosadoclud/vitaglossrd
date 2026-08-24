@@ -8,7 +8,7 @@ import { useSEO } from '../hooks/useSEO'
 import ReviewsSection from '../components/ReviewsSection'
 import { usePrecios } from '../context/PreciosContext'
 import { useAuth } from '../context/AuthContext'
-import { getMyShopUrl, hasDirectMyShopLink } from '../config/myshop'
+import { getMyShopUrl, hasDirectMyShopLink, MYSHOP_PRICE_NOTICE } from '../config/myshop'
 
 // Acordeón individual
 function Accordion({ titulo, icono, children, defaultOpen = false }) {
@@ -281,7 +281,7 @@ export default function ProductoDetalle() {
   const SITE = 'https://www.vitaglossrd.com'
   useSEO({
     title: producto?.nombre ?? 'Producto',
-    description: producto?.descripcion ?? 'Producto Amway original en VitaGloss RD. Envío a todo el país.',
+    description: producto?.descripcion ?? 'Producto Amway original en VitaGloss RD. Consulta disponibilidad y entrega en MyShop.',
     canonical: producto ? `${SITE}/producto/${slugify(producto.nombre)}` : undefined,
     ogImage: producto ? `${SITE}${producto.imagen}` : undefined,
     jsonLd: producto ? {
@@ -296,53 +296,6 @@ export default function ProductoDetalle() {
       brand: { '@type': 'Brand', name: 'Amway' },
       sku: producto.articulo,
       mpn: producto.articulo,
-      offers: {
-        '@type': 'Offer',
-        url: `${SITE}/producto/${slugify(producto.nombre)}`,
-        priceCurrency: 'DOP',
-        price: String(producto.precio),
-        priceValidUntil: '2027-12-31',
-        availability: producto.disponible
-          ? 'https://schema.org/InStock'
-          : 'https://schema.org/OutOfStock',
-        itemCondition: 'https://schema.org/NewCondition',
-        seller: { '@type': 'Organization', name: 'VitaGloss RD', url: SITE },
-        shippingDetails: {
-          '@type': 'OfferShippingDetails',
-          shippingRate: {
-            '@type': 'MonetaryAmount',
-            value: '150',
-            currency: 'DOP',
-          },
-          shippingDestination: {
-            '@type': 'DefinedRegion',
-            addressCountry: 'DO',
-          },
-          deliveryTime: {
-            '@type': 'ShippingDeliveryTime',
-            handlingTime: {
-              '@type': 'QuantitativeValue',
-              minValue: 0,
-              maxValue: 1,
-              unitCode: 'DAY',
-            },
-            transitTime: {
-              '@type': 'QuantitativeValue',
-              minValue: 1,
-              maxValue: 3,
-              unitCode: 'DAY',
-            },
-          },
-        },
-        hasMerchantReturnPolicy: {
-          '@type': 'MerchantReturnPolicy',
-          applicableCountry: 'DO',
-          returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
-          merchantReturnDays: 30,
-          returnMethod: 'https://schema.org/ReturnByMail',
-          returnFees: 'https://schema.org/FreeReturn',
-        },
-      },
     } : null,
   })
 
@@ -354,8 +307,6 @@ export default function ProductoDetalle() {
         content_name: producto.nombre,
         content_ids: [String(producto.id)],
         content_type: 'product',
-        value: producto.precio,
-        currency: 'DOP',
       })
     }
   }, [producto?.id])
@@ -393,7 +344,7 @@ export default function ProductoDetalle() {
   }
 
   const whatsappMsg = encodeURIComponent(
-    `Hola VitaGloss RD! 👋 Quiero hacer un pedido de:\n\n*${producto.nombre}*\nArt. ${producto.articulo} | Precio: RD$${producto.precio}\n\n¿Cuál es el proceso de compra? Gracias!`
+    `Hola VitaGloss RD! 👋 Quiero orientación para comprar:\n\n*${producto.nombre}*\nArt. ${producto.articulo}\n\n¿Cuál es el proceso de compra? Gracias!`
   )
   const whatsappURL = `https://wa.me/18492763532?text=${whatsappMsg}`
   const myShopURL = getMyShopUrl(producto.articulo)
@@ -550,7 +501,7 @@ export default function ProductoDetalle() {
                   )}
                 </div>
                 <p className="text-gray-400 text-sm">
-                  <span className="text-xs text-blue-500">Envío en Santo Domingo</span>
+                  <span className="text-xs text-blue-500">Precio del producto · No incluye impuestos ni entrega</span>
                 </p>
               </div>
             ) : (
@@ -590,7 +541,7 @@ export default function ProductoDetalle() {
                     <p className="text-sm text-gray-700">
                       <strong className="text-primary">RD${costoDia}</strong> por {unidad} · suministro para <strong>{usos} días</strong>
                     </p>
-                    <p className="text-xs text-gray-400 mt-0.5">Inversión en tu salud por menos de un café</p>
+                    <p className="text-xs text-gray-400 mt-0.5">Cálculo sobre el precio del producto; no incluye impuestos ni entrega.</p>
                   </div>
                 </div>
               )
@@ -621,7 +572,7 @@ export default function ProductoDetalle() {
             </a>
             <div className="rounded-xl border border-blue-100 bg-blue-50/70 px-4 py-3 mb-4">
               <p className="text-xs leading-relaxed text-blue-900">
-                La compra y el pago se completan en Amway. Allí verás el precio, la disponibilidad y las opciones de entrega habilitadas para tu dirección.
+                {MYSHOP_PRICE_NOTICE} Allí también verás la disponibilidad y las opciones habilitadas para tu dirección.
               </p>
               {!hasDirectMyShopLink(producto.articulo) && (
                 <p className="text-[11px] text-blue-700 mt-1">Busca el artículo <strong>{producto.articulo}</strong> dentro de MyShop.</p>
@@ -639,7 +590,7 @@ export default function ProductoDetalle() {
               </div>
               <div className="flex items-center gap-3 text-sm text-gray-500">
                 <svg className="w-4 h-4 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-                <span>Transferencia · tarjeta · efectivo</span>
+                <span>Métodos de pago mostrados por Amway en el checkout</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-gray-500">
                 <svg className="w-4 h-4 text-purple-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>

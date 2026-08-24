@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { usePrecios } from '../context/PreciosContext'
 import { useAuth } from '../context/AuthContext'
 import { slugify } from '../utils/slugify'
-import { getMyShopUrl, hasDirectMyShopLink } from '../config/myshop'
+import { getMyShopUrl, hasDirectMyShopLink, MYSHOP_PRICE_NOTICE } from '../config/myshop'
 
 export default function ProductoCard({ producto }) {
   const { getPrecio } = usePrecios()
@@ -73,16 +73,19 @@ export default function ProductoCard({ producto }) {
 
         {/* Precio — solo para usuarios autenticados */}
         {user ? (
-          <div className="flex items-center gap-2 mb-3 flex-wrap">
-            <span className="text-xl font-extrabold text-primary">RD${precio.toLocaleString('es-DO', { minimumFractionDigits: precio % 1 !== 0 ? 2 : 0, maximumFractionDigits: 2 })}</span>
-            {precioOriginal && (
-              <>
-                <span className="text-gray-300 text-xs line-through">RD${precioOriginal.toLocaleString('es-DO')}</span>
-                <span className="bg-red-100 text-red-500 text-[10px] font-bold px-1.5 py-0.5 rounded-full">
-                  -{Math.round(((precioOriginal - precio) / precioOriginal) * 100)}%
-                </span>
-              </>
-            )}
+          <div className="mb-3">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-xl font-extrabold text-primary">RD${precio.toLocaleString('es-DO', { minimumFractionDigits: precio % 1 !== 0 ? 2 : 0, maximumFractionDigits: 2 })}</span>
+              {precioOriginal && (
+                <>
+                  <span className="text-gray-300 text-xs line-through">RD${precioOriginal.toLocaleString('es-DO')}</span>
+                  <span className="bg-red-100 text-red-500 text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                    -{Math.round(((precioOriginal - precio) / precioOriginal) * 100)}%
+                  </span>
+                </>
+              )}
+            </div>
+            <p className="mt-1 text-[10px] leading-relaxed text-gray-400">No incluye impuestos ni gastos de entrega.</p>
           </div>
         ) : (
           <div className="flex items-center gap-2 mb-3">
@@ -106,7 +109,8 @@ export default function ProductoCard({ producto }) {
           </a>
         </div>
         <p className="mt-2 text-[10px] leading-relaxed text-gray-400 text-center">
-          {hasDirectMyShopLink(producto.articulo) ? 'Abre este producto en Amway.' : 'Abre nuestro catálogo oficial en Amway.'}
+          {hasDirectMyShopLink(producto.articulo) ? 'Abre este producto en Amway. ' : 'Abre nuestro catálogo oficial en Amway. '}
+          {MYSHOP_PRICE_NOTICE}
         </p>
       </div>
     </article>

@@ -1,5 +1,7 @@
 export const MYSHOP_URL = 'https://www.amway.com.do/myshop/vitaglossrd'
 
+export const MYSHOP_PRICE_NOTICE = 'El precio mostrado corresponde al producto. Los impuestos y gastos de entrega se calculan en el checkout oficial de Amway antes de confirmar el pago.'
+
 // Los enlaces individuales deben copiarse desde la función oficial «Compartir»
 // de Amway. Hasta tener un enlace verificado, enviamos al MyShop del IBO para
 // conservar la atribución y evitar rutas de producto inventadas o caducadas.

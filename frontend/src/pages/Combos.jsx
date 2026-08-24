@@ -84,7 +84,7 @@ export default function Combos() {
 
       {/* Banner de ahorro */}
       <div className="bg-secondary text-white text-center py-2.5 text-sm font-semibold tracking-wide">
-        🔥 Combos con hasta <strong>16% de descuento</strong> · Envío a todo el país
+        Combos con hasta <strong>16% de descuento</strong> · Impuestos y entrega no incluidos en el precio mostrado
       </div>
 
       {/* Filtros por categoría */}
@@ -186,6 +186,7 @@ export default function Combos() {
                         Ahorras RD${combo.ahorro.toLocaleString()}
                       </span>
                     </div>
+                    <p className="text-[11px] text-gray-400 mt-2">Precio de referencia; no incluye impuestos ni gastos de entrega.</p>
                   </div>
                 ) : (
                   <div className="bg-gray-50 rounded-2xl p-4 mb-6 border border-gray-100 mt-auto">
