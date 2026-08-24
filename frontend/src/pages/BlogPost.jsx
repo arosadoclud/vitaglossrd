@@ -1,8 +1,8 @@
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
-import { m } from 'framer-motion'
+import { m as Motion } from 'framer-motion'
 import { useSEO } from '../hooks/useSEO'
-import { getPostBySlug, getPostsRelacionados } from '../data/posts'
+import { posts, postRedirects } from '../data/postIndex.generated'
 import { buildTOC } from '../utils/toc'
 import { productos } from '../data/productos'
 import { slugify } from '../utils/slugify'
@@ -31,6 +31,17 @@ const catColors = {
   'Bienestar':    { bg: 'bg-purple-100', text: 'text-purple-700' },
   'Suplementos':  { bg: 'bg-amber-100',  text: 'text-amber-700' },
 }
+
+const institutionalResources = {
+  'Salud bucal': [
+    ['Organización Mundial de la Salud: salud bucodental', 'https://www.who.int/es/news-room/fact-sheets/detail/oral-health'],
+    ['American Dental Association: información para pacientes', 'https://www.mouthhealthy.org/'],
+  ],
+  default: [
+    ['NIH Office of Dietary Supplements: fichas informativas', 'https://ods.od.nih.gov/factsheets/list-all/'],
+    ['Organización Mundial de la Salud: alimentación sana', 'https://www.who.int/es/news-room/fact-sheets/detail/healthy-diet'],
+  ],
+}
 function catStyle(cat) {
   return catColors[cat] || { bg: 'bg-gray-100', text: 'text-gray-600' }
 }
@@ -38,8 +49,16 @@ function catStyle(cat) {
 export default function BlogPost() {
   const { slug } = useParams()
   const navigate = useNavigate()
-  const post = getPostBySlug(slug)
-  const relacionados = post ? getPostsRelacionados(slug) : []
+  const canonicalSlug = postRedirects[slug] || slug
+  const postMetadata = posts.find(candidate => candidate.slug === canonicalSlug)
+  const [postContent, setPostContent] = useState(null)
+  const post = useMemo(
+    () => postMetadata ? { ...postMetadata, ...(postContent?.slug === canonicalSlug ? postContent.data : {}) } : null,
+    [postMetadata, postContent, canonicalSlug],
+  )
+  const relacionados = postMetadata
+    ? posts.filter(candidate => candidate.slug !== canonicalSlug && candidate.categoria === postMetadata.categoria).slice(0, 3)
+    : []
   const productoDestacado = post?.productoRelacionadoId
     ? productos.find(p => p.id === post.productoRelacionadoId)
     : null
@@ -48,7 +67,7 @@ export default function BlogPost() {
 
   // ── TOC ─────────────────────────────────────────────────────────────────
   const { htmlWithIds, headings } = useMemo(
-    () => post ? buildTOC(post.contenido) : { htmlWithIds: '', headings: [] },
+    () => post?.contenido ? buildTOC(post.contenido) : { htmlWithIds: '', headings: [] },
     [post]
   )
 
@@ -85,7 +104,7 @@ export default function BlogPost() {
       '@type': 'Person',
       name: 'Andy Rosado',
       url: `${SITE_URL}/sobre-nosotros`,
-      jobTitle: 'Distribuidor Independiente Certificado Amway',
+      jobTitle: 'Empresario Independiente de Amway',
       worksFor: { '@type': 'Organization', name: 'VitaGloss RD', url: SITE_URL },
       sameAs: ['https://wa.me/18492763532'],
     },
@@ -149,8 +168,18 @@ export default function BlogPost() {
 
   // Scroll al top en cada navegación
   useEffect(() => {
+    if (postRedirects[slug]) navigate(`/blog/${postRedirects[slug]}`, { replace: true })
+    if (postMetadata) {
+      fetch(`/blog/content/${canonicalSlug}.json`)
+        .then(response => {
+          if (!response.ok) throw new Error('No se pudo cargar el artículo')
+          return response.json()
+        })
+        .then(data => setPostContent({ slug: canonicalSlug, data }))
+        .catch(() => setPostContent({ slug: canonicalSlug, data: { contenido: '', faqs: [] } }))
+    }
     window.scrollTo({ top: 0, behavior: 'instant' })
-  }, [slug])
+  }, [slug, canonicalSlug, postMetadata, navigate])
 
   // Progreso de lectura
   const [readingProgress, setReadingProgress] = useState(0)
@@ -160,7 +189,6 @@ export default function BlogPost() {
       const docHeight = document.documentElement.scrollHeight - window.innerHeight
       setReadingProgress(docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0)
     }
-    setReadingProgress(0)
     window.addEventListener('scroll', update, { passive: true })
     return () => window.removeEventListener('scroll', update)
   }, [slug])
@@ -216,14 +244,14 @@ export default function BlogPost() {
           </nav>
 
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8 items-end">
-            <m.div variants={fadeUp} initial="hidden" animate="visible">
+            <Motion.div variants={fadeUp} initial="hidden" animate="visible">
               <div className="flex items-center gap-3 mb-5 flex-wrap">
                 <span className={`text-xs font-bold px-3 py-1 rounded-full ${cs.bg} ${cs.text}`}>
                   {post.categoria}
                 </span>
                 <span className="text-white/40 text-xs">{formatFecha(post.fecha)}</span>
                 <span className="text-white/40 text-xs">·</span>
-                <span className="text-white/40 text-xs">⏱ {post.tiempoLectura} de lectura</span>
+                <span className="text-white/40 text-xs">{post.tiempoLectura} de lectura</span>
               </div>
 
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight mb-6">
@@ -240,14 +268,14 @@ export default function BlogPost() {
                 </div>
                 <div>
                   <p className="text-white/80 text-sm font-bold leading-none">Andy Rosado</p>
-                  <p className="text-white/40 text-xs mt-0.5">Distribuidor Independiente Certificado Amway · VitaGloss RD</p>
+                  <p className="text-white/40 text-xs mt-0.5">Empresario Independiente de Amway · VitaGloss RD</p>
                 </div>
               </div>
-            </m.div>
+            </Motion.div>
 
             {/* Imagen del producto en el hero — solo si no es cover */}
             {!post.imagenCover && (
-              <m.div
+              <Motion.div
                 variants={fadeUp}
                 initial="hidden"
                 animate="visible"
@@ -263,17 +291,34 @@ export default function BlogPost() {
                   decoding="async"
                   className="w-64 h-64 object-contain drop-shadow-2xl"
                 />
-              </m.div>
+              </Motion.div>
             )}
           </div>
         </div>
       </div>
 
+      {post.imagenCover && (
+        <figure className="max-w-5xl mx-auto px-4 -mt-1 pt-8">
+          <img
+            src={post.imagen}
+            alt={`Imagen editorial de ${post.titulo}`}
+            width="1200"
+            height="630"
+            fetchPriority="high"
+            decoding="async"
+            className="w-full aspect-[1200/630] object-cover rounded-3xl shadow-xl shadow-slate-900/10"
+          />
+          <figcaption className="mt-2 text-xs text-gray-400 text-right">
+            Ilustración editorial de VitaGloss RD.
+          </figcaption>
+        </figure>
+      )}
+
       {/* ── CONTENIDO ── */}
       <div className="max-w-3xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_200px] gap-10 items-start">
           {/* Artículo */}
-          <m.article
+          <Motion.article
             variants={fadeUp}
             initial="hidden"
             animate="visible"
@@ -297,6 +342,9 @@ export default function BlogPost() {
                 </p>
               </div>
             )}
+            <div className="mb-8 border-y border-gray-100 py-4 text-xs leading-relaxed text-gray-500">
+              <strong className="text-gray-700">Responsabilidad editorial:</strong> escrito y revisado por Andy Rosado, Empresario Independiente de Amway. No ha sido revisado por un profesional clínico, salvo que el artículo identifique expresamente al revisor. Consulta las fuentes institucionales y la fecha de actualización antes de tomar decisiones de salud.
+            </div>
             {/* ── Tabla de Contenido (mobile) ── */}
             {headings.length >= 3 && (
               <nav aria-label="Tabla de contenido" className="mb-8 bg-blue-50 border border-blue-100 rounded-2xl px-5 py-4">
@@ -319,7 +367,23 @@ export default function BlogPost() {
               className="prose-custom"
               dangerouslySetInnerHTML={{ __html: htmlWithIds }}
             />
-          </m.article>
+            {postContent?.slug !== canonicalSlug && (
+              <div className="py-16 text-center text-sm text-gray-400" role="status">
+                Cargando artículo…
+              </div>
+            )}
+            <section className="mt-10 rounded-2xl border border-gray-200 bg-gray-50 p-5" aria-labelledby="recursos-institucionales">
+              <h2 id="recursos-institucionales" className="text-base font-bold text-primary mb-2">Recursos institucionales para verificar y ampliar</h2>
+              <p className="text-xs text-gray-500 mb-3">Estos enlaces sirven como lectura general. Las afirmaciones específicas del artículo deben revisarse junto con sus fuentes y la orientación de un profesional.</p>
+              <ul className="space-y-2">
+                {(institutionalResources[post.categoria] || institutionalResources.default).map(([label, href]) => (
+                  <li key={href}>
+                    <a href={href} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-blue-700 hover:underline">{label}</a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </Motion.article>
 
           {/* Sidebar sticky */}
           <aside className="hidden lg:block">
@@ -446,7 +510,7 @@ export default function BlogPost() {
         <section className="py-10 px-4 bg-gradient-to-br from-[#f0fdf9] to-[#e8f8f5] border-t border-teal-100">
           <div className="max-w-3xl mx-auto">
             <p className="text-xs font-bold tracking-widest text-teal-600 uppercase mb-4">Producto mencionado en este artículo</p>
-            <m.div
+            <Motion.div
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -496,7 +560,7 @@ export default function BlogPost() {
                   </Link>
                 </div>
               </div>
-            </m.div>
+            </Motion.div>
           </div>
         </section>
       )}
@@ -528,7 +592,7 @@ export default function BlogPost() {
               {relacionados.map((rel, i) => {
                 const rcs = catStyle(rel.categoria)
                 return (
-                  <m.div
+                  <Motion.div
                     key={rel.id}
                     variants={fadeUp}
                     initial="hidden"
@@ -578,7 +642,7 @@ export default function BlogPost() {
                         </span>
                       </div>
                     </Link>
-                  </m.div>
+                  </Motion.div>
                 )
               })}
             </div>

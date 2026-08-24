@@ -46,6 +46,7 @@ export function useSEO({
 } = {}) {
   const fullTitle    = title ? `${title} | VitaGloss RD` : 'VitaGloss RD — Tu salud, tu sonrisa'
   const resolvedImg  = ogImage || SITE_OG_IMAGE
+  const resolvedImgType = resolvedImg.endsWith('.webp') ? 'image/webp' : resolvedImg.endsWith('.png') ? 'image/png' : 'image/jpeg'
   const resolvedUrl  = (canonical || SITE_URL).replace('https://vitaglossrd.com', 'https://www.vitaglossrd.com')
   const isArticle    = canonical && canonical.includes('/blog/')
 
@@ -74,6 +75,7 @@ export function useSEO({
     if (description) setMeta('property', 'og:description', description)
     setMeta('property', 'og:url',         resolvedUrl)
     setMeta('property', 'og:image',       resolvedImg)
+    setMeta('property', 'og:image:type',  resolvedImgType)
     setMeta('property', 'og:image:width', '1200')
     setMeta('property', 'og:image:height','630')
     setMeta('property', 'og:image:alt',   title || 'VitaGloss RD')
@@ -100,6 +102,8 @@ export function useSEO({
           el.setAttribute('content', tag)
         })
       }
+    } else {
+      document.querySelectorAll('meta[property^="article:"]').forEach(el => el.remove())
     }
 
     // ── Twitter Card ────────────────────────────────────────────────────────
@@ -114,7 +118,10 @@ export function useSEO({
     // ── Author (E-E-A-T signal) ─────────────────────────────────────────────
     if (articleAuthor) setMeta('name', 'author', articleAuthor)
 
-  }, [fullTitle, description, resolvedUrl, resolvedImg, publishedTime, modifiedTime, articleAuthor, articleSection])
+    return () => {
+      document.querySelectorAll('meta[property="article:tag"]').forEach(el => el.remove())
+    }
+  }, [fullTitle, title, description, resolvedUrl, resolvedImg, resolvedImgType, isArticle, publishedTime, modifiedTime, articleAuthor, articleTags, articleSection])
 
   // ── JSON-LD structured data ────────────────────────────────────────────────
   useEffect(() => {

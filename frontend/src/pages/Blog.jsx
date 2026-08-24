@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { m, AnimatePresence } from 'framer-motion'
+import { m as Motion, AnimatePresence } from 'framer-motion'
 import { useSEO } from '../hooks/useSEO'
-import { posts, categorias } from '../data/posts'
+import { posts, categorias } from '../data/postIndex.generated'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -34,7 +34,7 @@ function catStyle(cat) {
 export default function Blog() {
   useSEO({
     title:       'Blog — Salud, Nutrición y Bienestar en República Dominicana',
-    description: 'Artículos sobre salud bucal, nutrición, vitaminas y bienestar para República Dominicana. Consejos basados en ciencia de los especialistas de VitaGloss RD.',
+    description: 'Guías educativas sobre salud bucal, nutrición, vitaminas y bienestar, revisadas editorialmente y adaptadas a República Dominicana.',
     canonical:   'https://www.vitaglossrd.com/blog',
     ogImage:     'https://www.vitaglossrd.com/logoVitaglossRd.png',
     ogImageAlt:  'Blog de salud y nutrición — VitaGloss RD',
@@ -148,7 +148,7 @@ export default function Blog() {
       {/* ── HERO ── */}
       <section className="bg-gradient-to-br from-[#0a1628] via-[#1B3A6B] to-[#0f2a54] pt-20 sm:pt-28 pb-12 sm:pb-16 px-4">
         <div className="max-w-5xl mx-auto text-center">
-          <m.div variants={fadeUp} initial="hidden" animate="visible">
+          <Motion.div variants={fadeUp} initial="hidden" animate="visible">
             <span className="inline-block bg-secondary/20 text-secondary text-xs font-bold px-4 py-2 rounded-full uppercase tracking-widest mb-5 border border-secondary/30">
               📚 Blog VitaGloss RD
             </span>
@@ -172,7 +172,7 @@ export default function Blog() {
                 className="w-full bg-white/10 border border-white/20 focus:border-secondary/60 text-white placeholder-white/30 rounded-2xl pl-10 pr-4 py-3 text-sm outline-none transition-colors"
               />
             </div>
-          </m.div>
+          </Motion.div>
         </div>
       </section>
 
@@ -199,7 +199,7 @@ export default function Blog() {
       <div className="max-w-6xl mx-auto px-4 pt-4 pb-8">
         {postsFiltrados.length === 0 ? (
           <div className="text-center py-24">
-            <span className="text-5xl block mb-4">🔍</span>
+            <span className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-full bg-gray-100 text-xl text-gray-500" aria-hidden="true">?</span>
             <p className="text-gray-400 text-lg font-medium">No encontramos artículos con esa búsqueda.</p>
             <button
               onClick={() => { setBusqueda(''); setCategoriaActiva('Todas') }}
@@ -212,7 +212,7 @@ export default function Blog() {
           <>
             {/* ── POST DESTACADO ── */}
             {postDestacado && (
-              <m.div
+              <Motion.div
                 variants={fadeUp}
                 initial="hidden"
                 whileInView="visible"
@@ -231,7 +231,8 @@ export default function Blog() {
                         alt={postDestacado.titulo}
                         width="600"
                         height="360"
-                        loading="lazy"
+                        loading="eager"
+                        fetchPriority="high"
                         decoding="async"
                         className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
@@ -241,7 +242,8 @@ export default function Blog() {
                         alt={postDestacado.titulo}
                         width="256"
                         height="256"
-                        loading="lazy"
+                        loading="eager"
+                        fetchPriority="high"
                         decoding="async"
                         className="w-48 h-48 lg:w-64 lg:h-64 object-contain drop-shadow-2xl group-hover:scale-105 transition-transform duration-500"
                       />
@@ -252,7 +254,7 @@ export default function Blog() {
                       </span>
                     </div>
                     <div className="absolute top-4 right-4 bg-secondary text-white text-xs font-bold px-3 py-1 rounded-full">
-                      ✨ Destacado
+                      Selección editorial
                     </div>
                   </div>
 
@@ -261,7 +263,7 @@ export default function Blog() {
                     <div className="flex items-center gap-3 text-xs text-gray-400 mb-4">
                       <span>{formatFecha(postDestacado.fecha)}</span>
                       <span>·</span>
-                      <span>⏱ {postDestacado.tiempoLectura} de lectura</span>
+                      <span>{postDestacado.tiempoLectura} de lectura</span>
                     </div>
                     <h2 className="text-2xl lg:text-3xl font-black text-primary mb-3 leading-tight group-hover:text-secondary transition-colors">
                       {postDestacado.titulo}
@@ -281,7 +283,7 @@ export default function Blog() {
                     </span>
                   </div>
                 </Link>
-              </m.div>
+              </Motion.div>
             )}
 
             {/* ── GRID DE POSTS ── */}
@@ -297,7 +299,7 @@ export default function Blog() {
                 {postsGrid.map((post, i) => {
                   const cs = catStyle(post.categoria)
                   return (
-                    <m.div
+                    <Motion.div
                       key={post.id}
                       variants={fadeUp}
                       initial={i < 3 ? 'visible' : 'hidden'}
@@ -367,7 +369,7 @@ export default function Blog() {
                           </span>
                         </div>
                       </Link>
-                    </m.div>
+                    </Motion.div>
                   )
                 })}
               </div>
@@ -400,7 +402,7 @@ export default function Blog() {
       {/* ── BOTÓN SUBIR ── */}
       <AnimatePresence>
         {showScrollTop && (
-          <m.button
+          <Motion.button
             initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.7 }}
@@ -412,7 +414,7 @@ export default function Blog() {
             <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
             </svg>
-          </m.button>
+          </Motion.button>
         )}
       </AnimatePresence>
     </>

@@ -7,7 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "content:index": "node scripts/generate-post-index.mjs",
+    "content:audit": "node scripts/audit-content.mjs",
+    "seo:sitemap": "node scripts/generate-sitemap.mjs",
+    "content:check": "npm run content:index && npm run seo:sitemap && npm run content:audit && npm run build"
   },
   "dependencies": {
     "@vercel/speed-insights": "^1.3.1",
