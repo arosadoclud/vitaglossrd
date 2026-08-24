@@ -60,6 +60,7 @@ export const api = {
   createPublicLead: (body) => request('POST', '/leads/public', body), // sin auth
   getCupos: () => request('GET', '/leads/cupos'),
   updateLead: (id, body) => request('PATCH', `/leads/${id}`, body, true),
+  markLeadsSeen: () => request('PATCH', '/leads/mark-seen', {}, true),
   deleteLead: (id) => request('DELETE', `/leads/${id}`, null, true),
 
   // Sales

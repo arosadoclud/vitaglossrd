@@ -6,6 +6,7 @@ export default function LeadPopup() {
   const [visible, setVisible] = useState(false)
   const [nombre, setNombre] = useState('')
   const [whatsapp, setWhatsapp] = useState('')
+  const [consent, setConsent] = useState(false)
   const [enviado, setEnviado] = useState(false)
 
   useEffect(() => {
@@ -75,6 +76,9 @@ export default function LeadPopup() {
       origen:          'web',
       nota:            'Lead capturado desde el popup de la web',
       refCode:         refCode || '',
+      tipoInteres:     'cliente',
+      consentimientoContacto: consent,
+      consentimientoTexto: 'Solicité recibir información, consejos y la oferta indicada mediante WhatsApp.',
     }).catch(() => {}) // silencioso si falla
     const refTexto = refCode ? ` Me recomendó el representante: *${refCode}*.` : ''
     const msg = encodeURIComponent(
@@ -152,6 +156,10 @@ export default function LeadPopup() {
                           className="w-full bg-white/10 border border-white/20 focus:border-white/50 text-white placeholder-white/30 rounded-xl px-4 py-2 text-sm outline-none transition-colors"
                         />
                       </div>
+                      <label className="flex items-start gap-2 text-white/55 text-[10px] leading-relaxed">
+                        <input type="checkbox" required checked={consent} onChange={e => setConsent(e.target.checked)} className="mt-0.5 accent-emerald-500" />
+                        Autorizo el contacto por WhatsApp para recibir la información y oferta indicadas. Puedo retirar mi autorización.
+                      </label>
                       <div>
                         <label className="text-white/50 text-xs font-semibold uppercase tracking-wide mb-1.5 block">Tu WhatsApp</label>
                         <input

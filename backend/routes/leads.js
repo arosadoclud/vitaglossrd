@@ -2,6 +2,50 @@ const router = require('express').Router()
 const Lead = require('../models/Lead')
 const protect = require('../middleware/auth')
 
+const PUBLIC_LEAD_WINDOW_MS = 15 * 60 * 1000
+const publicLeadAttempts = new Map()
+
+function trim(value, max = 120) {
+  return String(value || '').trim().substring(0, max)
+}
+
+function publicLeadRateLimit(req, res, next) {
+  const key = req.ip || req.socket?.remoteAddress || 'unknown'
+  const now = Date.now()
+  const recent = (publicLeadAttempts.get(key) || []).filter(timestamp => now - timestamp < PUBLIC_LEAD_WINDOW_MS)
+  if (recent.length >= 6) return res.status(429).json({ error: 'Demasiados intentos. Espera unos minutos.' })
+  recent.push(now)
+  publicLeadAttempts.set(key, recent)
+  if (publicLeadAttempts.size > 5000) {
+    for (const [ip, timestamps] of publicLeadAttempts) {
+      if (!timestamps.some(timestamp => now - timestamp < PUBLIC_LEAD_WINDOW_MS)) publicLeadAttempts.delete(ip)
+    }
+  }
+  next()
+}
+
+async function notifyNewLead(lead) {
+  const apiKey = process.env.BREVO_API_KEY
+  const recipient = process.env.LEAD_NOTIFY_EMAIL || process.env.SMTP_USER
+  const senderEmail = process.env.BREVO_FROM_EMAIL || process.env.SMTP_USER
+  if (!apiKey || !recipient || !senderEmail) return
+
+  const dashboardUrl = `${String(process.env.FRONTEND_URL || 'https://vitaglossrd.com').replace(/\/$/, '')}/dashboard`
+  const safe = value => String(value || '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]))
+  const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'api-key': apiKey },
+    body: JSON.stringify({
+      sender: { email: senderEmail, name: process.env.BREVO_FROM_NAME || 'VitaGloss RD' },
+      to: [{ email: recipient }],
+      subject: `Nuevo lead: ${trim(lead.nombre, 60)}`,
+      htmlContent: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;color:#16324a"><h2>Nuevo contacto recibido</h2><p><strong>Nombre:</strong> ${safe(lead.nombre)}</p><p><strong>Interés:</strong> ${safe(lead.tipoInteres)}</p><p><strong>Origen:</strong> ${safe(lead.origen)}</p><p><strong>Campaña:</strong> ${safe(lead.campana?.name || 'Orgánico / sin identificar')}</p><p style="margin-top:24px"><a href="${dashboardUrl}" style="background:#0c7757;color:#fff;padding:12px 18px;border-radius:10px;text-decoration:none;font-weight:bold">Revisar en el panel</a></p><p style="color:#718193;font-size:12px;margin-top:24px">Contacta únicamente si la persona otorgó consentimiento.</p></div>`,
+      tags: ['nuevo-lead'],
+    }),
+  })
+  if (!response.ok) throw new Error(`Brevo respondió ${response.status}`)
+}
+
 // ── Helper: enviar mensaje WA via whatsapp-service ────────────────────────
 async function sendWA(numero, texto) {
   const WA_URL    = process.env.WA_SERVICE_URL  || 'http://localhost:3002'
@@ -47,19 +91,45 @@ function msgWebinar(nombre) {
 
 // ── POST /api/leads/public — Captura pública (LeadPopup, JoinCTA, etc.) ──────
 // No requiere autenticación. vendedor queda null (lead sin asignar).
-router.post('/public', async (req, res) => {
+router.post('/public', publicLeadRateLimit, async (req, res) => {
   try {
-    const { nombre, telefono, productoInteres, nota, origen, refCode, ciudad } = req.body
-    if (!nombre) return res.status(400).json({ error: 'El nombre es requerido' })
+    const { nombre, telefono, email, productoInteres, nota, origen, refCode, ciudad, tipoInteres, consentimientoContacto, consentimientoTexto, campana, website } = req.body
+    if (website) return res.status(201).json({ ok: true })
+    if (!trim(nombre, 60)) return res.status(400).json({ error: 'El nombre es requerido' })
+    const cleanPhone = trim(telefono, 20)
+    const cleanEmail = trim(email, 120).toLowerCase()
+    if (!cleanPhone && !cleanEmail) return res.status(400).json({ error: 'Indica un teléfono o correo de contacto' })
+    if (cleanEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) return res.status(400).json({ error: 'El correo no es válido' })
+
+    const duplicateSince = new Date(Date.now() - 10 * 60 * 1000)
+    const duplicateQuery = cleanPhone ? { telefono: cleanPhone } : { email: cleanEmail }
+    const duplicate = await Lead.findOne({ ...duplicateQuery, createdAt: { $gte: duplicateSince } }).select('_id')
+    if (duplicate) return res.status(200).json({ ok: true, duplicate: true })
+    const allowedOrigins = ['whatsapp', 'referido', 'web', 'instagram', 'facebook', 'amway-landing', 'webinar', 'campana', 'otro']
+
     const lead = await Lead.create({
-      nombre:          nombre.trim().substring(0, 60),
-      telefono:        (telefono || '').trim().substring(0, 20),
-      productoInteres: productoInteres || 'Catálogo general',
-      nota:            nota || '',
-      origen:          origen || 'web',
-      refCode:         refCode || '',
-      ciudad:          (ciudad || '').trim().substring(0, 80),
+      nombre:          trim(nombre, 60),
+      telefono:        cleanPhone,
+      email:           cleanEmail,
+      productoInteres: trim(productoInteres || 'Catálogo general', 160),
+      nota:            trim(nota, 500),
+      origen:          allowedOrigins.includes(origen) ? origen : 'web',
+      tipoInteres:     ['cliente', 'vendedor', 'ambos', 'otro'].includes(tipoInteres) ? tipoInteres : 'cliente',
+      refCode:         trim(refCode, 80),
+      ciudad:          trim(ciudad, 80),
+      consentimientoContacto: consentimientoContacto === true,
+      consentimientoFecha: consentimientoContacto === true ? new Date() : null,
+      consentimientoTexto: trim(consentimientoTexto, 300),
+      campana: {
+        source: trim(campana?.source, 80),
+        medium: trim(campana?.medium, 80),
+        name: trim(campana?.name, 120),
+        content: trim(campana?.content, 120),
+        landingPath: trim(campana?.landingPath, 160),
+      },
     })
+
+    notifyNewLead(lead).catch(error => console.error('[Lead notification]', error.message))
 
     // Enviar mensaje de confirmación si es registro de webinar y tiene teléfono
     if (origen === 'webinar' && telefono) {
@@ -105,18 +175,35 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.patch('/mark-seen', async (req, res) => {
+  try {
+    const filter = req.user.rol === 'admin' ? { leido: { $ne: true } } : { vendedor: req.user._id, leido: { $ne: true } }
+    const result = await Lead.updateMany(filter, { $set: { leido: true, leidoAt: new Date() } })
+    res.json({ updated: result.modifiedCount })
+  } catch {
+    res.status(500).json({ error: 'No se pudieron marcar los leads.' })
+  }
+})
+
 // ── POST /api/leads — Crear lead ──────────────────────────────────────────
 router.post('/', async (req, res) => {
   try {
-    const { nombre, telefono, productoInteres, estado, nota, origen } = req.body
+    const { nombre, telefono, email, productoInteres, estado, nota, origen, tipoInteres, consentimientoContacto, proximoSeguimiento } = req.body
     const lead = await Lead.create({
       vendedor: req.user._id,
       nombre,
       telefono,
+      email,
       productoInteres,
       estado,
       nota,
       origen,
+      tipoInteres,
+      consentimientoContacto: consentimientoContacto === true,
+      consentimientoFecha: consentimientoContacto === true ? new Date() : null,
+      leido: true,
+      leidoAt: new Date(),
+      proximoSeguimiento: proximoSeguimiento || null,
     })
     res.status(201).json({ lead })
   } catch (err) {
@@ -132,16 +219,25 @@ router.patch('/:id', async (req, res) => {
   try {
     const lead = await Lead.findById(req.params.id)
     if (!lead) return res.status(404).json({ error: 'Lead no encontrado.' })
-    if (req.user.rol !== 'admin' && lead.vendedor.toString() !== req.user._id.toString()) {
+    if (req.user.rol !== 'admin' && (!lead.vendedor || lead.vendedor.toString() !== req.user._id.toString())) {
       return res.status(403).json({ error: 'Sin permiso.' })
     }
-    const { estado, nota, nombre, telefono, productoInteres, origen, vendedor } = req.body
+    const { estado, nota, nombre, telefono, email, productoInteres, origen, vendedor, tipoInteres, leido, ultimoContacto, proximoSeguimiento, consentimientoContacto } = req.body
     if (estado) lead.estado = estado
     if (nota !== undefined) lead.nota = nota
     if (nombre) lead.nombre = nombre
     if (telefono !== undefined) lead.telefono = telefono
+    if (email !== undefined) lead.email = email
     if (productoInteres !== undefined) lead.productoInteres = productoInteres
     if (origen !== undefined) lead.origen = origen
+    if (tipoInteres !== undefined) lead.tipoInteres = tipoInteres
+    if (leido !== undefined) { lead.leido = Boolean(leido); lead.leidoAt = lead.leido ? new Date() : null }
+    if (ultimoContacto !== undefined) lead.ultimoContacto = ultimoContacto || null
+    if (proximoSeguimiento !== undefined) lead.proximoSeguimiento = proximoSeguimiento || null
+    if (consentimientoContacto !== undefined) {
+      lead.consentimientoContacto = Boolean(consentimientoContacto)
+      lead.consentimientoFecha = lead.consentimientoContacto ? (lead.consentimientoFecha || new Date()) : null
+    }
     if (vendedor !== undefined && req.user.rol === 'admin') lead.vendedor = vendedor || null
     await lead.save()
     res.json({ lead })
@@ -155,7 +251,7 @@ router.delete('/:id', async (req, res) => {
   try {
     const lead = await Lead.findById(req.params.id)
     if (!lead) return res.status(404).json({ error: 'Lead no encontrado.' })
-    if (req.user.rol !== 'admin' && lead.vendedor.toString() !== req.user._id.toString()) {
+    if (req.user.rol !== 'admin' && (!lead.vendedor || lead.vendedor.toString() !== req.user._id.toString())) {
       return res.status(403).json({ error: 'Sin permiso.' })
     }
     await lead.deleteOne()

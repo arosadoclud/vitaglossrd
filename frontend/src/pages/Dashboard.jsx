@@ -170,6 +170,45 @@ function Section({ children }) {
   )
 }
 
+function LeadDetailModal({ lead, setLead, onClose, onSave, onContact, onDelete, saving, isAdmin, teamMembers }) {
+  if (!lead) return null
+  return (
+    <m.div className="fixed inset-0 z-[80] flex items-center justify-center p-4 bg-[#07192b]/65 backdrop-blur-sm" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
+      <m.form onSubmit={onSave} onClick={event => event.stopPropagation()} initial={{ opacity: 0, y: 18, scale: .98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 12 }} className="vg-lead-detail">
+        <div className="vg-lead-detail-head">
+          <div><p>Ficha de seguimiento</p><h3>{lead.nombre}</h3></div>
+          <button type="button" onClick={onClose} aria-label="Cerrar ficha">×</button>
+        </div>
+        <div className="vg-lead-detail-body">
+          <div className="grid sm:grid-cols-2 gap-4">
+            <label>Nombre<input required value={lead.nombre || ''} onChange={event => setLead(current => ({ ...current, nombre: event.target.value }))} /></label>
+            <label>Teléfono<input value={lead.telefono || ''} onChange={event => setLead(current => ({ ...current, telefono: event.target.value }))} /></label>
+            <label>Correo<input type="email" value={lead.email || ''} onChange={event => setLead(current => ({ ...current, email: event.target.value }))} /></label>
+            <label>Tipo de interés<select value={lead.tipoInteres || 'cliente'} onChange={event => setLead(current => ({ ...current, tipoInteres: event.target.value }))}><option value="cliente">Productos</option><option value="vendedor">Negocio independiente</option><option value="ambos">Ambos</option><option value="otro">Otro</option></select></label>
+            <label>Estado<select value={lead.estado || 'nuevo'} onChange={event => setLead(current => ({ ...current, estado: event.target.value }))}>{ESTADO_LEAD.map(estado => <option key={estado} value={estado}>{estado}</option>)}</select></label>
+            <label>Próximo seguimiento<input type="datetime-local" value={lead.proximoSeguimiento || ''} onChange={event => setLead(current => ({ ...current, proximoSeguimiento: event.target.value }))} /></label>
+            {isAdmin && <label>Responsable<select value={lead.vendedor || ''} onChange={event => setLead(current => ({ ...current, vendedor: event.target.value }))}><option value="">Sin asignar</option>{teamMembers.map(member => <option key={member._id} value={member._id}>{member.nombre}</option>)}</select></label>}
+            <label>Interés específico<input value={lead.productoInteres || ''} onChange={event => setLead(current => ({ ...current, productoInteres: event.target.value }))} /></label>
+          </div>
+          <label>Notas<textarea rows={4} value={lead.nota || ''} onChange={event => setLead(current => ({ ...current, nota: event.target.value }))} /></label>
+          <div className="vg-lead-source-grid">
+            <div><span>Origen</span><strong>{lead.origen || 'web'}</strong></div>
+            <div><span>Campaña</span><strong>{lead.campana?.name || 'Sin identificar'}</strong></div>
+            <div><span>Registro</span><strong>{new Date(lead.createdAt).toLocaleString('es-DO')}</strong></div>
+            <div><span>Consentimiento</span><strong className={lead.consentimientoContacto ? 'text-green-700' : 'text-amber-700'}>{lead.consentimientoContacto ? 'Registrado' : 'No registrado'}</strong></div>
+          </div>
+          {!lead.consentimientoContacto && <p className="vg-consent-warning">No consta consentimiento de contacto. Confírmalo antes de enviar mensajes promocionales.</p>}
+        </div>
+        <div className="vg-lead-detail-actions">
+          {lead.telefono && <a href={`https://wa.me/${lead.telefono.replace(/\D/g, '')}`} onClick={() => onContact(lead)} target="_blank" rel="noopener noreferrer">Abrir WhatsApp</a>}
+          <button type="button" className="is-danger" onClick={() => onDelete(lead._id)}>Eliminar</button>
+          <button type="submit" disabled={saving}>{saving ? 'Guardando…' : 'Guardar cambios'}</button>
+        </div>
+      </m.form>
+    </m.div>
+  )
+}
+
 // ─── Main Dashboard ──────────────────────────────────────────────────────────
 export default function Dashboard() {
   useSEO({ title: 'Dashboard – VitaGloss RD', description: 'Panel de gestión para el equipo de ventas VitaGloss RD.' })
@@ -188,9 +227,13 @@ export default function Dashboard() {
   // leads
   const [leads, setLeads] = useState([])
   const [loadingLeads, setLoadingLeads] = useState(false)
-  const [leadForm, setLeadForm] = useState({ nombre: '', telefono: '', productoInteres: '', nota: '', origen: 'whatsapp' })
+  const [leadForm, setLeadForm] = useState({ nombre: '', telefono: '', email: '', productoInteres: '', nota: '', origen: 'whatsapp', tipoInteres: 'cliente', consentimientoContacto: false, proximoSeguimiento: '' })
   const [leadFormOpen, setLeadFormOpen] = useState(false)
   const [savingLead, setSavingLead] = useState(false)
+  const [leadQuery, setLeadQuery] = useState('')
+  const [leadFilter, setLeadFilter] = useState('atencion')
+  const [leadDetail, setLeadDetail] = useState(null)
+  const [savingLeadDetail, setSavingLeadDetail] = useState(false)
 
   // sales
   const [sales, setSales] = useState([])
@@ -355,7 +398,7 @@ export default function Dashboard() {
     try {
       await api.createLead(leadForm)
       setLeadFormOpen(false)
-      setLeadForm({ nombre: '', telefono: '', productoInteres: '', nota: '', origen: 'whatsapp' })
+      setLeadForm({ nombre: '', telefono: '', email: '', productoInteres: '', nota: '', origen: 'whatsapp', tipoInteres: 'cliente', consentimientoContacto: false, proximoSeguimiento: '' })
       loadLeads()
     } catch (err) { alert(err.message) }
     finally { setSavingLead(false) }
@@ -372,6 +415,63 @@ export default function Dashboard() {
   const deleteLead = async (id) => {
     if (!confirm('¿Eliminar este lead?')) return
     try { await api.deleteLead(id); loadLeads() } catch {}
+  }
+
+  const openLeadDetail = async (lead) => {
+    setLeadDetail({
+      ...lead,
+      vendedor: lead.vendedor?._id || lead.vendedor || '',
+      proximoSeguimiento: lead.proximoSeguimiento ? new Date(lead.proximoSeguimiento).toISOString().slice(0, 16) : '',
+    })
+    if (!lead.leido) {
+      try {
+        await api.updateLead(lead._id, { leido: true })
+        setLeads(current => current.map(item => item._id === lead._id ? { ...item, leido: true, leidoAt: new Date().toISOString() } : item))
+        loadStats()
+      } catch { /* La ficha puede abrirse aunque falle el marcado remoto. */ }
+    }
+  }
+
+  const saveLeadDetail = async (e) => {
+    e.preventDefault()
+    if (!leadDetail) return
+    setSavingLeadDetail(true)
+    try {
+      await api.updateLead(leadDetail._id, {
+        nombre: leadDetail.nombre,
+        telefono: leadDetail.telefono,
+        email: leadDetail.email,
+        productoInteres: leadDetail.productoInteres,
+        nota: leadDetail.nota,
+        estado: leadDetail.estado,
+        tipoInteres: leadDetail.tipoInteres,
+        proximoSeguimiento: leadDetail.proximoSeguimiento || null,
+        vendedor: leadDetail.vendedor || null,
+        leido: true,
+      })
+      setLeadDetail(null)
+      loadLeads()
+      loadStats()
+    } catch (err) { alert(err.message) }
+    finally { setSavingLeadDetail(false) }
+  }
+
+  const markAllLeadsSeen = async () => {
+    try {
+      await api.markLeadsSeen()
+      setLeads(current => current.map(lead => ({ ...lead, leido: true, leidoAt: lead.leidoAt || new Date().toISOString() })))
+      loadStats()
+    } catch { /* Conserva la bandeja disponible si falla el marcado masivo. */ }
+  }
+
+  const registerLeadContact = async (lead) => {
+    const update = { ultimoContacto: new Date().toISOString(), leido: true }
+    if (lead.estado === 'nuevo') update.estado = 'contactado'
+    try {
+      await api.updateLead(lead._id, update)
+      setLeads(current => current.map(item => item._id === lead._id ? { ...item, ...update } : item))
+      loadStats()
+    } catch { /* WhatsApp debe poder abrir aunque falle el registro de contacto. */ }
   }
 
   // ── sale actions ─────────────────────────────────────────────────────────
@@ -419,6 +519,25 @@ export default function Dashboard() {
     setTimeout(() => setCopied(null), 2000)
   }
 
+  const now = Date.now()
+  const needsLeadAttention = lead => {
+    if (['cerrado', 'perdido'].includes(lead.estado)) return false
+    const overdue = lead.proximoSeguimiento && new Date(lead.proximoSeguimiento).getTime() < now
+    const untouched = lead.estado === 'nuevo' && now - new Date(lead.createdAt).getTime() > 24 * 60 * 60 * 1000
+    return !lead.leido || overdue || untouched
+  }
+  const filteredLeads = leads.filter(lead => {
+    const query = leadQuery.trim().toLowerCase()
+    const matchesQuery = !query || [lead.nombre, lead.telefono, lead.email, lead.productoInteres, lead.campana?.name, lead.ciudad].some(value => String(value || '').toLowerCase().includes(query))
+    const matchesFilter = leadFilter === 'todos'
+      || (leadFilter === 'atencion' && needsLeadAttention(lead))
+      || (leadFilter === 'sin-asignar' && !lead.vendedor)
+      || lead.estado === leadFilter
+    return matchesQuery && matchesFilter
+  })
+  const unreadLeads = leads.filter(lead => !lead.leido).length
+  const overdueLeads = leads.filter(lead => lead.proximoSeguimiento && new Date(lead.proximoSeguimiento).getTime() < now && !['cerrado', 'perdido'].includes(lead.estado)).length
+
   // ─────────────────────────────────────────────────────────────────────────
   return (
     <div className="vg-dashboard">
@@ -437,8 +556,8 @@ export default function Dashboard() {
             <button key={item.label} onClick={() => setTab(i)} className={tab === i ? 'is-active' : ''} aria-current={tab === i ? 'page' : undefined}>
               <DashboardIcon name={item.icon} />
               <span>{item.label}</span>
-              {i === 1 && (stats?.leads?.nuevos || 0) > 0 && (
-                <span className="vg-nav-badge">{stats.leads.nuevos > 9 ? '9+' : stats.leads.nuevos}</span>
+              {i === 1 && (stats?.leads?.sinLeer || 0) > 0 && (
+                <span className="vg-nav-badge">{stats.leads.sinLeer > 9 ? '9+' : stats.leads.sinLeer}</span>
               )}
             </button>
           ))}
@@ -473,7 +592,7 @@ export default function Dashboard() {
             <button key={item.label} onClick={() => setTab(i)} className={tab === i ? 'is-active' : ''}>
               <DashboardIcon name={item.icon} />
               <span>{item.label}</span>
-              {i === 1 && (stats?.leads?.nuevos || 0) > 0 && <i>{stats.leads.nuevos > 9 ? '9+' : stats.leads.nuevos}</i>}
+              {i === 1 && (stats?.leads?.sinLeer || 0) > 0 && <i>{stats.leads.sinLeer > 9 ? '9+' : stats.leads.sinLeer}</i>}
             </button>
           ))}
         </div>
@@ -629,44 +748,68 @@ export default function Dashboard() {
                 <button onClick={loadStats} className="mt-4 text-sm text-secondary font-semibold hover:underline">Reintentar</button>
               </div>
             )}
+
           </Section>
         )}
 
         {/* ── TAB 1: LEADS ───────────────────────────────────────────────── */}
         {tab === 1 && (
           <Section>
-            <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
+            <div className="flex flex-wrap justify-between items-end gap-4 mb-5">
               <div>
-                <h2 className="text-2xl font-black text-primary">Gestión de Leads</h2>
-                {leads.length > 0 && (
-                  <p className="text-gray-400 text-xs mt-0.5">{leads.filter(l => l.estado === 'nuevo').length} nuevos · {leads.length} total</p>
-                )}
+                <p className="vg-eyebrow !text-secondary mb-2">Relaciones comerciales</p>
+                <h2 className="text-3xl font-black text-primary tracking-tight">Centro de leads</h2>
+                <p className="text-gray-500 text-sm mt-1">Prioriza cada contacto, registra el seguimiento y conoce qué campaña funcionó.</p>
               </div>
               <div className="flex items-center gap-2 flex-wrap">
                 {leads.length > 0 && (
-                  <button onClick={exportLeadsCSV} className="border border-gray-200 text-gray-500 hover:bg-gray-50 text-xs font-semibold px-3 py-2 rounded-xl flex items-center gap-1.5 transition-all">
-                    ⬇️ Exportar CSV
+                  <button onClick={exportLeadsCSV} className="border border-gray-200 text-gray-600 hover:bg-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all">
+                    Exportar CSV
                   </button>
                 )}
-                {/* Toggle lista/kanban */}
-                <div className="bg-gray-100 rounded-xl p-1 flex gap-1">
-                  <button
-                    onClick={() => setKanbanView(false)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${!kanbanView ? 'bg-white shadow text-primary' : 'text-gray-400 hover:text-gray-600'}`}
-                  >
-                    ☰ Lista
-                  </button>
-                  <button
-                    onClick={() => setKanbanView(true)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${kanbanView ? 'bg-white shadow text-primary' : 'text-gray-400 hover:text-gray-600'}`}
-                  >
-                    ⬛ Kanban
-                  </button>
-                </div>
                 <button onClick={() => setLeadFormOpen(true)}
-                  className="bg-primary hover:bg-blue-800 text-white text-sm font-bold px-5 py-2.5 rounded-2xl flex items-center gap-2 transition-all hover:scale-105">
-                  <span aria-hidden="true">+</span> Nuevo lead
+                  className="bg-primary hover:bg-[#102d58] text-white text-sm font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 transition-all">
+                  <DashboardIcon name="plus" className="h-4 w-4" /> Nuevo lead
                 </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+              {[
+                ['Por atender', leads.filter(needsLeadAttention).length, 'Requieren una acción'],
+                ['Sin revisar', unreadLeads, 'Entraron recientemente'],
+                ['Seguimiento vencido', overdueLeads, 'Fecha ya cumplida'],
+                ['Conversión', `${stats?.leads?.tasaConversion || 0}%`, `${leads.filter(l => l.estado === 'cerrado').length} cerrados`],
+              ].map(([label, value, hint], index) => (
+                <div key={label} className={`vg-lead-metric ${index === 0 && Number(value) > 0 ? 'is-priority' : ''}`}>
+                  <p>{label}</p><strong>{value}</strong><span>{hint}</span>
+                </div>
+              ))}
+            </div>
+
+            {unreadLeads > 0 && (
+              <div className="vg-lead-alert" role="status">
+                <span className="vg-lead-alert-dot" />
+                <div><strong>Tienes {unreadLeads} {unreadLeads === 1 ? 'lead nuevo sin revisar' : 'leads nuevos sin revisar'}</strong><p>Abre cada ficha para atenderla o márcalos como revisados.</p></div>
+                <button onClick={markAllLeadsSeen}>Marcar revisados</button>
+              </div>
+            )}
+
+            <div className="vg-lead-toolbar">
+              <input value={leadQuery} onChange={e => setLeadQuery(e.target.value)} placeholder="Buscar por nombre, teléfono, interés o campaña" aria-label="Buscar leads" />
+              <select value={leadFilter} onChange={e => setLeadFilter(e.target.value)} aria-label="Filtrar leads">
+                <option value="atencion">Requieren atención</option>
+                <option value="todos">Todos los leads</option>
+                <option value="nuevo">Nuevos</option>
+                <option value="contactado">Contactados</option>
+                <option value="interesado">Interesados</option>
+                <option value="cerrado">Cerrados</option>
+                <option value="perdido">Perdidos</option>
+                {user?.rol === 'admin' && <option value="sin-asignar">Sin asignar</option>}
+              </select>
+              <div className="vg-view-toggle">
+                <button onClick={() => setKanbanView(false)} className={!kanbanView ? 'is-active' : ''}>Lista</button>
+                <button onClick={() => setKanbanView(true)} className={kanbanView ? 'is-active' : ''}>Pipeline</button>
               </div>
             </div>
 
@@ -681,14 +824,32 @@ export default function Dashboard() {
                       className="border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-primary" />
                     <input placeholder="Teléfono" value={leadForm.telefono} onChange={e => setLeadForm(f => ({ ...f, telefono: e.target.value }))}
                       className="border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-primary" />
+                    <input type="email" placeholder="Correo electrónico" value={leadForm.email} onChange={e => setLeadForm(f => ({ ...f, email: e.target.value }))}
+                      className="border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-primary" />
                     <input placeholder="Producto de interés" value={leadForm.productoInteres} onChange={e => setLeadForm(f => ({ ...f, productoInteres: e.target.value }))}
                       className="border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-primary" />
+                    <select value={leadForm.tipoInteres} onChange={e => setLeadForm(f => ({ ...f, tipoInteres: e.target.value }))}
+                      className="border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-primary">
+                      <option value="cliente">Interés en productos</option>
+                      <option value="vendedor">Interés en negocio independiente</option>
+                      <option value="ambos">Productos y negocio</option>
+                      <option value="otro">Otro interés</option>
+                    </select>
                     <select value={leadForm.origen} onChange={e => setLeadForm(f => ({ ...f, origen: e.target.value }))}
                       className="border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-primary">
-                      {['whatsapp','referido','web','instagram','facebook','otro'].map(o => <option key={o}>{o}</option>)}
+                      {['whatsapp','referido','web','instagram','facebook','campana','otro'].map(o => <option key={o}>{o}</option>)}
                     </select>
+                    <label className="text-xs font-bold text-gray-500">
+                      Próximo seguimiento
+                      <input type="datetime-local" value={leadForm.proximoSeguimiento} onChange={e => setLeadForm(f => ({ ...f, proximoSeguimiento: e.target.value }))}
+                        className="mt-2 w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm font-normal focus:outline-none focus:border-primary" />
+                    </label>
                     <textarea placeholder="Nota adicional" value={leadForm.nota} onChange={e => setLeadForm(f => ({ ...f, nota: e.target.value }))}
                       rows={2} className="sm:col-span-2 border border-gray-200 rounded-2xl px-4 py-3 text-sm resize-none focus:outline-none focus:border-primary" />
+                    <label className="sm:col-span-2 flex items-start gap-3 text-xs text-gray-500 bg-gray-50 rounded-2xl p-4">
+                      <input type="checkbox" checked={leadForm.consentimientoContacto} onChange={e => setLeadForm(f => ({ ...f, consentimientoContacto: e.target.checked }))} className="mt-0.5" />
+                      La persona autorizó recibir seguimiento por los datos proporcionados. Registra este consentimiento antes de enviar mensajes.
+                    </label>
                     <div className="sm:col-span-2 flex gap-3">
                       <button type="submit" disabled={savingLead}
                         className="bg-primary text-white font-bold px-6 py-3 rounded-2xl text-sm transition-all hover:scale-105 disabled:opacity-60">
@@ -708,9 +869,15 @@ export default function Dashboard() {
               <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="bg-white rounded-3xl h-20 animate-pulse border border-gray-100" />)}</div>
             ) : leads.length === 0 ? (
               <div className="bg-white rounded-3xl p-12 text-center border border-gray-100">
-                <p className="text-4xl mb-3" aria-hidden="true">👥</p>
-                <p className="text-gray-500 mb-4">No tienes leads registrados aún.</p>
+                <p className="font-black text-primary text-xl mb-2">Tu bandeja de leads está vacía</p>
+                <p className="text-gray-500 mb-4">Los contactos de formularios y campañas aparecerán aquí.</p>
                 <button onClick={() => setLeadFormOpen(true)} className="text-sm text-secondary font-semibold hover:underline">+ Agregar primer lead</button>
+              </div>
+            ) : filteredLeads.length === 0 ? (
+              <div className="bg-white rounded-3xl p-10 text-center border border-gray-100">
+                <p className="font-black text-primary text-lg mb-2">No hay resultados con este filtro</p>
+                <p className="text-gray-500 text-sm mb-4">Prueba otra búsqueda o revisa todos los leads.</p>
+                <button onClick={() => { setLeadQuery(''); setLeadFilter('todos') }} className="text-sm text-secondary font-bold">Mostrar todos</button>
               </div>
             ) : kanbanView ? (
               /* ── KANBAN BOARD ── */
@@ -718,7 +885,7 @@ export default function Dashboard() {
                 <div className="flex gap-4 min-w-max">
                   {ESTADO_LEAD.map(estado => {
                     const col = { nuevo: { label: 'Nuevos', color: 'bg-sky-500', bg: 'bg-sky-50', border: 'border-sky-200' }, contactado: { label: 'Contactados', color: 'bg-yellow-500', bg: 'bg-yellow-50', border: 'border-yellow-200' }, interesado: { label: 'Interesados', color: 'bg-purple-500', bg: 'bg-purple-50', border: 'border-purple-200' }, cerrado: { label: 'Cerrados', color: 'bg-green-500', bg: 'bg-green-50', border: 'border-green-200' }, perdido: { label: 'Perdidos', color: 'bg-red-400', bg: 'bg-red-50', border: 'border-red-200' } }[estado]
-                    const colLeads = leads.filter(l => l.estado === estado)
+                    const colLeads = filteredLeads.filter(l => l.estado === estado)
                     return (
                       <div key={estado} className={`w-64 flex-shrink-0 rounded-2xl border ${col.border} ${col.bg} p-3`}>
                         <div className="flex items-center gap-2 mb-3">
@@ -728,23 +895,11 @@ export default function Dashboard() {
                         </div>
                         <div className="space-y-2 min-h-[60px]">
                           {colLeads.map(l => (
-                            <div key={l._id} className="bg-white rounded-xl p-3 border border-white shadow-sm">
-                              <p className="font-semibold text-gray-800 text-sm leading-tight mb-1">{l.nombre}</p>
+                            <button type="button" key={l._id} onClick={() => openLeadDetail(l)} className={`w-full text-left bg-white rounded-xl p-3 border shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${!l.leido ? 'border-secondary/50' : 'border-white'}`}>
+                              <div className="flex items-center gap-2"><p className="font-semibold text-gray-800 text-sm leading-tight">{l.nombre}</p>{!l.leido && <span className="w-2 h-2 bg-secondary rounded-full" title="Sin revisar" />}</div>
                               {l.productoInteres && <p className="text-gray-400 text-xs mb-2 truncate">{l.productoInteres}</p>}
-                              <div className="flex items-center justify-between gap-1 mt-2">
-                                {l.telefono ? (
-                                  <a href={`https://wa.me/${l.telefono.replace(/\D/g,'')}`} target="_blank" rel="noopener noreferrer"
-                                    className="text-green-600 text-xs font-semibold hover:underline">📲 {l.telefono}</a>
-                                ) : <span />}
-                                <select
-                                  value={l.estado}
-                                  onChange={e => changeLeadEstado(l._id, e.target.value)}
-                                  className="text-[10px] font-bold bg-gray-50 border border-gray-200 rounded-lg px-1.5 py-1 cursor-pointer focus:outline-none"
-                                >
-                                  {ESTADO_LEAD.map(s => <option key={s} value={s}>{s}</option>)}
-                                </select>
-                              </div>
-                            </div>
+                              <div className="flex items-center justify-between gap-2 mt-3"><span className="text-[10px] text-gray-400 capitalize">{l.campana?.name || l.origen}</span><span className="text-[10px] font-bold text-primary">Abrir ficha</span></div>
+                            </button>
                           ))}
                         </div>
                       </div>
@@ -761,18 +916,18 @@ export default function Dashboard() {
                   <span></span>
                 </div>
                 <div className="divide-y divide-gray-50">
-                  {leads.map(l => (
-                    <div key={l._id} className={`grid grid-cols-1 gap-2 px-6 py-4 items-center hover:bg-gray-50 ${user?.rol === 'admin' ? 'sm:grid-cols-6 sm:gap-0' : 'sm:grid-cols-5 sm:gap-0'}`}>
+                  {filteredLeads.map(l => (
+                    <div key={l._id} className={`relative grid grid-cols-1 gap-2 px-6 py-4 items-center hover:bg-gray-50 ${!l.leido ? 'bg-teal-50/30' : ''} ${user?.rol === 'admin' ? 'sm:grid-cols-6 sm:gap-0' : 'sm:grid-cols-5 sm:gap-0'}`}>
                       <div>
-                        <p className="font-semibold text-gray-800 text-sm">{l.nombre}</p>
+                        <div className="flex items-center gap-2"><p className="font-semibold text-gray-800 text-sm">{l.nombre}</p>{!l.leido && <span className="w-2 h-2 bg-secondary rounded-full" title="Sin revisar" />}</div>
                         {l.telefono && (
                           <a href={`https://wa.me/${l.telefono.replace(/\D/g,'')}`} target="_blank" rel="noopener noreferrer"
-                            className="text-green-600 text-xs hover:underline">{l.telefono}</a>
+                            onClick={() => registerLeadContact(l)} className="text-green-700 text-xs hover:underline">{l.telefono}</a>
                         )}
-                        {l.nota && <p className="text-gray-400 text-xs mt-0.5 truncate max-w-[180px]" title={l.nota}>📝 {l.nota}</p>}
+                        {l.email && <p className="text-gray-400 text-xs truncate max-w-[180px]">{l.email}</p>}
                       </div>
-                      <p className="text-gray-500 text-xs">{l.productoInteres || '—'}</p>
-                      <span className="text-gray-400 text-xs capitalize">{l.origen}</span>
+                      <div><p className="text-gray-600 text-xs">{l.productoInteres || '—'}</p><span className="text-[10px] text-gray-400 capitalize">{l.tipoInteres || 'cliente'}</span></div>
+                      <div><span className="text-gray-500 text-xs capitalize">{l.campana?.name || l.origen}</span>{l.proximoSeguimiento && <p className={`text-[10px] mt-1 ${new Date(l.proximoSeguimiento).getTime() < now ? 'text-red-600 font-bold' : 'text-gray-400'}`}>{new Date(l.proximoSeguimiento).toLocaleString('es-DO', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}</p>}</div>
                       <select value={l.estado} onChange={e => changeLeadEstado(l._id, e.target.value)} aria-label="Cambiar estado del lead"
                         className={`text-xs font-bold px-2 py-1.5 rounded-xl border-0 cursor-pointer focus:ring-2 focus:ring-primary/20 ${BADGE_LEAD[l.estado] || 'bg-gray-100'}`}>
                         {ESTADO_LEAD.map(s => <option key={s} value={s}>{s}</option>)}
@@ -788,15 +943,30 @@ export default function Dashboard() {
                           {teamMembers.map(m => <option key={m._id} value={m._id}>{m.nombre}</option>)}
                         </select>
                       )}
-                      <button onClick={() => deleteLead(l._id)} aria-label="Eliminar lead"
-                        className="text-red-400 hover:text-red-600 text-xs font-semibold transition-colors justify-self-end">
-                        Eliminar
+                      <button onClick={() => openLeadDetail(l)} aria-label={`Abrir ficha de ${l.nombre}`}
+                        className="text-primary hover:text-secondary text-xs font-bold transition-colors justify-self-end">
+                        Ver ficha
                       </button>
                     </div>
                   ))}
                 </div>
               </div>
             )}
+            <AnimatePresence>
+              {leadDetail && (
+                <LeadDetailModal
+                  lead={leadDetail}
+                  setLead={setLeadDetail}
+                  onClose={() => setLeadDetail(null)}
+                  onSave={saveLeadDetail}
+                  onContact={registerLeadContact}
+                  onDelete={async id => { await deleteLead(id); setLeadDetail(null) }}
+                  saving={savingLeadDetail}
+                  isAdmin={user?.rol === 'admin'}
+                  teamMembers={teamMembers}
+                />
+              )}
+            </AnimatePresence>
           </Section>
         )}
 

@@ -17,6 +17,13 @@ const leadSchema = new mongoose.Schema({
     trim: true,
     default: '',
   },
+  email: {
+    type: String,
+    trim: true,
+    lowercase: true,
+    maxlength: [120, 'Email muy largo'],
+    default: '',
+  },
   productoInteres: {
     type: String,
     default: 'Sin especificar',
@@ -33,8 +40,13 @@ const leadSchema = new mongoose.Schema({
   },
   origen: {
     type: String,
-    enum: ['whatsapp', 'referido', 'web', 'instagram', 'facebook', 'amway-landing', 'otro'],
+    enum: ['whatsapp', 'referido', 'web', 'instagram', 'facebook', 'amway-landing', 'webinar', 'campana', 'otro'],
     default: 'whatsapp',
+  },
+  tipoInteres: {
+    type: String,
+    enum: ['cliente', 'vendedor', 'ambos', 'otro'],
+    default: 'cliente',
   },
   fechaContacto: {
     type: Date,
@@ -52,8 +64,51 @@ const leadSchema = new mongoose.Schema({
     default: '',
     trim: true,
   },
+  consentimientoContacto: {
+    type: Boolean,
+    default: false,
+  },
+  consentimientoFecha: {
+    type: Date,
+    default: null,
+  },
+  consentimientoTexto: {
+    type: String,
+    maxlength: [300, 'Texto de consentimiento muy largo'],
+    default: '',
+  },
+  leido: {
+    type: Boolean,
+    default: false,
+  },
+  leidoAt: {
+    type: Date,
+    default: null,
+  },
+  ultimoContacto: {
+    type: Date,
+    default: null,
+  },
+  proximoSeguimiento: {
+    type: Date,
+    default: null,
+  },
+  campana: {
+    source: { type: String, default: '', maxlength: 80 },
+    medium: { type: String, default: '', maxlength: 80 },
+    name: { type: String, default: '', maxlength: 120 },
+    content: { type: String, default: '', maxlength: 120 },
+    landingPath: { type: String, default: '', maxlength: 160 },
+  },
 }, {
   timestamps: true,
 })
+
+leadSchema.index({ createdAt: -1 })
+leadSchema.index({ vendedor: 1, estado: 1, createdAt: -1 })
+leadSchema.index({ vendedor: 1, leido: 1 })
+leadSchema.index({ proximoSeguimiento: 1, estado: 1 })
+leadSchema.index({ telefono: 1, createdAt: -1 })
+leadSchema.index({ email: 1, createdAt: -1 })
 
 module.exports = mongoose.model('Lead', leadSchema)

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useSEO } from '../hooks/useSEO'
 import LoginModal from '../components/LoginModal'
+import { api } from '../services/api'
 
 const WA_TEAM = 'https://wa.me/18492763532?text=Hola!%20Quiero%20recibir%20informaci%C3%B3n%20sobre%20la%20oportunidad%20Amway%20y%20el%20equipo%20VitaGloss%20RD'
 
@@ -35,6 +36,10 @@ export default function Equipo() {
   const [openFaq, setOpenFaq] = useState(0)
   const [loginOpen, setLoginOpen] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
+  const [leadForm, setLeadForm] = useState({ nombre: '', telefono: '', email: '', ciudad: '', website: '', consentimientoContacto: false })
+  const [leadSending, setLeadSending] = useState(false)
+  const [leadDone, setLeadDone] = useState(false)
+  const [leadError, setLeadError] = useState('')
 
   const modalOpen = loginOpen || searchParams.get('acceso') === 'equipo'
 
@@ -44,6 +49,34 @@ export default function Equipo() {
       const next = new URLSearchParams(searchParams)
       next.delete('acceso')
       setSearchParams(next, { replace: true })
+    }
+  }
+
+  const submitInterest = async event => {
+    event.preventDefault()
+    if (!leadForm.consentimientoContacto) return setLeadError('Debes autorizar el contacto para enviar la solicitud.')
+    setLeadSending(true)
+    setLeadError('')
+    try {
+      await api.createPublicLead({
+        ...leadForm,
+        productoInteres: 'Información sobre negocio independiente',
+        origen: searchParams.get('utm_source') ? 'campana' : 'web',
+        tipoInteres: 'vendedor',
+        consentimientoTexto: 'Autorizo a VitaGloss RD a contactarme para responder mi solicitud de información sobre la oportunidad de negocio independiente. Puedo retirar mi autorización.',
+        campana: {
+          source: searchParams.get('utm_source') || '',
+          medium: searchParams.get('utm_medium') || '',
+          name: searchParams.get('utm_campaign') || '',
+          content: searchParams.get('utm_content') || '',
+          landingPath: window.location.pathname,
+        },
+      })
+      setLeadDone(true)
+    } catch (error) {
+      setLeadError(error.message || 'No pudimos enviar tu solicitud. Intenta nuevamente.')
+    } finally {
+      setLeadSending(false)
     }
   }
 
@@ -62,7 +95,7 @@ export default function Equipo() {
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-[-.045em] leading-[1.03] max-w-5xl mx-auto mb-7">Construye habilidades. Atiende clientes. <span className="text-secondary">Crece a tu ritmo.</span></h1>
           <p className="text-white/65 text-lg sm:text-xl leading-relaxed max-w-3xl mx-auto mb-10">Conoce la oportunidad de venta directa ofrecida por Amway y cómo VitaGloss RD puede acompañarte mientras desarrollas tu propio negocio independiente.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href={WA_TEAM} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 bg-secondary hover:bg-[#22b5a8] text-[#07192f] font-extrabold px-8 py-4 rounded-xl transition-colors">Solicitar información <ArrowIcon /></a>
+            <a href="#solicitar-informacion" className="inline-flex items-center justify-center gap-3 bg-secondary hover:bg-[#22b5a8] text-[#07192f] font-extrabold px-8 py-4 rounded-xl transition-colors">Solicitar información <ArrowIcon /></a>
             <a href="#como-funciona" className="inline-flex items-center justify-center border border-white/25 hover:border-white/50 text-white font-bold px-8 py-4 rounded-xl transition-colors">Ver cómo funciona</a>
             <button type="button" onClick={() => setLoginOpen(true)} className="inline-flex items-center justify-center gap-2 border border-white/25 bg-white/10 hover:bg-white/15 hover:border-white/50 text-white font-bold px-8 py-4 rounded-xl transition-colors">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" strokeWidth="1.8" /><path d="M8 10V7a4 4 0 018 0v3" strokeWidth="1.8" strokeLinecap="round" /></svg>
@@ -116,8 +149,42 @@ export default function Equipo() {
         </div>
       </section>
 
-      <section className="py-20 sm:py-24 text-center">
-        <div className="max-w-3xl mx-auto px-5 sm:px-8"><h2 className="text-3xl sm:text-5xl font-black tracking-tight text-primary mb-5">¿Quieres hacer tus preguntas?</h2><p className="text-gray-500 text-lg leading-relaxed mb-9">Solicita una conversación informativa, sin compromiso y a tu ritmo.</p><a href={WA_TEAM} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 bg-primary hover:bg-[#102d58] text-white font-extrabold px-8 py-4 rounded-xl transition-colors">Solicitar información <ArrowIcon /></a><p className="mt-6 text-gray-400 text-xs">Empresario Independiente de Amway. Los resultados individuales varían.</p><button type="button" onClick={() => setLoginOpen(true)} className="mt-8 text-sm font-semibold text-gray-400 hover:text-primary transition-colors">Acceso privado para administración y equipo</button></div>
+      <section id="solicitar-informacion" className="py-20 sm:py-24">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 grid lg:grid-cols-[.85fr_1.15fr] gap-12 lg:gap-20 items-start">
+          <div className="lg:sticky lg:top-28">
+            <p className="text-secondary text-xs font-bold uppercase tracking-[.2em] mb-4">Conversación informativa</p>
+            <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-primary mb-5">Haz tus preguntas antes de decidir.</h2>
+            <p className="text-gray-500 text-lg leading-relaxed">Déjanos tus datos únicamente si deseas que te contactemos. Te explicaremos el modelo, sus responsabilidades y dónde consultar la información oficial.</p>
+            <div className="mt-8 p-5 rounded-2xl bg-[#f4f8fa] border border-gray-100 text-sm text-gray-500 leading-relaxed">
+              Esto no es una oferta de empleo. Es una solicitud de información sobre una oportunidad de negocio independiente. No se garantizan ingresos ni resultados.
+            </div>
+          </div>
+          {leadDone ? (
+            <div className="rounded-[28px] border border-emerald-200 bg-emerald-50 p-8 sm:p-10">
+              <p className="text-emerald-800 font-black text-2xl mb-3">Solicitud recibida</p>
+              <p className="text-emerald-700 leading-relaxed mb-6">Quedó registrada en nuestro panel para darle seguimiento. Te contactaremos por el medio que proporcionaste.</p>
+              <a href={WA_TEAM} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-emerald-700 text-white font-bold px-5 py-3 rounded-xl">También puedes escribirnos ahora <ArrowIcon /></a>
+            </div>
+          ) : (
+            <form onSubmit={submitInterest} className="rounded-[28px] border border-gray-100 bg-white p-6 sm:p-9 shadow-[0_20px_60px_rgba(20,49,72,.08)] space-y-5">
+              <div className="grid sm:grid-cols-2 gap-5">
+                <label className="text-xs font-bold text-gray-600">Nombre completo<input required value={leadForm.nombre} onChange={event => setLeadForm(form => ({ ...form, nombre: event.target.value }))} className="mt-2 w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm font-normal outline-none focus:border-secondary" /></label>
+                <label className="text-xs font-bold text-gray-600">WhatsApp o teléfono<input required value={leadForm.telefono} onChange={event => setLeadForm(form => ({ ...form, telefono: event.target.value }))} className="mt-2 w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm font-normal outline-none focus:border-secondary" /></label>
+                <label className="text-xs font-bold text-gray-600">Correo electrónico<input type="email" value={leadForm.email} onChange={event => setLeadForm(form => ({ ...form, email: event.target.value }))} className="mt-2 w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm font-normal outline-none focus:border-secondary" /></label>
+                <label className="text-xs font-bold text-gray-600">Ciudad<input value={leadForm.ciudad} onChange={event => setLeadForm(form => ({ ...form, ciudad: event.target.value }))} className="mt-2 w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm font-normal outline-none focus:border-secondary" /></label>
+              </div>
+              <label className="sr-only" aria-hidden="true">Sitio web<input tabIndex="-1" autoComplete="off" value={leadForm.website} onChange={event => setLeadForm(form => ({ ...form, website: event.target.value }))} /></label>
+              <label className="flex items-start gap-3 rounded-2xl bg-[#f7fafb] border border-gray-100 p-4 text-xs text-gray-600 leading-relaxed">
+                <input required type="checkbox" checked={leadForm.consentimientoContacto} onChange={event => setLeadForm(form => ({ ...form, consentimientoContacto: event.target.checked }))} className="mt-0.5 h-4 w-4 accent-[#168a72]" />
+                <span>Autorizo a VitaGloss RD a contactarme para responder esta solicitud. Entiendo que puedo retirar mi autorización y consultar la <Link to="/privacidad" className="font-bold text-primary underline">Política de Privacidad</Link>.</span>
+              </label>
+              {leadError && <p className="rounded-xl bg-red-50 border border-red-100 px-4 py-3 text-red-700 text-sm">{leadError}</p>}
+              <button type="submit" disabled={leadSending} className="w-full inline-flex items-center justify-center gap-3 bg-primary hover:bg-[#102d58] text-white font-extrabold px-8 py-4 rounded-xl transition-colors disabled:opacity-60">{leadSending ? 'Enviando solicitud…' : 'Solicitar conversación'} <ArrowIcon /></button>
+              <p className="text-center text-gray-400 text-[11px]">No compramos listas ni enviamos mensajes no solicitados.</p>
+            </form>
+          )}
+        </div>
+        <div className="text-center mt-12"><p className="text-gray-400 text-xs">Empresario Independiente de Amway. Los resultados individuales varían.</p><button type="button" onClick={() => setLoginOpen(true)} className="mt-8 text-sm font-semibold text-gray-400 hover:text-primary transition-colors">Acceso privado para administración y equipo</button></div>
       </section>
 
       <LoginModal open={modalOpen} onClose={closeLogin} />

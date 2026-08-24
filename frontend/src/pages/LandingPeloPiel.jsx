@@ -228,7 +228,7 @@ function StickyBar() {
 }
 
 function OrderForm() {
-  const [form, setForm]       = useState({ nombre: '', telefono: '', ciudad: '' })
+  const [form, setForm]       = useState({ nombre: '', telefono: '', ciudad: '', consentimientoContacto: false })
   const [loading, setLoading] = useState(false)
   const [done, setDone]       = useState(false)
   const [error, setError]     = useState('')
@@ -257,6 +257,9 @@ function OrderForm() {
           productoInteres: 'Pelo Piel y Uñas Nutrilite',
           origen:          'web',
           nota:            `Ciudad: ${form.ciudad} | Landing: /pelo-piel-unas`,
+          tipoInteres:     'cliente',
+          consentimientoContacto: form.consentimientoContacto,
+          consentimientoTexto: 'Solicité información para coordinar este producto mediante WhatsApp.',
         }),
       })
     } catch {
@@ -311,6 +314,10 @@ function OrderForm() {
           className="w-full border-2 border-pink-200 focus:border-pink-400 rounded-xl px-4 py-3 text-gray-800 text-sm outline-none transition-colors bg-white"
         />
       </div>
+      <label className="flex items-start gap-2 rounded-xl bg-pink-50 border border-pink-100 p-3 text-[11px] text-gray-600 leading-relaxed">
+        <input name="consentimientoContacto" type="checkbox" required checked={form.consentimientoContacto} onChange={e => setForm(f => ({ ...f, consentimientoContacto: e.target.checked }))} className="mt-0.5 accent-pink-500" />
+        Autorizo que VitaGloss RD me contacte por WhatsApp para responder esta solicitud y coordinar el pedido.
+      </label>
       <div>
         <label className="block text-sm font-bold text-gray-700 mb-1.5">Número de WhatsApp</label>
         <input

@@ -41,7 +41,6 @@ const Terminos       = lazy(() => import('./pages/Terminos'))
 const PoliticaEditorial = lazy(() => import('./pages/PoliticaEditorial'))
 const LandingPeloPiel = lazy(() => import('./pages/LandingPeloPiel'))
 const Academia       = lazy(() => import('./pages/Academia'))
-const IniciaEnAmway  = lazy(() => import('./pages/IniciaEnAmway'))
 const Checkout       = lazy(() => import('./pages/Checkout'))
 const OrdenConfirmada = lazy(() => import('./pages/OrdenConfirmada'))
 const CertPagadito   = lazy(() => import('./pages/CertPagadito'))
@@ -56,8 +55,13 @@ function PageSpinner() {
   )
 }
 
+function LegacyCampaignRedirect() {
+  const { search } = useLocation()
+  return <Navigate to={`/equipo${search}`} replace />
+}
+
 // Páginas que NO deben mostrar el Navbar/Footer público
-const DASHBOARD_ROUTES = ['/dashboard', '/pelo-piel-unas', '/academia', '/mi-equipo-ventas', '/empieza']
+const DASHBOARD_ROUTES = ['/dashboard', '/pelo-piel-unas', '/academia', '/mi-equipo-ventas']
 
 // Detecta ?ref= en URL y guarda en sessionStorage para atribuir leads
 function RefTracker() {
@@ -101,7 +105,7 @@ function Layout() {
           <Route path="/politica-editorial" element={<PoliticaEditorial />} />
           <Route path="/unete" element={<Navigate to="/equipo" replace />} />
           <Route path="/pelo-piel-unas" element={<LandingPeloPiel />} />
-          <Route path="/empieza" element={<IniciaEnAmway />} />
+          <Route path="/empieza" element={<LegacyCampaignRedirect />} />
           <Route path="/checkout" element={<Navigate to="/" replace />} />
           <Route path="/orden-confirmada" element={<OrdenConfirmada />} />
           <Route path="/cert-pagadito" element={<CertPagadito />} />
