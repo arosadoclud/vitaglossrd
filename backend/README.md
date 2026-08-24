@@ -33,16 +33,25 @@ ADMIN_WHATSAPP=18492763532
 ```
 
 Para recuperación de contraseñas, los planes Free, Trial y Hobby de Railway
-bloquean SMTP. En esos planes configura el envío HTTPS de Resend:
+bloquean SMTP. En esos planes configura preferentemente la API HTTPS de Brevo:
+
+```env
+BREVO_API_KEY=xkeysib-xxxxxxxxx
+BREVO_FROM_EMAIL=noreply@vitaglossrd.com
+BREVO_FROM_NAME="VitaGloss RD"
+```
+
+El remitente debe estar verificado en Brevo. También está disponible Resend
+como segunda alternativa HTTPS:
 
 ```env
 RESEND_API_KEY=re_xxxxxxxxx
 RESEND_FROM="VitaGloss RD <noreply@vitaglossrd.com>"
 ```
 
-El dominio usado en `RESEND_FROM` debe estar verificado en Resend. Si existe
-`RESEND_API_KEY`, el sistema usa su API HTTPS; de lo contrario intenta las
-variables `SMTP_*` con tiempos de espera limitados.
+La prioridad es Brevo, después Resend y finalmente `SMTP_*`. Todos los
+proveedores tienen tiempos de espera limitados para evitar solicitudes
+congeladas.
 
 Para producción, agrega temporalmente las cuatro variables `ADMIN_*` al
 servicio de Railway y ejecuta `npm run seed:admin`. El proceso nunca imprime la

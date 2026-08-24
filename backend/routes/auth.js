@@ -37,6 +37,40 @@ async function sendPasswordResetEmail({ to, resetUrl }) {
   const text = `Solicitaste restaurar tu contraseña. Abre este enlace dentro de los próximos 30 minutos: ${resetUrl}\n\nSi no hiciste esta solicitud, ignora este mensaje.`
   const html = `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;color:#15243b"><h1 style="font-size:24px">Restaura tu contraseña</h1><p>Recibimos una solicitud para cambiar la contraseña de tu cuenta de VitaGloss RD.</p><p><a href="${resetUrl}" style="display:inline-block;background:#173b67;color:#fff;text-decoration:none;padding:14px 22px;border-radius:10px;font-weight:700">Crear nueva contraseña</a></p><p style="font-size:13px;color:#667085">Este enlace vence en 30 minutos y solo puede utilizarse una vez. Si no hiciste esta solicitud, puedes ignorar el mensaje.</p></div>`
 
+  // Brevo usa HTTPS y funciona en Railway Hobby, donde SMTP está bloqueado.
+  if (process.env.BREVO_API_KEY) {
+    const senderEmail = process.env.BREVO_FROM_EMAIL || process.env.SMTP_USER
+    if (!senderEmail) throw new Error('BREVO_FROM_EMAIL no está configurado')
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 10000)
+    try {
+      const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          'api-key': process.env.BREVO_API_KEY,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sender: {
+            name: process.env.BREVO_FROM_NAME || 'VitaGloss RD',
+            email: senderEmail,
+          },
+          to: [{ email: to }],
+          subject,
+          htmlContent: html,
+          replyTo: { email: process.env.SMTP_USER || senderEmail, name: 'VitaGloss RD' },
+          tags: ['password-reset'],
+        }),
+      })
+      if (!response.ok) throw new Error(`Brevo respondió ${response.status}: ${(await response.text()).slice(0, 200)}`)
+      return
+    } finally {
+      clearTimeout(timeout)
+    }
+  }
+
   // Railway Hobby bloquea los puertos SMTP. Resend usa HTTPS y es la opción
   // preferida cuando RESEND_API_KEY está configurada.
   if (process.env.RESEND_API_KEY) {
