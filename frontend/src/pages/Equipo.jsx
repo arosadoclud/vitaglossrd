@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useSEO } from '../hooks/useSEO'
 import LoginModal from '../components/LoginModal'
 
@@ -34,6 +34,18 @@ function ArrowIcon() {
 export default function Equipo() {
   const [openFaq, setOpenFaq] = useState(0)
   const [loginOpen, setLoginOpen] = useState(false)
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const modalOpen = loginOpen || searchParams.get('acceso') === 'equipo'
+
+  const closeLogin = () => {
+    setLoginOpen(false)
+    if (searchParams.has('acceso')) {
+      const next = new URLSearchParams(searchParams)
+      next.delete('acceso')
+      setSearchParams(next, { replace: true })
+    }
+  }
 
   useSEO({
     title: 'Conoce la oportunidad Amway con VitaGloss RD',
@@ -52,7 +64,12 @@ export default function Equipo() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href={WA_TEAM} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 bg-secondary hover:bg-[#22b5a8] text-[#07192f] font-extrabold px-8 py-4 rounded-xl transition-colors">Solicitar información <ArrowIcon /></a>
             <a href="#como-funciona" className="inline-flex items-center justify-center border border-white/25 hover:border-white/50 text-white font-bold px-8 py-4 rounded-xl transition-colors">Ver cómo funciona</a>
+            <button type="button" onClick={() => setLoginOpen(true)} className="inline-flex items-center justify-center gap-2 border border-white/25 bg-white/10 hover:bg-white/15 hover:border-white/50 text-white font-bold px-8 py-4 rounded-xl transition-colors">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" strokeWidth="1.8" /><path d="M8 10V7a4 4 0 018 0v3" strokeWidth="1.8" strokeLinecap="round" /></svg>
+              Iniciar sesión
+            </button>
           </div>
+          <p className="mt-4 text-white/55 text-sm">¿Ya eres parte del equipo? Accede al panel, la academia y tus herramientas.</p>
           <p className="mt-7 text-white/40 text-sm">Los ingresos no están garantizados. Los resultados dependen de múltiples factores y del esfuerzo continuo.</p>
         </div>
       </section>
@@ -103,7 +120,7 @@ export default function Equipo() {
         <div className="max-w-3xl mx-auto px-5 sm:px-8"><h2 className="text-3xl sm:text-5xl font-black tracking-tight text-primary mb-5">¿Quieres hacer tus preguntas?</h2><p className="text-gray-500 text-lg leading-relaxed mb-9">Solicita una conversación informativa, sin compromiso y a tu ritmo.</p><a href={WA_TEAM} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 bg-primary hover:bg-[#102d58] text-white font-extrabold px-8 py-4 rounded-xl transition-colors">Solicitar información <ArrowIcon /></a><p className="mt-6 text-gray-400 text-xs">Empresario Independiente de Amway. Los resultados individuales varían.</p><button type="button" onClick={() => setLoginOpen(true)} className="mt-8 text-sm font-semibold text-gray-400 hover:text-primary transition-colors">Acceso privado para administración y equipo</button></div>
       </section>
 
-      <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
+      <LoginModal open={modalOpen} onClose={closeLogin} />
     </div>
   )
 }

@@ -89,6 +89,16 @@ export default function Navbar() {
 
           {/* CTA Button desktop */}
           <div className="hidden md:flex items-center gap-3">
+            <Link
+              to="/equipo?acceso=equipo"
+              className={`px-4 py-2.5 rounded-xl text-sm font-bold border transition-colors ${
+                isTransparent
+                  ? 'border-white/30 text-white hover:bg-white/10'
+                  : 'border-primary/15 text-primary hover:bg-primary/5'
+              }`}
+            >
+              Acceso equipo
+            </Link>
             <a
               href="https://wa.me/18492763532?text=Hola!%20Quiero%20conocer%20los%20productos%20de%20VitaGloss%20RD"
                   target="_blank"
@@ -165,6 +175,13 @@ export default function Navbar() {
                 transition={{ delay: 0.3 }}
                 className="pt-3 border-t border-gray-100 mt-2"
               >
+                <Link
+                  to="/equipo?acceso=equipo"
+                  onClick={() => setMenuOpen(false)}
+                  className="mb-2 flex items-center justify-center w-full border border-primary/15 bg-primary/5 text-primary px-4 py-3.5 rounded-xl font-bold text-sm transition-colors hover:bg-primary/10"
+                >
+                  Iniciar sesión en el equipo
+                </Link>
                 <a
                   href="https://wa.me/18492763532?text=Hola!%20Quiero%20conocer%20los%20productos%20de%20VitaGloss%20RD"
                   target="_blank"
