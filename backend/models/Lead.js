@@ -104,6 +104,29 @@ const leadSchema = new mongoose.Schema({
     maxlength: [300, 'Texto de consentimiento muy largo'],
     default: '',
   },
+  consentimientoOrigen: {
+    type: String,
+    enum: ['', 'formulario_web', 'instagram', 'facebook', 'whatsapp', 'verbal', 'otro'],
+    default: '',
+  },
+  comunidadTipo: {
+    type: String,
+    enum: ['ninguna', 'clientes', 'orientacion_negocio', 'equipo_ibo'],
+    default: 'ninguna',
+  },
+  comunidadEstado: {
+    type: String,
+    enum: ['no_invitado', 'invitado', 'aceptado', 'activo', 'salio', 'removido'],
+    default: 'no_invitado',
+  },
+  comunidadIngresoAt: {
+    type: Date,
+    default: null,
+  },
+  comunidadSalidaAt: {
+    type: Date,
+    default: null,
+  },
   leido: {
     type: Boolean,
     default: false,
@@ -139,5 +162,6 @@ leadSchema.index({ telefono: 1, createdAt: -1 })
 leadSchema.index({ email: 1, createdAt: -1 })
 leadSchema.index({ relacion: 1, etapaConversion: 1, createdAt: -1 })
 leadSchema.index({ 'registroOficial.confirmado': 1, 'actividadEquipo.estado': 1 })
+leadSchema.index({ comunidadTipo: 1, comunidadEstado: 1, createdAt: -1 })
 
 module.exports = mongoose.model('Lead', leadSchema)

@@ -121,6 +121,9 @@ router.post('/public', publicLeadRateLimit, async (req, res) => {
       consentimientoContacto: consentimientoContacto === true,
       consentimientoFecha: consentimientoContacto === true ? new Date() : null,
       consentimientoTexto: trim(consentimientoTexto, 300),
+      consentimientoOrigen: consentimientoContacto === true
+        ? (['instagram', 'facebook', 'whatsapp'].includes(origen) ? origen : 'formulario_web')
+        : '',
       campana: {
         source: trim(campana?.source, 80),
         medium: trim(campana?.medium, 80),
@@ -189,7 +192,13 @@ router.patch('/mark-seen', async (req, res) => {
 // ── POST /api/leads — Crear lead ──────────────────────────────────────────
 router.post('/', async (req, res) => {
   try {
-    const { nombre, telefono, email, productoInteres, estado, nota, origen, tipoInteres, relacion, etapaConversion, consentimientoContacto, proximoSeguimiento } = req.body
+    const { nombre, telefono, email, productoInteres, estado, nota, origen, tipoInteres, relacion, etapaConversion, consentimientoContacto, consentimientoOrigen, proximoSeguimiento, comunidadTipo, comunidadEstado } = req.body
+    if (['aceptado', 'activo'].includes(comunidadEstado) && consentimientoContacto !== true) {
+      return res.status(400).json({ error: 'Registra el consentimiento antes de añadir una persona a una comunidad.' })
+    }
+    if (comunidadTipo === 'equipo_ibo') {
+      return res.status(400).json({ error: 'Confirma primero el registro oficial desde la ficha antes de asignar la comunidad de equipo.' })
+    }
     const lead = await Lead.create({
       vendedor: req.user._id,
       nombre,
@@ -204,6 +213,10 @@ router.post('/', async (req, res) => {
       etapaConversion: etapaConversion || 'contacto',
       consentimientoContacto: consentimientoContacto === true,
       consentimientoFecha: consentimientoContacto === true ? new Date() : null,
+      consentimientoOrigen: consentimientoContacto === true ? (consentimientoOrigen || 'verbal') : '',
+      comunidadTipo: comunidadTipo || 'ninguna',
+      comunidadEstado: comunidadEstado || 'no_invitado',
+      comunidadIngresoAt: ['aceptado', 'activo'].includes(comunidadEstado) ? new Date() : null,
       leido: true,
       leidoAt: new Date(),
       proximoSeguimiento: proximoSeguimiento || null,
@@ -225,7 +238,7 @@ router.patch('/:id', async (req, res) => {
     if (req.user.rol !== 'admin' && (!lead.vendedor || lead.vendedor.toString() !== req.user._id.toString())) {
       return res.status(403).json({ error: 'Sin permiso.' })
     }
-    const { estado, nota, nombre, telefono, email, productoInteres, origen, vendedor, tipoInteres, relacion, etapaConversion, registroOficial, actividadEquipo, leido, ultimoContacto, proximoSeguimiento, consentimientoContacto } = req.body
+    const { estado, nota, nombre, telefono, email, productoInteres, origen, vendedor, tipoInteres, relacion, etapaConversion, registroOficial, actividadEquipo, leido, ultimoContacto, proximoSeguimiento, consentimientoContacto, consentimientoOrigen, comunidadTipo, comunidadEstado, comunidadIngresoAt, comunidadSalidaAt } = req.body
     if (estado) lead.estado = estado
     if (nota !== undefined) lead.nota = nota
     if (nombre) lead.nombre = nombre
@@ -258,6 +271,21 @@ router.patch('/:id', async (req, res) => {
     if (consentimientoContacto !== undefined) {
       lead.consentimientoContacto = Boolean(consentimientoContacto)
       lead.consentimientoFecha = lead.consentimientoContacto ? (lead.consentimientoFecha || new Date()) : null
+      if (!lead.consentimientoContacto) lead.consentimientoOrigen = ''
+    }
+    if (consentimientoOrigen !== undefined && lead.consentimientoContacto) lead.consentimientoOrigen = consentimientoOrigen
+    if (comunidadTipo !== undefined) lead.comunidadTipo = comunidadTipo
+    if (comunidadEstado !== undefined) {
+      lead.comunidadEstado = comunidadEstado
+      if (['aceptado', 'activo'].includes(comunidadEstado) && !lead.comunidadIngresoAt) lead.comunidadIngresoAt = comunidadIngresoAt || new Date()
+      if (['salio', 'removido'].includes(comunidadEstado)) lead.comunidadSalidaAt = comunidadSalidaAt || new Date()
+      if (!['salio', 'removido'].includes(comunidadEstado)) lead.comunidadSalidaAt = null
+    }
+    if (lead.comunidadTipo === 'equipo_ibo' && !lead.registroOficial?.confirmado) {
+      return res.status(400).json({ error: 'Solo un IBO confirmado puede acceder a la comunidad del equipo.' })
+    }
+    if (lead.comunidadTipo !== 'ninguna' && ['aceptado', 'activo'].includes(lead.comunidadEstado) && !lead.consentimientoContacto) {
+      return res.status(400).json({ error: 'Registra el consentimiento antes de añadir una persona a una comunidad.' })
     }
     if (vendedor !== undefined && req.user.rol === 'admin') lead.vendedor = vendedor || null
     await lead.save()

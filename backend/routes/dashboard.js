@@ -52,6 +52,9 @@ router.get('/', async (req, res) => {
     const miembrosConfirmados = await Lead.countDocuments({ ...vendedorFilter, 'registroOficial.confirmado': true })
     const miembrosActivos = await Lead.countDocuments({ ...vendedorFilter, 'registroOficial.confirmado': true, 'actividadEquipo.estado': 'activo' })
     const clientesConfirmados = await Lead.countDocuments({ ...vendedorFilter, relacion: 'cliente' })
+    const comunidadClientes = await Lead.countDocuments({ ...vendedorFilter, comunidadTipo: 'clientes', comunidadEstado: { $in: ['aceptado', 'activo'] } })
+    const comunidadOrientacion = await Lead.countDocuments({ ...vendedorFilter, comunidadTipo: 'orientacion_negocio', comunidadEstado: { $in: ['aceptado', 'activo'] } })
+    const comunidadEquipo = await Lead.countDocuments({ ...vendedorFilter, comunidadTipo: 'equipo_ibo', comunidadEstado: { $in: ['aceptado', 'activo'] } })
 
     // Últimas 5 ventas
     const ultimasVentas = await Sale.find(vendedorFilter)
@@ -109,6 +112,9 @@ router.get('/', async (req, res) => {
         miembrosConfirmados,
         miembrosActivos,
         clientesConfirmados,
+        comunidadClientes,
+        comunidadOrientacion,
+        comunidadEquipo,
       },
       ultimos: {
         ventas: ultimasVentas,

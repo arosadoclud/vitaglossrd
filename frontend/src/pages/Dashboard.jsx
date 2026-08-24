@@ -25,6 +25,29 @@ const RELACIONES = [
   ['cliente', 'Cliente confirmado'],
   ['miembro_equipo', 'Miembro oficial del equipo'],
 ]
+const COMUNIDADES = [
+  ['ninguna', 'Sin comunidad'],
+  ['clientes', 'Círculo de clientes'],
+  ['orientacion_negocio', 'Orientación sobre el negocio'],
+  ['equipo_ibo', 'Equipo IBO activo'],
+]
+const ESTADOS_COMUNIDAD = [
+  ['no_invitado', 'No invitado'],
+  ['invitado', 'Invitación enviada'],
+  ['aceptado', 'Aceptó participar'],
+  ['activo', 'Miembro activo'],
+  ['salio', 'Salió voluntariamente'],
+  ['removido', 'Removido'],
+]
+const ORIGENES_CONSENTIMIENTO = [
+  ['', 'Sin registrar'],
+  ['formulario_web', 'Formulario web'],
+  ['instagram', 'Instagram'],
+  ['facebook', 'Facebook'],
+  ['whatsapp', 'WhatsApp'],
+  ['verbal', 'Confirmación verbal'],
+  ['otro', 'Otro'],
+]
 const ESTADO_VENTA = ['pendiente', 'pagado', 'enviado', 'entregado', 'cancelado']
 const METODO_PAGO = ['transferencia', 'efectivo', 'tarjeta', 'pago_movil', 'otro']
 
@@ -109,36 +132,35 @@ function DashboardIcon({ name, className = 'h-5 w-5' }) {
 
 const WA_TEMPLATES_BY_STAGE = [
   {
-    etapa: '🔵 Primer Contacto',
-    desc: 'Para romper el hielo con leads nuevos',
+    etapa: 'Primer contacto autorizado',
+    desc: 'Úsalo solamente cuando la persona pidió información o autorizó el contacto.',
     plantillas: [
-      { producto: 'Apertura — vitaminas Nutrilite™', msg: '¡Hola! 👋 Vi que podría interesarte mejorar tu salud o generar ingresos extra. Tenemos las vitaminas *Nutrilite™* de Amway, las más vendidas en RD. ¿Te cuento cuáles son las más solicitadas y sus precios?' },
-      { producto: 'Apertura — salud bucal Glister™', msg: '¡Hola! 😊 Soy del equipo VitaGloss RD. Tenemos disponible la pasta dental y enjuague *Glister™* de Amway, con flúor activo y acción antibacterial. Muchas familias en RD la usan como parte de su rutina. ¿Te interesa recibir más información y el precio?' },
+      { producto: 'Confirmar la solicitud', msg: 'Hola, [nombre]. Soy Andy Rosado, Empresario Independiente de Amway. Recibí tu solicitud de información en [canal]. ¿Prefieres conocer información oficial sobre productos o sobre el negocio independiente?' },
+      { producto: 'Orientación de producto', msg: 'Hola, [nombre]. Gracias por solicitar orientación sobre [producto o categoría]. Puedo compartirte la descripción, las instrucciones y el enlace oficial aplicable en República Dominicana. ¿Cuál es tu principal duda?' },
     ],
   },
   {
-    etapa: '🟡 Seguimiento (Día 3)',
-    desc: 'Para retomar contacto con leads que no respondieron',
+    etapa: 'Seguimiento con consentimiento',
+    desc: 'Un recordatorio breve, sin presión ni urgencia artificial.',
     plantillas: [
-      { producto: 'Recordatorio amigable', msg: '¡Hola de nuevo! 🙋 Solo quería saber si tuviste chance de revisar lo que te envié sobre nuestros productos Amway. Tenemos promo especial esta semana. ¿Te puedo contar más detalles?' },
-      { producto: 'Seguimiento Nutrilite™ Daily', msg: '¡Hola! 👋 La semana pasada hablamos de Nutrilite™. Te comento que el multivitamínico *Nutrilite™ Daily* es el favorito del equipo — energía y defensas altas en una sola pastilla al día. ¿Hablamos hoy?' },
+      { producto: 'Recordatorio respetuoso', msg: 'Hola, [nombre]. Retomo la información que me solicitaste sobre [tema]. Si todavía deseas revisarla, puedo aclarar tus preguntas. Si prefieres cerrar el seguimiento, indícamelo y no volveré a escribirte sobre este tema.' },
+      { producto: 'Fuente oficial', msg: 'Hola, [nombre]. Te comparto la fuente oficial correspondiente a [producto o tema] para que puedas revisarla directamente. Si surge alguna pregunta sobre su contenido, estoy disponible para orientarte.' },
     ],
   },
   {
-    etapa: '🟢 Cierre',
-    desc: 'Para leads que ya mostraron interés',
+    etapa: 'Decisión informada',
+    desc: 'Facilita el siguiente paso sin promesas, descuentos inventados ni presión.',
     plantillas: [
-      { producto: 'Cierre con urgencia', msg: '¡Hola! 🌟 Solo quería decirte que esta semana estamos con stock limitado del *Combo Salud Completa* (Glister™ + Vitamina C). Si quieres aprovecharlo, puedo apartarte uno hoy mismo. ¿Lo confirmamos?' },
-      { producto: 'Combo personalizado', msg: '¡Hola! 😊 Pensando en lo que me dijiste, te armé un combo ideal:\n\n• *Nutrilite™ Daily* — vitaminas diarias\n• *Glister™ Pasta Dental* — cuidado bucal\n\nJuntos tienen un descuento especial. ¿Te lo aparto?' },
+      { producto: 'Compra mediante MyShop', msg: 'Hola, [nombre]. Si ya revisaste la información y deseas continuar, puedes realizar la compra directamente en mi MyShop oficial. Antes de hacerlo, confirma que el producto y sus instrucciones corresponden a lo que buscas.' },
+      { producto: 'Orientación sobre el negocio', msg: 'Hola, [nombre]. La opción que conversamos es un negocio independiente de venta directa ofrecido por Amway; no es un empleo ni ofrece ingresos garantizados. Si deseas continuar, coordinamos una orientación privada para revisar responsabilidades, costos y el proceso oficial.' },
     ],
   },
   {
-    etapa: '⭐ Post-venta',
-    desc: 'Para mantener clientes activos y generar recompra',
+    etapa: 'Servicio posventa',
+    desc: 'Seguimiento de entrega y uso, sin solicitar afirmaciones de resultados.',
     plantillas: [
-      { producto: 'Seguimiento Nutrilite™ Daily (Multivitamínico)', msg: '¡Hola! ¿Sabías que con *Nutrilite™ Daily* tienes 24 vitaminas y minerales en una sola pastilla al día? 💊 Energía, defensas altas y bienestar total. Precio especial esta semana. ¿Hablamos?' },
-      { producto: 'Recompra + recomendación', msg: '¡Hola! 👋 ¿Cómo te fue con el producto? Queria saber si ya se te está terminando 😄 Si quieres que te aparte otro, avísame. Y si conoces a alguien que también quiera mejorar su salud, te doy un descuento adicional por cada amigo que compre. 🎁' },
-      { producto: 'Seguimiento de cliente', msg: '¡Hola! 😊 Quería saber cómo te fue con el producto que pediste. ¿Notaste algún cambio? Tu opinión me importa mucho. ¡Cualquier duda, aquí estoy! 💪' },
+      { producto: 'Confirmar entrega', msg: 'Hola, [nombre]. Quiero confirmar que recibiste tu pedido correctamente. ¿El empaque llegó en buenas condiciones? Si necesitas revisar las instrucciones oficiales de uso, puedo ayudarte.' },
+      { producto: 'Consulta de servicio', msg: 'Hola, [nombre]. ¿Tienes alguna duda sobre las instrucciones, almacenamiento o uso indicado en la etiqueta de [producto]? Estoy disponible para ayudarte a localizar la información oficial.' },
     ],
   },
 ]
@@ -204,6 +226,9 @@ function LeadDetailModal({ lead, setLead, onClose, onSave, onContact, onDelete, 
             <label>Etapa de conversión<select value={lead.etapaConversion || 'contacto'} onChange={event => setLead(current => ({ ...current, etapaConversion: event.target.value }))}>{ETAPA_CONVERSION.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
             <label>Estado<select value={lead.estado || 'nuevo'} onChange={event => setLead(current => ({ ...current, estado: event.target.value }))}>{ESTADO_LEAD.map(estado => <option key={estado} value={estado}>{estado}</option>)}</select></label>
             <label>Próximo seguimiento<input type="datetime-local" value={lead.proximoSeguimiento || ''} onChange={event => setLead(current => ({ ...current, proximoSeguimiento: event.target.value }))} /></label>
+            <label>Comunidad<select value={lead.comunidadTipo || 'ninguna'} onChange={event => setLead(current => ({ ...current, comunidadTipo: event.target.value }))}>{COMUNIDADES.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+            <label>Estado en comunidad<select value={lead.comunidadEstado || 'no_invitado'} onChange={event => setLead(current => ({ ...current, comunidadEstado: event.target.value }))}>{ESTADOS_COMUNIDAD.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+            <label>Origen del consentimiento<select value={lead.consentimientoOrigen || ''} onChange={event => setLead(current => ({ ...current, consentimientoOrigen: event.target.value, consentimientoContacto: Boolean(event.target.value) || current.consentimientoContacto }))}>{ORIGENES_CONSENTIMIENTO.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
             {isAdmin && <label>Responsable<select value={lead.vendedor || ''} onChange={event => setLead(current => ({ ...current, vendedor: event.target.value }))}><option value="">Sin asignar</option>{teamMembers.map(member => <option key={member._id} value={member._id}>{member.nombre}</option>)}</select></label>}
             <label>Interés específico<input value={lead.productoInteres || ''} onChange={event => setLead(current => ({ ...current, productoInteres: event.target.value }))} /></label>
             <label>Actividad en equipo<select value={lead.actividadEquipo?.estado || 'no_aplica'} onChange={event => setLead(current => ({ ...current, actividadEquipo: { ...(current.actividadEquipo || {}), estado: event.target.value } }))}><option value="no_aplica">No aplica / no confirmado</option><option value="sin_compra">Sin compras registradas</option><option value="activo">Activo</option><option value="inactivo">Inactivo</option></select></label>
@@ -215,7 +240,7 @@ function LeadDetailModal({ lead, setLead, onClose, onSave, onContact, onDelete, 
             <div><span>Origen</span><strong>{lead.origen || 'web'}</strong></div>
             <div><span>Campaña</span><strong>{lead.campana?.name || 'Sin identificar'}</strong></div>
             <div><span>Registro</span><strong>{new Date(lead.createdAt).toLocaleString('es-DO')}</strong></div>
-            <div><span>Consentimiento</span><strong className={lead.consentimientoContacto ? 'text-green-700' : 'text-amber-700'}>{lead.consentimientoContacto ? 'Registrado' : 'No registrado'}</strong></div>
+            <div><span>Consentimiento</span><strong className={lead.consentimientoContacto ? 'text-green-700' : 'text-amber-700'}>{lead.consentimientoContacto ? `Registrado · ${lead.consentimientoOrigen || 'sin fuente'}` : 'No registrado'}</strong></div>
           </div>
           {!lead.consentimientoContacto && <p className="vg-consent-warning">No consta consentimiento de contacto. Confírmalo antes de enviar mensajes promocionales.</p>}
         </div>
@@ -247,7 +272,7 @@ export default function Dashboard() {
   // leads
   const [leads, setLeads] = useState([])
   const [loadingLeads, setLoadingLeads] = useState(false)
-  const [leadForm, setLeadForm] = useState({ nombre: '', telefono: '', email: '', productoInteres: '', nota: '', origen: 'whatsapp', tipoInteres: 'cliente', relacion: 'prospecto_cliente', etapaConversion: 'contacto', consentimientoContacto: false, proximoSeguimiento: '' })
+  const [leadForm, setLeadForm] = useState({ nombre: '', telefono: '', email: '', productoInteres: '', nota: '', origen: 'whatsapp', tipoInteres: 'cliente', relacion: 'prospecto_cliente', etapaConversion: 'contacto', consentimientoContacto: false, consentimientoOrigen: '', comunidadTipo: 'ninguna', comunidadEstado: 'no_invitado', proximoSeguimiento: '' })
   const [leadFormOpen, setLeadFormOpen] = useState(false)
   const [savingLead, setSavingLead] = useState(false)
   const [leadQuery, setLeadQuery] = useState('')
@@ -350,8 +375,8 @@ export default function Dashboard() {
     URL.revokeObjectURL(url)
   }
   const exportLeadsCSV = () => {
-    const h = ['Nombre', 'Teléfono', 'Producto', 'Clasificación', 'Etapa de conversión', 'Registro oficial confirmado', 'Actividad', 'Estado de seguimiento', 'Origen', 'Nota', 'Fecha']
-    const r = leads.map(l => [l.nombre, l.telefono, l.productoInteres, l.relacion || 'sin_clasificar', l.etapaConversion || 'contacto', l.registroOficial?.confirmado ? 'Sí' : 'No', l.actividadEquipo?.estado || 'no_aplica', l.estado, l.origen, l.nota, new Date(l.createdAt).toLocaleDateString('es-DO')])
+    const h = ['Nombre', 'Teléfono', 'Producto', 'Clasificación', 'Etapa de conversión', 'Registro oficial confirmado', 'Actividad', 'Comunidad', 'Estado comunidad', 'Consentimiento', 'Origen consentimiento', 'Estado de seguimiento', 'Origen', 'Nota', 'Fecha']
+    const r = leads.map(l => [l.nombre, l.telefono, l.productoInteres, l.relacion || 'sin_clasificar', l.etapaConversion || 'contacto', l.registroOficial?.confirmado ? 'Sí' : 'No', l.actividadEquipo?.estado || 'no_aplica', l.comunidadTipo || 'ninguna', l.comunidadEstado || 'no_invitado', l.consentimientoContacto ? 'Sí' : 'No', l.consentimientoOrigen || '', l.estado, l.origen, l.nota, new Date(l.createdAt).toLocaleDateString('es-DO')])
     downloadCSV(toCSV(h, r), `leads-${new Date().toISOString().split('T')[0]}.csv`)
   }
   const exportSalesCSV = () => {
@@ -418,7 +443,7 @@ export default function Dashboard() {
     try {
       await api.createLead(leadForm)
       setLeadFormOpen(false)
-      setLeadForm({ nombre: '', telefono: '', email: '', productoInteres: '', nota: '', origen: 'whatsapp', tipoInteres: 'cliente', relacion: 'prospecto_cliente', etapaConversion: 'contacto', consentimientoContacto: false, proximoSeguimiento: '' })
+      setLeadForm({ nombre: '', telefono: '', email: '', productoInteres: '', nota: '', origen: 'whatsapp', tipoInteres: 'cliente', relacion: 'prospecto_cliente', etapaConversion: 'contacto', consentimientoContacto: false, consentimientoOrigen: '', comunidadTipo: 'ninguna', comunidadEstado: 'no_invitado', proximoSeguimiento: '' })
       loadLeads()
     } catch (err) { alert(err.message) }
     finally { setSavingLead(false) }
@@ -444,6 +469,9 @@ export default function Dashboard() {
       etapaConversion: lead.etapaConversion || 'contacto',
       registroOficial: lead.registroOficial || { confirmado: false },
       actividadEquipo: lead.actividadEquipo || { estado: 'no_aplica', ultimaCompra: null },
+      comunidadTipo: lead.comunidadTipo || 'ninguna',
+      comunidadEstado: lead.comunidadEstado || 'no_invitado',
+      consentimientoOrigen: lead.consentimientoOrigen || '',
       vendedor: lead.vendedor?._id || lead.vendedor || '',
       proximoSeguimiento: lead.proximoSeguimiento ? new Date(lead.proximoSeguimiento).toISOString().slice(0, 16) : '',
     })
@@ -473,6 +501,10 @@ export default function Dashboard() {
         etapaConversion: leadDetail.etapaConversion,
         registroOficial: leadDetail.registroOficial,
         actividadEquipo: leadDetail.actividadEquipo,
+        comunidadTipo: leadDetail.comunidadTipo,
+        comunidadEstado: leadDetail.comunidadEstado,
+        consentimientoContacto: leadDetail.consentimientoContacto,
+        consentimientoOrigen: leadDetail.consentimientoOrigen,
         proximoSeguimiento: leadDetail.proximoSeguimiento || null,
         vendedor: leadDetail.vendedor || null,
         leido: true,
@@ -564,6 +596,9 @@ export default function Dashboard() {
       || (leadFilter === 'miembros-equipo' && lead.registroOficial?.confirmado === true)
       || (leadFilter === 'miembros-activos' && lead.registroOficial?.confirmado === true && lead.actividadEquipo?.estado === 'activo')
       || (leadFilter === 'clientes' && lead.relacion === 'cliente')
+      || (leadFilter === 'comunidad-clientes' && lead.comunidadTipo === 'clientes' && ['aceptado', 'activo'].includes(lead.comunidadEstado))
+      || (leadFilter === 'comunidad-negocio' && lead.comunidadTipo === 'orientacion_negocio' && ['aceptado', 'activo'].includes(lead.comunidadEstado))
+      || (leadFilter === 'comunidad-equipo' && lead.comunidadTipo === 'equipo_ibo' && ['aceptado', 'activo'].includes(lead.comunidadEstado))
       || lead.estado === leadFilter
     return matchesQuery && matchesFilter
   })
@@ -836,6 +871,9 @@ export default function Dashboard() {
                 <option value="miembros-equipo">Equipo confirmado</option>
                 <option value="miembros-activos">Equipo activo</option>
                 <option value="clientes">Clientes confirmados</option>
+                <option value="comunidad-clientes">Comunidad · clientes</option>
+                <option value="comunidad-negocio">Comunidad · orientación</option>
+                <option value="comunidad-equipo">Comunidad · equipo IBO</option>
                 <option value="nuevo">Nuevos</option>
                 <option value="contactado">Contactados</option>
                 <option value="interesado">Interesados</option>
@@ -875,6 +913,14 @@ export default function Dashboard() {
                       className="border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-primary">
                       {RELACIONES.slice(0, 2).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
                     </select>
+                    <select value={leadForm.comunidadTipo} onChange={e => setLeadForm(f => ({ ...f, comunidadTipo: e.target.value, comunidadEstado: e.target.value === 'ninguna' ? 'no_invitado' : f.comunidadEstado }))}
+                      className="border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-primary">
+                      {COMUNIDADES.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                    </select>
+                    <select value={leadForm.comunidadEstado} onChange={e => setLeadForm(f => ({ ...f, comunidadEstado: e.target.value }))}
+                      className="border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-primary">
+                      {ESTADOS_COMUNIDAD.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                    </select>
                     <select value={leadForm.origen} onChange={e => setLeadForm(f => ({ ...f, origen: e.target.value }))}
                       className="border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-primary">
                       {['whatsapp','referido','web','instagram','facebook','campana','otro'].map(o => <option key={o}>{o}</option>)}
@@ -887,9 +933,18 @@ export default function Dashboard() {
                     <textarea placeholder="Nota adicional" value={leadForm.nota} onChange={e => setLeadForm(f => ({ ...f, nota: e.target.value }))}
                       rows={2} className="sm:col-span-2 border border-gray-200 rounded-2xl px-4 py-3 text-sm resize-none focus:outline-none focus:border-primary" />
                     <label className="sm:col-span-2 flex items-start gap-3 text-xs text-gray-500 bg-gray-50 rounded-2xl p-4">
-                      <input type="checkbox" checked={leadForm.consentimientoContacto} onChange={e => setLeadForm(f => ({ ...f, consentimientoContacto: e.target.checked }))} className="mt-0.5" />
+                      <input type="checkbox" checked={leadForm.consentimientoContacto} onChange={e => setLeadForm(f => ({ ...f, consentimientoContacto: e.target.checked, consentimientoOrigen: e.target.checked ? (f.consentimientoOrigen || 'verbal') : '' }))} className="mt-0.5" />
                       La persona autorizó recibir seguimiento por los datos proporcionados. Registra este consentimiento antes de enviar mensajes.
                     </label>
+                    {leadForm.consentimientoContacto && (
+                      <label className="sm:col-span-2 text-xs font-bold text-gray-500">
+                        Fuente del consentimiento
+                        <select value={leadForm.consentimientoOrigen} onChange={e => setLeadForm(f => ({ ...f, consentimientoOrigen: e.target.value }))}
+                          className="mt-2 w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm font-normal focus:outline-none focus:border-primary">
+                          {ORIGENES_CONSENTIMIENTO.filter(([value]) => value).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                        </select>
+                      </label>
+                    )}
                     <div className="sm:col-span-2 flex gap-3">
                       <button type="submit" disabled={savingLead}
                         className="bg-primary text-white font-bold px-6 py-3 rounded-2xl text-sm transition-all hover:scale-105 disabled:opacity-60">
