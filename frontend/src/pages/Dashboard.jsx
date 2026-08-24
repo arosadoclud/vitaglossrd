@@ -6,6 +6,7 @@ import { api } from '../services/api'
 import { useSEO } from '../hooks/useSEO'
 import PreciosTab from '../components/PreciosTab'
 import { productos } from '../data/productos'
+import './Dashboard.css'
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 const ESTADO_LEAD = ['nuevo', 'contactado', 'interesado', 'cerrado', 'perdido']
@@ -57,7 +58,39 @@ function waMessageForEstado(order) {
   }
 }
 
-const TABS_ALL = ['📊 Resumen', '👥 Leads', '💰 Ventas', '💬 Plantillas', '📦 Pedidos Web', '⚙️ Perfil', '💲 Precios']
+const TABS_ALL = [
+  { label: 'Resumen', icon: 'overview' },
+  { label: 'Leads', icon: 'users' },
+  { label: 'Ventas', icon: 'sales' },
+  { label: 'Plantillas', icon: 'message' },
+  { label: 'Pedidos web', icon: 'orders' },
+  { label: 'Mi perfil', icon: 'profile' },
+  { label: 'Precios', icon: 'prices' },
+]
+
+function DashboardIcon({ name, className = 'h-5 w-5' }) {
+  const paths = {
+    overview: <><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></>,
+    users: <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></>,
+    sales: <><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"/></>,
+    message: <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>,
+    orders: <><path d="M6 2h12l3 5-9 4-9-4 3-5Z"/><path d="M3 7v10l9 5 9-5V7M12 11v11"/></>,
+    profile: <><circle cx="12" cy="8" r="4"/><path d="M4 22a8 8 0 0 1 16 0"/></>,
+    prices: <><path d="M20 13 13 20a2 2 0 0 1-3 0l-6-6a2 2 0 0 1 0-3l7-7h6l3 3v6Z"/><circle cx="15.5" cy="8.5" r="1"/></>,
+    home: <><path d="m3 11 9-8 9 8"/><path d="M5 10v11h14V10M9 21v-7h6v7"/></>,
+    academy: <><path d="m3 10 9-5 9 5-9 5-9-5Z"/><path d="M7 12.5V17c3 2 7 2 10 0v-4.5M21 10v6"/></>,
+    logout: <><path d="M10 17l5-5-5-5M15 12H3"/><path d="M14 3h5a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5"/></>,
+    plus: <><path d="M12 5v14M5 12h14"/></>,
+    trend: <><path d="m3 17 6-6 4 4 8-8"/><path d="M15 7h6v6"/></>,
+    target: <><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></>,
+    external: <><path d="M14 3h7v7M10 14 21 3"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></>,
+  }
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {paths[name] || paths.overview}
+    </svg>
+  )
+}
 
 const WA_TEMPLATES_BY_STAGE = [
   {
@@ -111,19 +144,19 @@ function copyToClipboard(text) {
 // ─── stat card ──────────────────────────────────────────────────────────────
 function StatCard({ titulo, valor, sub, icono, color = 'primary' }) {
   const colors = {
-    primary: 'from-[#0a1628] to-[#1B3A6B]',
-    green:   'from-green-600 to-emerald-500',
-    purple:  'from-purple-700 to-violet-500',
-    orange:  'from-orange-500 to-amber-400',
+    primary: 'vg-stat--navy',
+    green:   'vg-stat--green',
+    purple:  'vg-stat--violet',
+    orange:  'vg-stat--amber',
   }
   return (
-    <div className={`bg-gradient-to-br ${colors[color]} rounded-3xl p-6 text-white`}>
-      <div className="flex items-start justify-between mb-4">
-        <p className="text-white/60 text-sm font-medium">{titulo}</p>
-        <span className="text-2xl" aria-hidden="true">{icono}</span>
+    <div className={`vg-stat-card ${colors[color]}`}>
+      <div className="flex items-start justify-between mb-5">
+        <p className="vg-stat-label">{titulo}</p>
+        <span className="vg-stat-icon"><DashboardIcon name={icono} className="h-5 w-5" /></span>
       </div>
-      <p className="text-3xl font-black">{valor}</p>
-      {sub && <p className="text-white/50 text-xs mt-1">{sub}</p>}
+      <p className="vg-stat-value">{valor}</p>
+      {sub && <p className="vg-stat-sub">{sub}</p>}
     </div>
   )
 }
@@ -388,96 +421,96 @@ export default function Dashboard() {
 
   // ─────────────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="vg-dashboard">
+      <aside className="vg-sidebar">
+        <button className="vg-sidebar-brand" onClick={() => navigate('/')} aria-label="Ir a la tienda VitaGloss RD">
+          <span className="vg-brand-mark">VG</span>
+          <span>
+            <strong>VitaGloss RD</strong>
+            <small>Centro de ventas</small>
+          </span>
+        </button>
 
-      {/* Top bar */}
-      <div className="bg-gradient-to-r from-[#0a1628] to-[#1B3A6B] px-4 py-3 flex items-center justify-between sticky top-0 z-40 shadow-xl">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate('/')} aria-label="Ir al inicio"
-            className="w-8 h-8 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors text-sm">
-            ←
-          </button>
-          <div className="flex items-center gap-2">
-            <img src="/vg-logo.png" alt="" className="h-7 w-auto hidden sm:block" onError={e => e.target.style.display='none'} />
-            <div>
-              <p className="text-white font-black text-base leading-none">VitaGloss RD</p>
-              <p className="text-white/40 text-[10px] uppercase tracking-widest">Panel de equipo</p>
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="hidden sm:block text-right mr-1">
-            <p className="text-white font-semibold text-sm leading-none">{user?.nombre}</p>
-            <p className="text-secondary text-[10px] capitalize font-medium">{user?.rol}</p>
-          </div>
-          {/* Avatar iniciales */}
-          <div className="w-9 h-9 rounded-xl bg-secondary/30 border border-secondary/40 flex items-center justify-center text-white font-black text-sm flex-shrink-0">
-            {user?.nombre?.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase() || '?'}
-          </div>
-          <button onClick={handleLogout} aria-label="Cerrar sesión"
-            className="bg-white/10 hover:bg-red-500/80 border border-white/20 hover:border-red-400 text-white text-xs font-semibold px-3 py-2 rounded-xl transition-all ml-1">
-            Salir
-          </button>
-        </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="bg-white border-b border-gray-100 sticky top-[65px] z-30 overflow-x-auto">
-        <div className="flex gap-0 max-w-5xl mx-auto px-4">
-          {displayTabs.map((t, i) => (
-            <button key={i} onClick={() => setTab(i)}
-              className={`flex-shrink-0 px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold border-b-2 transition-all relative ${
-                tab === i ? 'border-primary text-primary' : 'border-transparent text-gray-400 hover:text-gray-600'
-              }`}>
-              {t}
+        <div className="vg-sidebar-section-label">Espacio de trabajo</div>
+        <nav className="vg-sidebar-nav" aria-label="Navegación del panel">
+          {displayTabs.map((item, i) => (
+            <button key={item.label} onClick={() => setTab(i)} className={tab === i ? 'is-active' : ''} aria-current={tab === i ? 'page' : undefined}>
+              <DashboardIcon name={item.icon} />
+              <span>{item.label}</span>
               {i === 1 && (stats?.leads?.nuevos || 0) > 0 && (
-                <span className="absolute top-2 right-0.5 min-w-[16px] h-4 bg-red-500 text-white text-[9px] font-black rounded-full flex items-center justify-center px-1">
-                  {stats.leads.nuevos > 9 ? '9+' : stats.leads.nuevos}
-                </span>
+                <span className="vg-nav-badge">{stats.leads.nuevos > 9 ? '9+' : stats.leads.nuevos}</span>
               )}
             </button>
           ))}
-        </div>
-      </div>
+        </nav>
 
-      {/* Content */}
-      <div className="max-w-5xl mx-auto px-4 py-8">
+        <div className="vg-sidebar-links">
+          <button onClick={() => navigate('/academia')}><DashboardIcon name="academy" /><span>Academia</span></button>
+          <button onClick={() => navigate('/')}><DashboardIcon name="home" /><span>Ver tienda</span><DashboardIcon name="external" className="h-4 w-4 ml-auto" /></button>
+        </div>
+
+        <div className="vg-sidebar-user">
+          <div className="vg-avatar">{user?.nombre?.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase() || '?'}</div>
+          <div className="min-w-0">
+            <strong>{user?.nombre}</strong>
+            <span>{user?.rol === 'admin' ? 'Administrador' : 'Vendedor'}</span>
+          </div>
+          <button onClick={handleLogout} aria-label="Cerrar sesión" title="Cerrar sesión"><DashboardIcon name="logout" /></button>
+        </div>
+      </aside>
+
+      <div className="vg-dashboard-main">
+        <header className="vg-mobile-header">
+          <button className="vg-sidebar-brand" onClick={() => navigate('/')} aria-label="Ir a la tienda VitaGloss RD">
+            <span className="vg-brand-mark">VG</span>
+            <span><strong>VitaGloss RD</strong><small>Centro de ventas</small></span>
+          </button>
+          <div className="vg-avatar">{user?.nombre?.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase() || '?'}</div>
+        </header>
+
+        <div className="vg-mobile-nav" role="navigation" aria-label="Navegación móvil del panel">
+          {displayTabs.map((item, i) => (
+            <button key={item.label} onClick={() => setTab(i)} className={tab === i ? 'is-active' : ''}>
+              <DashboardIcon name={item.icon} />
+              <span>{item.label}</span>
+              {i === 1 && (stats?.leads?.nuevos || 0) > 0 && <i>{stats.leads.nuevos > 9 ? '9+' : stats.leads.nuevos}</i>}
+            </button>
+          ))}
+        </div>
+
+        <main className="vg-dashboard-content">
 
         {/* ── TAB 0: RESUMEN ─────────────────────────────────────────────── */}
         {tab === 0 && (
           <Section>
             {/* Saludo personalizado */}
-            <div className="bg-gradient-to-r from-[#0a1628] to-[#1B3A6B] rounded-3xl p-6 mb-6 flex items-center justify-between overflow-hidden relative">
-              <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/5 rounded-full" />
-              <div className="absolute -right-4 -bottom-8 w-28 h-28 bg-secondary/10 rounded-full" />
-              <div className="relative">
-                <p className="text-white/50 text-xs uppercase tracking-widest mb-1">
+            <div className="vg-welcome-card">
+              <div className="vg-welcome-copy">
+                <p className="vg-eyebrow">
                   {new Date().toLocaleDateString('es-DO', { weekday: 'long', day: 'numeric', month: 'long' })}
                 </p>
-                <h2 className="text-white font-black text-xl leading-tight">
-                  ¡Hola, {user?.nombre?.split(' ')[0]}! 👋
-                </h2>
-                <p className="text-white/50 text-sm mt-1">Aquí está el resumen de tu negocio.</p>
+                <h1>Buen día, {user?.nombre?.split(' ')[0]}</h1>
+                <p>Estas son las señales más importantes de tu negocio hoy.</p>
               </div>
-              <div className="relative flex-shrink-0">
-                <div className="w-14 h-14 rounded-2xl bg-secondary/20 border border-secondary/30 flex items-center justify-center text-white font-black text-xl">
-                  {user?.nombre?.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase() || '?'}
-                </div>
+              <div className="vg-welcome-status">
+                <span><i /> Sistema actualizado</span>
+                <strong>{new Date().toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' })}</strong>
               </div>
             </div>
 
             {/* Acciones rápidas */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
               {[
-                { label: 'Nuevo lead', icon: '👤', color: 'bg-sky-50 border-sky-200 text-sky-700 hover:bg-sky-100', action: () => { setTab(1); setTimeout(() => setLeadFormOpen(true), 100) } },
-                { label: 'Nueva venta', icon: '💰', color: 'bg-green-50 border-green-200 text-green-700 hover:bg-green-100', action: () => { setTab(2); setTimeout(() => setSaleFormOpen(true), 100) } },
-                { label: 'Plantillas WA', icon: '💬', color: 'bg-purple-50 border-purple-200 text-purple-700 hover:bg-purple-100', action: () => setTab(3) },
-                { label: 'Mi equipo', icon: '🟢', color: 'bg-teal-50 border-teal-200 text-teal-700 hover:bg-teal-100', action: () => navigate('/academia') },
-              ].map(({ label, icon, color, action }) => (
+                { label: 'Nuevo lead', icon: 'users', desc: 'Agregar prospecto', action: () => { setTab(1); setTimeout(() => setLeadFormOpen(true), 100) } },
+                { label: 'Nueva venta', icon: 'sales', desc: 'Registrar ingreso', action: () => { setTab(2); setTimeout(() => setSaleFormOpen(true), 100) } },
+                { label: 'Plantillas', icon: 'message', desc: 'Abrir mensajes', action: () => setTab(3) },
+                { label: 'Academia', icon: 'academy', desc: 'Seguir aprendiendo', action: () => navigate('/academia') },
+              ].map(({ label, icon, desc, action }) => (
                 <button key={label} onClick={action}
-                  className={`border rounded-2xl p-4 flex flex-col items-center gap-2 text-center transition-all hover:scale-105 font-semibold text-xs ${color}`}>
-                  <span className="text-2xl" aria-hidden="true">{icon}</span>
-                  {label}
+                  className="vg-quick-action">
+                  <span><DashboardIcon name={icon} /></span>
+                  <div><strong>{label}</strong><small>{desc}</small></div>
+                  <DashboardIcon name="external" className="h-4 w-4 ml-auto" />
                 </button>
               ))}
             </div>
@@ -489,10 +522,10 @@ export default function Dashboard() {
             ) : stats ? (
               <>
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                  <StatCard titulo="Ventas este mes" valor={`RD$ ${(stats.ventas?.totalMes || 0).toLocaleString()}`} icono="💰" sub={`${stats.ventas?.cantidadMes || 0} transacciones`} color="green" />
-                  <StatCard titulo="Crecimiento" valor={`${stats.ventas?.crecimiento >= 0 ? '+' : ''}${stats.ventas?.crecimiento || 0}%`} icono="📈" sub="vs mes anterior" color="purple" />
-                  <StatCard titulo="Leads activos" valor={stats.leads?.total || 0} icono="👥" sub={`${stats.leads?.cerrados || 0} cerrados`} color="orange" />
-                  <StatCard titulo="Conversión" valor={`${stats.leads?.tasaConversion || 0}%`} icono="🎯" sub="leads → ventas" color="primary" />
+                  <StatCard titulo="Ventas este mes" valor={`RD$ ${(stats.ventas?.totalMes || 0).toLocaleString()}`} icono="sales" sub={`${stats.ventas?.cantidadMes || 0} transacciones`} color="green" />
+                  <StatCard titulo="Crecimiento" valor={`${stats.ventas?.crecimiento >= 0 ? '+' : ''}${stats.ventas?.crecimiento || 0}%`} icono="trend" sub="vs mes anterior" color="purple" />
+                  <StatCard titulo="Leads activos" valor={stats.leads?.total || 0} icono="users" sub={`${stats.leads?.cerrados || 0} cerrados`} color="orange" />
+                  <StatCard titulo="Conversión" valor={`${stats.leads?.tasaConversion || 0}%`} icono="target" sub="leads a ventas" color="primary" />
                 </div>
 
                 {/* Progress bar meta — más prominente */}
@@ -1770,6 +1803,7 @@ export default function Dashboard() {
             </div>
           </Section>
         )}
+        </main>
       </div>
     </div>
   )
