@@ -105,6 +105,7 @@ El propietario confirma que VitaGloss RD está autorizado para continuar operand
 - Publicar educación útil sin afirmaciones médicas propias.
 - Compartir activos corporativos aprobados sin alterarlos.
 - Construir una comunidad privada basada en consentimiento.
+- Separar clientes, interesados en el negocio e IBO activos según `ESTRATEGIA_COMUNIDADES_PRIVADAS.md`; no usar un grupo mixto.
 - Llevar consultas a conversaciones privadas únicamente cuando exista opt-in o relación previa.
 - Medir conversaciones iniciadas voluntariamente, clientes recurrentes y retención, no alcance vacío.
 

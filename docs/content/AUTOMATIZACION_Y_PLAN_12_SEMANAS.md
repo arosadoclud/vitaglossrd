@@ -11,7 +11,7 @@ El repositorio ya automatiza el índice ligero del blog, la revisión de metadat
 - Lunes: elegir una pregunta obtenida de clientes, Search Console o comentarios.
 - Martes: investigar fuentes y redactar el artículo.
 - Miércoles: revisar afirmaciones, publicar y enlazar desde dos artículos relacionados.
-- Jueves: publicar carrusel y reel derivados.
+- Jueves: publicar un carrusel derivado; usar reel únicamente con guion, activos, música y aprobación requeridos documentados.
 - Viernes: historia de preguntas, seguimiento por WhatsApp y actualización de MyShop relacionada.
 - Domingo: registrar métricas y decidir qué tema ampliar.
 
@@ -27,7 +27,7 @@ El repositorio ya automatiza el índice ligero del blog, la revisión de metadat
 
 - Publicar una guía pilar y dos respuestas específicas por cada clúster prioritario.
 - Actualizar enlaces internos y evitar dos artículos para la misma intención.
-- Crear un carrusel, un reel y cuatro historias por cada guía.
+- Crear un carrusel y cuatro historias por cada guía; producir reel solo cuando complete el flujo de aprobación aplicable.
 
 ### Semanas 7–9 — Conversión responsable
 
@@ -54,3 +54,4 @@ El repositorio ya automatiza el índice ligero del blog, la revisión de metadat
 - Consolidar artículos que compitan por la misma consulta.
 - No crear contenido solo para llenar calendario.
 - No automatizar respuestas médicas, testimonios, precios ni publicaciones sin revisión.
+- Separar las comunicaciones de clientes, interesados en el negocio e IBO activos según `../compliance/ESTRATEGIA_COMUNIDADES_PRIVADAS.md`.
