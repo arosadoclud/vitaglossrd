@@ -1,9 +1,46 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { productos } from '../data/productos'
 import ProductoCard from '../components/ProductoCard'
 import { useSEO } from '../hooks/useSEO'
 
 const WA_URL = 'https://wa.me/18492763532?text=Hola!%20Quiero%20orientaci%C3%B3n%20para%20elegir%20un%20producto%20en%20VitaGloss%20RD'
+
+const heroSlides = [
+  {
+    eyebrow: 'Cuidado bucal diario',
+    title: 'Tu rutina bucal,',
+    accent: 'mejor orientada.',
+    description: 'Conoce una opción de limpieza diaria y revisa sus instrucciones antes de elegir.',
+    image: '/124106SP-690px-01.webp',
+    image400: '/124106SP-400w.webp',
+    imageAlt: 'Pasta Dental Glister',
+    href: '/producto/pasta-dental-glister',
+    cta: 'Conocer la pasta dental',
+  },
+  {
+    eyebrow: 'Nutrición y bienestar',
+    title: 'Complementa tu alimentación,',
+    accent: 'con información clara.',
+    description: 'Revisa la presentación, los ingredientes y el uso indicado de Vitamina C Nutrilite™.',
+    image: '/109741CO-690px-01.webp',
+    image400: '/109741CO-400w.webp',
+    imageAlt: 'Vitamina C Nutrilite',
+    href: '/producto/vitamina-c-nutrilite',
+    cta: 'Conocer la vitamina C',
+  },
+  {
+    eyebrow: 'Frescura portátil',
+    title: 'Cuidado bucal,',
+    accent: 'donde lo necesites.',
+    description: 'Descubre una presentación compacta para complementar tu rutina de higiene bucal.',
+    image: '/124111-690px-01.webp',
+    image400: '/124111-400w.webp',
+    imageAlt: 'Spray Bucal Glister',
+    href: '/producto/spray-bucal-glister',
+    cta: 'Conocer el spray bucal',
+  },
+]
 
 const categories = [
   { name: 'Salud bucal', description: 'Cuidado diario para una rutina completa.', image: '/124106SP-690px-01.webp', href: '/catalogo?categoria=Salud%20Bucal', tone: 'from-cyan-50 to-blue-50' },
@@ -24,6 +61,18 @@ function Icon({ name, className = 'w-5 h-5' }) {
 }
 
 export default function Home() {
+  const [activeSlide, setActiveSlide] = useState(0)
+  const [carouselPaused, setCarouselPaused] = useState(false)
+
+  useEffect(() => {
+    if (carouselPaused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+    const timer = window.setInterval(
+      () => setActiveSlide(current => (current + 1) % heroSlides.length),
+      7000,
+    )
+    return () => window.clearInterval(timer)
+  }, [carouselPaused])
+
   useSEO({
     title: 'Productos de bienestar y cuidado personal en República Dominicana',
     description: 'Explora productos de salud bucal, vitaminas y bienestar con orientación personalizada y entrega en República Dominicana.',
@@ -32,18 +81,31 @@ export default function Home() {
   })
 
   const featured = productos.slice(0, 4)
+  const slide = heroSlides[activeSlide]
+
+  const selectSlide = index => {
+    setActiveSlide((index + heroSlides.length) % heroSlides.length)
+  }
 
   return (
     <div className="bg-white">
-      <section className="relative overflow-hidden bg-[#07192f] pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-24">
+      <section
+        className="relative overflow-hidden bg-[#07192f] pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-24"
+        aria-roledescription="carrusel"
+        aria-label="Productos destacados"
+        onMouseEnter={() => setCarouselPaused(true)}
+        onMouseLeave={() => setCarouselPaused(false)}
+        onFocusCapture={() => setCarouselPaused(true)}
+        onBlurCapture={() => setCarouselPaused(false)}
+      >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_40%,rgba(46,196,182,.22),transparent_34%)]" />
         <div className="relative max-w-7xl mx-auto px-5 sm:px-8 grid lg:grid-cols-[1.05fr_.95fr] items-center gap-12 lg:gap-6">
-          <div className="max-w-2xl">
-            <p className="text-secondary text-xs sm:text-sm font-bold uppercase tracking-[.22em] mb-5">Bienestar elegido con intención</p>
-            <h1 className="text-white text-4xl sm:text-6xl lg:text-7xl font-black tracking-[-.045em] leading-[1.02] mb-6">Tu rutina diaria, <span className="text-secondary">mejor orientada.</span></h1>
-            <p className="text-white/70 text-base sm:text-xl leading-relaxed max-w-xl mb-9">Descubre productos de cuidado personal y bienestar con atención cercana, información clara y entrega en República Dominicana.</p>
+          <div key={`copy-${slide.href}`} className="max-w-2xl" aria-live="polite" aria-atomic="true">
+            <p className="text-secondary text-xs sm:text-sm font-bold uppercase tracking-[.22em] mb-5">{slide.eyebrow}</p>
+            <h1 className="text-white text-4xl sm:text-6xl lg:text-7xl font-black tracking-[-.045em] leading-[1.02] mb-6">{slide.title} <span className="text-secondary">{slide.accent}</span></h1>
+            <p className="text-white/70 text-base sm:text-xl leading-relaxed max-w-xl mb-9">{slide.description}</p>
             <div className="flex flex-col sm:flex-row gap-3">
-              <Link to="/catalogo" className="inline-flex items-center justify-center gap-3 bg-secondary hover:bg-[#22b5a8] text-[#07192f] font-extrabold px-7 py-4 rounded-xl transition-colors">Explorar productos <Icon name="arrow" /></Link>
+              <Link to={slide.href} className="inline-flex items-center justify-center gap-3 bg-secondary hover:bg-[#22b5a8] text-[#07192f] font-extrabold px-7 py-4 rounded-xl transition-colors">{slide.cta} <Icon name="arrow" /></Link>
               <a href={WA_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 border border-white/25 hover:border-white/50 hover:bg-white/5 text-white font-bold px-7 py-4 rounded-xl transition-colors">Recibir orientación</a>
             </div>
             <p className="mt-6 text-white/45 text-sm">Atención de un Empresario Independiente de Amway en República Dominicana.</p>
@@ -51,8 +113,24 @@ export default function Home() {
           <div className="relative min-h-[360px] sm:min-h-[470px] flex items-center justify-center">
             <div className="absolute w-[330px] h-[330px] sm:w-[450px] sm:h-[450px] rounded-full border border-secondary/30 bg-secondary/5" />
             <div className="absolute w-[250px] h-[250px] sm:w-[340px] sm:h-[340px] rounded-full bg-secondary/10 blur-2xl" />
-            <img src="/124106SP-690px-01.webp" srcSet="/124106SP-400w.webp 400w, /124106SP-690px-01.webp 690w" sizes="(max-width: 640px) 260px, 410px" alt="Pasta Dental Glister" width="420" height="520" fetchPriority="high" className="relative z-10 w-auto h-[310px] sm:h-[440px] object-contain drop-shadow-[0_35px_35px_rgba(0,0,0,.35)]" />
-            <div className="absolute z-20 right-1 sm:right-5 bottom-4 sm:bottom-12 bg-white rounded-2xl p-4 sm:p-5 shadow-2xl max-w-[190px]"><p className="text-[11px] font-bold uppercase tracking-wider text-secondary mb-1">Selección destacada</p><p className="font-extrabold text-primary text-sm sm:text-base">Cuidado bucal para todos los días</p></div>
+            <img key={slide.image} src={slide.image} srcSet={`${slide.image400} 400w, ${slide.image} 690w`} sizes="(max-width: 640px) 260px, 410px" alt={slide.imageAlt} width="420" height="520" loading={activeSlide === 0 ? 'eager' : 'lazy'} fetchPriority={activeSlide === 0 ? 'high' : 'auto'} decoding="async" className="relative z-10 w-auto h-[310px] sm:h-[440px] object-contain drop-shadow-[0_35px_35px_rgba(0,0,0,.35)]" />
+
+            <div className="absolute z-20 inset-x-0 bottom-0 flex items-center justify-center gap-3" aria-label="Seleccionar producto destacado">
+              <button type="button" onClick={() => selectSlide(activeSlide - 1)} className="w-10 h-10 rounded-full border border-white/25 bg-[#07192f]/80 text-white hover:border-secondary hover:text-secondary transition-colors" aria-label="Producto anterior">‹</button>
+              <div className="flex gap-2">
+                {heroSlides.map((item, index) => (
+                  <button
+                    key={item.href}
+                    type="button"
+                    onClick={() => selectSlide(index)}
+                    aria-label={`Mostrar ${item.imageAlt}`}
+                    aria-current={index === activeSlide ? 'true' : undefined}
+                    className={`h-2.5 rounded-full transition-all ${index === activeSlide ? 'w-8 bg-secondary' : 'w-2.5 bg-white/40 hover:bg-white/70'}`}
+                  />
+                ))}
+              </div>
+              <button type="button" onClick={() => selectSlide(activeSlide + 1)} className="w-10 h-10 rounded-full border border-white/25 bg-[#07192f]/80 text-white hover:border-secondary hover:text-secondary transition-colors" aria-label="Producto siguiente">›</button>
+            </div>
           </div>
         </div>
       </section>
