@@ -26,6 +26,53 @@ function mailTransport() {
     port: Number(process.env.SMTP_PORT || 587),
     secure: process.env.SMTP_SECURE === 'true',
     auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+    connectionTimeout: 8000,
+    greetingTimeout: 8000,
+    socketTimeout: 10000,
+  })
+}
+
+async function sendPasswordResetEmail({ to, resetUrl }) {
+  const subject = 'Restaura tu contraseña de VitaGloss RD'
+  const text = `Solicitaste restaurar tu contraseña. Abre este enlace dentro de los próximos 30 minutos: ${resetUrl}\n\nSi no hiciste esta solicitud, ignora este mensaje.`
+  const html = `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;color:#15243b"><h1 style="font-size:24px">Restaura tu contraseña</h1><p>Recibimos una solicitud para cambiar la contraseña de tu cuenta de VitaGloss RD.</p><p><a href="${resetUrl}" style="display:inline-block;background:#173b67;color:#fff;text-decoration:none;padding:14px 22px;border-radius:10px;font-weight:700">Crear nueva contraseña</a></p><p style="font-size:13px;color:#667085">Este enlace vence en 30 minutos y solo puede utilizarse una vez. Si no hiciste esta solicitud, puedes ignorar el mensaje.</p></div>`
+
+  // Railway Hobby bloquea los puertos SMTP. Resend usa HTTPS y es la opción
+  // preferida cuando RESEND_API_KEY está configurada.
+  if (process.env.RESEND_API_KEY) {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 10000)
+    try {
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: process.env.RESEND_FROM || 'VitaGloss RD <noreply@vitaglossrd.com>',
+          to: [to],
+          subject,
+          text,
+          html,
+        }),
+      })
+      if (!response.ok) throw new Error(`Resend respondió ${response.status}: ${(await response.text()).slice(0, 200)}`)
+      return
+    } finally {
+      clearTimeout(timeout)
+    }
+  }
+
+  const transporter = mailTransport()
+  if (!transporter) throw new Error('No hay proveedor de correo configurado')
+  await transporter.sendMail({
+    from: `"VitaGloss RD" <${process.env.SMTP_USER}>`,
+    to,
+    subject,
+    text,
+    html,
   })
 }
 
@@ -108,24 +155,9 @@ router.post('/forgot-password', async (req, res) => {
     user.resetPasswordExpires = new Date(Date.now() + 30 * 60 * 1000)
     await user.save({ validateBeforeSave: false })
 
-    const transporter = mailTransport()
-    if (!transporter) {
-      user.resetPasswordToken = undefined
-      user.resetPasswordExpires = undefined
-      await user.save({ validateBeforeSave: false })
-      console.error('[Password reset] SMTP no configurado')
-      return res.json({ message: genericMessage })
-    }
-
     const resetUrl = `${frontendUrl()}/restablecer-contrasena?token=${encodeURIComponent(rawToken)}`
     try {
-      await transporter.sendMail({
-        from: `"VitaGloss RD" <${process.env.SMTP_USER}>`,
-        to: user.email,
-        subject: 'Restaura tu contraseña de VitaGloss RD',
-        text: `Solicitaste restaurar tu contraseña. Abre este enlace dentro de los próximos 30 minutos: ${resetUrl}\n\nSi no hiciste esta solicitud, ignora este mensaje.`,
-        html: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;color:#15243b"><h1 style="font-size:24px">Restaura tu contraseña</h1><p>Recibimos una solicitud para cambiar la contraseña de tu cuenta de VitaGloss RD.</p><p><a href="${resetUrl}" style="display:inline-block;background:#173b67;color:#fff;text-decoration:none;padding:14px 22px;border-radius:10px;font-weight:700">Crear nueva contraseña</a></p><p style="font-size:13px;color:#667085">Este enlace vence en 30 minutos y solo puede utilizarse una vez. Si no hiciste esta solicitud, puedes ignorar el mensaje.</p></div>`,
-      })
+      await sendPasswordResetEmail({ to: user.email, resetUrl })
     } catch (mailError) {
       user.resetPasswordToken = undefined
       user.resetPasswordExpires = undefined

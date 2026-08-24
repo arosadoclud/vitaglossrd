@@ -14,21 +14,31 @@ function headers(auth = false) {
   return h
 }
 
-async function request(method, path, body, auth = false) {
-  const res = await fetch(`${BASE}${path}`, {
-    method,
-    headers: headers(auth),
-    body: body ? JSON.stringify(body) : undefined,
-  })
-  const data = await res.json()
-  if (!res.ok) throw new Error(data.error || 'Error en la petición')
-  return data
+async function request(method, path, body, auth = false, timeoutMs = 30000) {
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), timeoutMs)
+  try {
+    const res = await fetch(`${BASE}${path}`, {
+      method,
+      signal: controller.signal,
+      headers: headers(auth),
+      body: body ? JSON.stringify(body) : undefined,
+    })
+    const data = await res.json()
+    if (!res.ok) throw new Error(data.error || 'Error en la petición')
+    return data
+  } catch (error) {
+    if (error.name === 'AbortError') throw new Error('La solicitud tardó demasiado. Intenta nuevamente.')
+    throw error
+  } finally {
+    clearTimeout(timeout)
+  }
 }
 
 export const api = {
   // Auth
   login: (email, password) => request('POST', '/auth/login', { email, password }),
-  forgotPassword: (email) => request('POST', '/auth/forgot-password', { email }),
+  forgotPassword: (email) => request('POST', '/auth/forgot-password', { email }, false, 15000),
   resetPassword: (token, password) => request('POST', '/auth/reset-password', { token, password }),
   register: (body) => request('POST', '/auth/register', body, true),
   me: () => request('GET', '/auth/me', null, true),

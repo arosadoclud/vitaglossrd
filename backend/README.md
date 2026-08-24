@@ -32,6 +32,18 @@ ADMIN_PASSWORD=una_clave_unica_de_14_o_mas_caracteres
 ADMIN_WHATSAPP=18492763532
 ```
 
+Para recuperación de contraseñas, los planes Free, Trial y Hobby de Railway
+bloquean SMTP. En esos planes configura el envío HTTPS de Resend:
+
+```env
+RESEND_API_KEY=re_xxxxxxxxx
+RESEND_FROM="VitaGloss RD <noreply@vitaglossrd.com>"
+```
+
+El dominio usado en `RESEND_FROM` debe estar verificado en Resend. Si existe
+`RESEND_API_KEY`, el sistema usa su API HTTPS; de lo contrario intenta las
+variables `SMTP_*` con tiempos de espera limitados.
+
 Para producción, agrega temporalmente las cuatro variables `ADMIN_*` al
 servicio de Railway y ejecuta `npm run seed:admin`. El proceso nunca imprime la
 contraseña y MongoDB almacena únicamente su hash con bcrypt. Al finalizar,
