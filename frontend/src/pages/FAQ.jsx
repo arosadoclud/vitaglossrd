@@ -89,7 +89,7 @@ const faqs = [
     preguntas: [
       {
         p: '¿Cómo hago un pedido en VitaGloss RD?',
-        r: 'Elige un producto y pulsa “Comprar en MyShop”. La compra y el pago se completan en el sitio oficial de Amway, donde verás la disponibilidad, los impuestos aplicables, las opciones de entrega y el total final antes de pagar. Si necesitas orientación, puedes escribirnos por WhatsApp.',
+        r: 'Puedes comprar mediante nuestro MyShop oficial o consultarnos por WhatsApp. En MyShop, Amway procesa el pago y muestra disponibilidad, impuestos, cargos y modalidad de entrega o retiro antes de confirmar. VitaGloss RD sigue siendo tu distribuidor independiente y tu contacto para orientación y servicio antes y después de la compra.',
       },
       {
         p: '¿El precio mostrado en MyShop incluye impuestos y envío?',
@@ -101,7 +101,11 @@ const faqs = [
       },
       {
         p: '¿Hacen envíos a todo el país?',
-        r: 'Escribe tu dirección durante el checkout de MyShop para consultar las opciones, costos y plazos de entrega disponibles. El envío no está incluido en el precio inicial del producto. Si Amway ofrece retiro u otra modalidad, aparecerá allí antes de confirmar el pedido.',
+        r: 'En MyShop debes escribir tu dirección para consultar las opciones, costos y plazos disponibles; la orden seguirá la modalidad de entrega o retiro elegida en ese checkout. Si haces un pedido directo por WhatsApp de un producto que VitaGloss RD tenga disponible, coordinaremos contigo el costo, el lugar y el plazo de entrega antes de confirmar.',
+      },
+      {
+        p: '¿Quién es responsable de atenderme después de comprar?',
+        r: 'VitaGloss RD es tu distribuidor independiente y tu punto de contacto para orientación y servicio. En una compra de MyShop, el pago y la modalidad logística se gestionan según lo mostrado por Amway en el checkout. En una venta directa desde nuestro inventario disponible, VitaGloss RD coordina la entrega y proporciona el recibo correspondiente.',
       },
       {
         p: '¿Puedo comprar más de un producto a la vez?',

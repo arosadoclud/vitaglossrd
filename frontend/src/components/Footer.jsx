@@ -12,7 +12,7 @@ export default function Footer() {
               { icono: '✓', titulo: 'Compra oficial', desc: 'Pago dentro de MyShop' },
               { icono: '→', titulo: 'Total transparente', desc: 'Impuestos y entrega al pagar' },
               { icono: '✓', titulo: 'Productos originales', desc: 'Catálogo oficial Amway' },
-              { icono: '→', titulo: 'Orientación personal', desc: 'Soporte por WhatsApp' },
+              { icono: '→', titulo: 'Respaldo VitaGloss', desc: 'Servicio antes y después' },
             ].map((item, i) => (
               <div key={i} className="flex flex-col items-center gap-1.5">
                 <span className="text-2xl">{item.icono}</span>

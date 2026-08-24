@@ -32,7 +32,7 @@ export default function Terminos() {
           <section>
             <h2 className="text-xl font-bold text-primary mb-3">3. Proceso de compra</h2>
             <p>
-              Las compras iniciadas desde los botones “Comprar en MyShop” se completan en el sitio oficial de Amway y quedan sujetas a sus precios, disponibilidad, términos y proceso de confirmación. VitaGloss RD ofrece orientación independiente antes y después de la compra, pero no procesa el pago de esos pedidos.
+              Existen dos modalidades claramente diferenciadas. Las compras iniciadas desde los botones “Comprar en MyShop” se completan en el sitio oficial de Amway y quedan sujetas a sus precios, disponibilidad, términos, pago y modalidad logística mostrada durante el checkout. VitaGloss RD es el distribuidor independiente asociado y ofrece orientación y servicio antes y después de la compra, pero no procesa el pago de esos pedidos. Cuando el cliente realiza una compra directa por WhatsApp de inventario disponible de VitaGloss RD, confirmamos por separado el producto, el total, la entrega y el recibo antes de completar la venta.
             </p>
           </section>
 
@@ -46,7 +46,7 @@ export default function Terminos() {
           <section>
             <h2 className="text-xl font-bold text-primary mb-3">5. Envíos y entregas</h2>
             <p>
-              Los gastos de entrega no están incluidos en el precio inicial del producto. Para los pedidos completados en MyShop, el cliente debe elegir una de las opciones que Amway muestre durante el checkout. Los costos, plazos, disponibilidad territorial y cualquier opción de retiro son determinados y confirmados en ese proceso. VitaGloss RD no promete una modalidad ni una tarifa de entrega que no aparezca en el checkout oficial.
+              Los gastos de entrega no están incluidos en el precio inicial del producto. Para los pedidos completados en MyShop, el cliente debe elegir una de las opciones que Amway muestre durante el checkout; la entrega o el retiro se realizará conforme a esa selección. Para ventas directas desde inventario disponible, VitaGloss RD coordinará con el cliente el costo, el lugar y el plazo antes de confirmar la orden. No prometemos una modalidad ni una tarifa que todavía no haya sido confirmada.
             </p>
           </section>
 

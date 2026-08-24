@@ -8,7 +8,7 @@ import { useSEO } from '../hooks/useSEO'
 import ReviewsSection from '../components/ReviewsSection'
 import { usePrecios } from '../context/PreciosContext'
 import { useAuth } from '../context/AuthContext'
-import { getMyShopUrl, hasDirectMyShopLink, MYSHOP_PRICE_NOTICE } from '../config/myshop'
+import { getMyShopUrl, hasDirectMyShopLink, MYSHOP_PRICE_NOTICE, MYSHOP_SERVICE_NOTICE } from '../config/myshop'
 
 // Acordeón individual
 function Accordion({ titulo, icono, children, defaultOpen = false }) {
@@ -572,7 +572,7 @@ export default function ProductoDetalle() {
             </a>
             <div className="rounded-xl border border-blue-100 bg-blue-50/70 px-4 py-3 mb-4">
               <p className="text-xs leading-relaxed text-blue-900">
-                {MYSHOP_PRICE_NOTICE} Allí también verás la disponibilidad y las opciones habilitadas para tu dirección.
+                {MYSHOP_PRICE_NOTICE} Allí también verás la disponibilidad y la modalidad de entrega o retiro habilitada para tu dirección. {MYSHOP_SERVICE_NOTICE}
               </p>
               {!hasDirectMyShopLink(producto.articulo) && (
                 <p className="text-[11px] text-blue-700 mt-1">Busca el artículo <strong>{producto.articulo}</strong> dentro de MyShop.</p>
@@ -591,6 +591,10 @@ export default function ProductoDetalle() {
               <div className="flex items-center gap-3 text-sm text-gray-500">
                 <svg className="w-4 h-4 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                 <span>Métodos de pago mostrados por Amway en el checkout</span>
+              </div>
+              <div className="flex items-center gap-3 text-sm text-gray-500">
+                <svg className="w-4 h-4 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636a9 9 0 11-12.728 0M12 3v9"/></svg>
+                <span>VitaGloss RD te orienta antes y después de comprar</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-gray-500">
                 <svg className="w-4 h-4 text-purple-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>

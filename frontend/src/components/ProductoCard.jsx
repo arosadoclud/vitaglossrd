@@ -110,7 +110,7 @@ export default function ProductoCard({ producto }) {
         </div>
         <p className="mt-2 text-[10px] leading-relaxed text-gray-400 text-center">
           {hasDirectMyShopLink(producto.articulo) ? 'Abre este producto en Amway. ' : 'Abre nuestro catálogo oficial en Amway. '}
-          {MYSHOP_PRICE_NOTICE}
+          {MYSHOP_PRICE_NOTICE} VitaGloss RD te acompaña antes y después de la compra.
         </p>
       </div>
     </article>

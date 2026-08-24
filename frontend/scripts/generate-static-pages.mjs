@@ -136,7 +136,7 @@ const productPages = productos.map(producto => {
       title: producto.nombreCorto || producto.nombre,
       intro: producto.descripcion,
       path,
-      body: `<h2>Descripción</h2>${plainText(intro).split(/\n+/).filter(Boolean).map(text => `<p>${escapeHtml(text)}</p>`).join('')}<h2>Características principales</h2><ul>${benefits}</ul>${instructions ? `<h2>Indicaciones de uso</h2><ul>${instructions}</ul>` : ''}${questions ? `<h2>Preguntas sobre el producto</h2>${questions}` : ''}<p>El precio mostrado corresponde al producto. Los impuestos, gastos de entrega y el total final se calculan en el checkout oficial de Amway antes de confirmar el pago.</p><p>Consulta siempre la etiqueta, las instrucciones y las advertencias oficiales antes de usar el producto. Esta ficha es informativa y no sustituye consejo médico u odontológico.</p>`,
+      body: `<h2>Descripción</h2>${plainText(intro).split(/\n+/).filter(Boolean).map(text => `<p>${escapeHtml(text)}</p>`).join('')}<h2>Características principales</h2><ul>${benefits}</ul>${instructions ? `<h2>Indicaciones de uso</h2><ul>${instructions}</ul>` : ''}${questions ? `<h2>Preguntas sobre el producto</h2>${questions}` : ''}<p>El precio mostrado corresponde al producto. Los impuestos, gastos de entrega y el total final se calculan en el checkout oficial de Amway antes de confirmar el pago. VitaGloss RD es tu distribuidor independiente y tu contacto para orientación y servicio antes y después de comprar.</p><p>Consulta siempre la etiqueta, las instrucciones y las advertencias oficiales antes de usar el producto. Esta ficha es informativa y no sustituye consejo médico u odontológico.</p>`,
     }),
   }
 })
