@@ -343,13 +343,6 @@ export default function ProductoDetalle() {
           returnFees: 'https://schema.org/FreeReturn',
         },
       },
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: String(producto.rating ?? 4.8),
-        reviewCount: String(producto.reviewCount ?? 12),
-        bestRating: '5',
-        worstRating: '1',
-      },
     } : null,
   })
 

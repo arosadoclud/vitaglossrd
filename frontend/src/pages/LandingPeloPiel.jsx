@@ -516,11 +516,6 @@ export default function LandingPeloPiel() {
         availability: 'https://schema.org/InStock',
         seller: { '@type': 'Organization', name: 'VitaGloss RD' },
       },
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: '5',
-        reviewCount: '86',
-      },
     })
 
     return () => {

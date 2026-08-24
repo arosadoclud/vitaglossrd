@@ -527,24 +527,24 @@ export const posts = [
   {
     "id": 34,
     "slug": "colageno-hidrolizado-tipos-cual-comprar-republica-dominicana",
-    "titulo": "Colágeno hidrolizado en RD: qué tipo comprar y cuál es puro cuento",
-    "excerpt": "No todo colágeno es igual. Te explico los tipos que existen, cuál realmente funciona para piel y articulaciones, y qué buscar antes de comprar en RD.",
+    "titulo": "Colágeno: tipos, pastillas y cómo elegir",
+    "excerpt": "Guía clara para comparar péptidos hidrolizados, fuentes, presentaciones y evidencia antes de elegir un suplemento en República Dominicana.",
     "categoria": "Suplementos",
     "fecha": "2026-03-04",
-    "fechaActualizacion": "2026-03-04",
-    "tiempoLectura": "8 min",
+    "fechaActualizacion": "2026-08-24",
+    "tiempoLectura": "11 min",
     "imagen": "/blog/covers/colageno-hidrolizado-tipos-cual-comprar-republica-dominicana.webp",
     "imagenCover": true,
     "autor": "Andy Rosado",
     "tags": [
-      "colágeno hidrolizado",
-      "suplementos RD",
-      "piel saludable",
-      "articulaciones",
-      "antienvejecimiento"
+      "colágeno",
+      "colágeno en pastillas",
+      "péptidos hidrolizados",
+      "piel",
+      "tejidos conectivos"
     ],
     "productoRelacionadoId": 21,
-    "metaDescripcion": "Descubre qué tipo de colágeno hidrolizado elegir en República Dominicana, qué dice la evidencia y cómo comparar su calidad."
+    "metaDescripcion": "Compara tipos de colágeno, polvo y pastillas, fuentes marinas o bovinas y la evidencia disponible antes de comprar en República Dominicana."
   },
   {
     "id": 26,

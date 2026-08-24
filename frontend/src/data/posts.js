@@ -1,3 +1,5 @@
+import { editorialOverrides } from './editorialOverrides.js'
+
 // Blog posts de VitaGloss RD
 // Para agregar un nuevo post: copia una entrada, cambia el slug (único) y rellena el contenido.
 
@@ -3467,7 +3469,9 @@ export const postRedirects = {
 }
 
 const slugsArchivados = new Set(Object.keys(postRedirects))
-export const posts = allPosts.filter(post => !slugsArchivados.has(post.slug))
+export const posts = allPosts
+  .filter(post => !slugsArchivados.has(post.slug))
+  .map(post => editorialOverrides[post.slug] ? { ...post, ...editorialOverrides[post.slug] } : post)
 
 // Categorías únicas para filtros
 export const categorias = ['Todas', ...new Set(posts.map(p => p.categoria))]
